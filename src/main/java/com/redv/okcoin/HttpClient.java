@@ -70,7 +70,7 @@ public class HttpClient implements AutoCloseable {
 	}
 
 	public <T> T get(URI uri, ValueReader<T> valueReader) throws IOException {
-		return execute(uri, valueReader, new HttpGet(uri));
+		return execute(valueReader, new HttpGet(uri));
 	}
 
 	public <T> T post(URI uri, ValueReader<T> valueReader,
@@ -82,19 +82,20 @@ public class HttpClient implements AutoCloseable {
 			List<NameValuePair> params) throws IOException {
 		HttpPost post = new HttpPost(uri);
 		post.setEntity(new UrlEncodedFormEntity(params));
-		return execute(uri, valueReader, post);
+		return execute(valueReader, post);
 	}
 
 	public <T> T post(URI uri, ValueReader<T> valueReader, String content,
 			String charset) throws IOException {
 		HttpPost post = new HttpPost(uri);
 		post.setEntity(new StringEntity(content, charset));
-		return execute(uri, valueReader, post);
+		return execute(valueReader, post);
 	}
 
-	private <T> T execute(final URI uri, final ValueReader<T> valueReader,
+	private <T> T execute(
+			final ValueReader<T> valueReader,
 			final HttpUriRequest request) throws IOException {
-		log.debug("Executing: {}", uri);
+		log.debug("Executing: {}", request.getURI());
 		try (CloseableHttpResponse response = httpClient.execute(request)) {
 			final StatusLine statusLine = response.getStatusLine();
 			if (statusLine.getStatusCode() == SC_OK) {
