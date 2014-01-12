@@ -11,6 +11,7 @@ import java.util.List;
 import org.apache.http.Header;
 import org.apache.http.NameValuePair;
 import org.apache.http.StatusLine;
+import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
@@ -54,6 +55,14 @@ public class HttpClient implements AutoCloseable {
 		Collection<Header> defaultHeaders = new ArrayList<>();
 		defaultHeaders.add(new BasicHeader("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"));
 		httpClientBuilder.setDefaultHeaders(defaultHeaders);
+
+		RequestConfig defaultRequestConfig = RequestConfig.custom()
+				.setSocketTimeout(5000)
+				.setConnectTimeout(5000)
+				.setConnectionRequestTimeout(5000)
+				.setStaleConnectionCheckEnabled(true)
+				.build();
+		httpClientBuilder.setDefaultRequestConfig(defaultRequestConfig);
 
 		httpClient = httpClientBuilder.build();
 
