@@ -262,7 +262,6 @@ public class OKCoinClient implements AutoCloseable {
 					} else {
 						error = "最小卖出数量为：0.01BTC！";
 					}
-					;
 				}
 			} else if (result.getResultCode() == -2) {
 				if (result.getErrorNum() == 0) {
