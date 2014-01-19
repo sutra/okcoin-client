@@ -54,16 +54,28 @@ public class OKCoinClient implements AutoCloseable {
 
 	private String tradePwd;
 
-	public OKCoinClient() {
-		this(null, null, null);
+	public OKCoinClient(
+			int socketTimeout,
+			int connectTimeout,
+			int connectionRequestTimeout) {
+		this(null, null, null,
+				socketTimeout, connectTimeout, connectionRequestTimeout);
 	}
 
-	public OKCoinClient(String loginName, String password) {
-		this(loginName, password, null);
+	public OKCoinClient(String loginName, String password,
+			int socketTimeout,
+			int connectTimeout,
+			int connectionRequestTimeout) {
+		this(loginName, password, null,
+				socketTimeout, connectTimeout, connectionRequestTimeout);
 	}
 
-	public OKCoinClient(String loginName, String password, String tradePwd) {
-		httpClient = new HttpClient();
+	public OKCoinClient(String loginName, String password, String tradePwd,
+			int socketTimeout,
+			int connectTimeout,
+			int connectionRequestTimeout) {
+		httpClient = new HttpClient(
+				socketTimeout, connectTimeout, connectionRequestTimeout);
 
 		this.loginName = loginName;
 		this.password = password;

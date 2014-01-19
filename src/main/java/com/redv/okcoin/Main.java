@@ -23,7 +23,7 @@ public class Main {
 		String tradePwd = args[2];
 
 		try (OKCoinClient client = new OKCoinClient(loginName, password,
-				tradePwd)) {
+				tradePwd, 5000, 5000, 5000)) {
 			// Ticker
 			Ticker ticker = client.getTicker();
 			log.debug("Ticker: {}", ticker);

@@ -45,7 +45,10 @@ public class HttpClient implements AutoCloseable {
 
 	private final ObjectMapper objectMapper;
 
-	public HttpClient() {
+	public HttpClient(
+			int socketTimeout,
+			int connectTimeout,
+			int connectionRequestTimeout) {
 		HttpClientBuilder httpClientBuilder = HttpClientBuilder.create();
 		httpClientBuilder.setRedirectStrategy(new LaxRedirectStrategy());
 
@@ -57,9 +60,9 @@ public class HttpClient implements AutoCloseable {
 		httpClientBuilder.setDefaultHeaders(defaultHeaders);
 
 		RequestConfig defaultRequestConfig = RequestConfig.custom()
-				.setSocketTimeout(5000)
-				.setConnectTimeout(5000)
-				.setConnectionRequestTimeout(5000)
+				.setSocketTimeout(socketTimeout)
+				.setConnectTimeout(connectTimeout)
+				.setConnectionRequestTimeout(connectionRequestTimeout)
 				.setStaleConnectionCheckEnabled(true)
 				.build();
 		httpClientBuilder.setDefaultRequestConfig(defaultRequestConfig);
