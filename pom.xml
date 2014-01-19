@@ -10,7 +10,9 @@
 	<packaging>jar</packaging>
 
 	<name>OKCoin Client</name>
-	<description>Client for OKCoin.</description>
+	<description><![CDATA[
+		Client for <a href="https://www.okcoin.com">OKCoin</a>.
+	]]></description>
 
 	<prerequisites>
 		<maven>2.2.1</maven>
