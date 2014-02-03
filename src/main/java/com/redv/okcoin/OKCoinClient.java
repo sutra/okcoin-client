@@ -28,7 +28,6 @@ public class OKCoinClient implements AutoCloseable {
 
 	public static final String ENCODING = "UTF-8";
 
-	private static final URI HTTP_BASE = URI.create("http://www.okcoin.com/");
 	private static final URI HTTPS_BASE = URI.create("https://www.okcoin.com/");
 	private static final URI API_BASE = URIUtils.resolve(HTTPS_BASE, "api/");
 
@@ -37,7 +36,7 @@ public class OKCoinClient implements AutoCloseable {
 	private static final URI TRADES_URI = URIUtils.resolve(API_BASE, "trades.do");
 
 	private static final URI LOGIN_URI = URIUtils.resolve(HTTPS_BASE, "login/index.do");
-	private static final URI LOGOUT_URI = URIUtils.resolve(HTTP_BASE, "logout.do");
+	private static final URI LOGOUT_URI = URIUtils.resolve(HTTPS_BASE, "user/logout.do");
 
 	private static final URI BUY_BTC_SUBMIT_URI = URIUtils.resolve(HTTPS_BASE, "trade/buyBtcSubmit.do");
 	private static final URI SELL_BTC_SUBMIT_URI = URIUtils.resolve(HTTPS_BASE, "trade/sellBtcSubmit.do");
