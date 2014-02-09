@@ -6,8 +6,10 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
 
+import org.apache.http.Consts;
 import org.apache.http.client.utils.URIBuilder;
 import org.apache.http.client.utils.URIUtils;
+import org.apache.http.entity.ContentType;
 import org.apache.http.message.BasicNameValuePair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,6 +29,9 @@ import com.redv.okcoin.valuereader.VoidValueReader;
 public class OKCoinClient implements AutoCloseable {
 
 	public static final String ENCODING = "UTF-8";
+
+	public static final ContentType APPLICATION_FORM_URLENCODED = ContentType.create(
+			"application/x-www-form-urlencoded", Consts.UTF_8);
 
 	private static final URI HTTPS_BASE = URI.create("https://www.okcoin.com/");
 	private static final URI API_BASE = URIUtils.resolve(HTTPS_BASE, "api/");
@@ -239,10 +244,10 @@ public class OKCoinClient implements AutoCloseable {
 		}
 
 		String param = new TradeParam(tradeAmount, tradeCnyPrice, tradePwd,
-				symbol).toJson();
+				symbol).toUrlencoded();
 		log.debug("param: {}", param);
 		Result result = httpClient.post(uri, ResultValueReader.getInstance(),
-				param, ENCODING);
+				param, APPLICATION_FORM_URLENCODED);
 
 		final String error;
 		if (result != null) {

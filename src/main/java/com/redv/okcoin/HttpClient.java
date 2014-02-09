@@ -17,6 +17,7 @@ import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpUriRequest;
+import org.apache.http.entity.ContentType;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
@@ -101,6 +102,13 @@ public class HttpClient implements AutoCloseable {
 			String charset) throws IOException {
 		HttpPost post = new HttpPost(uri);
 		post.setEntity(new StringEntity(content, charset));
+		return execute(valueReader, post);
+	}
+
+	public <T> T post(URI uri, ValueReader<T> valueReader, String content,
+			ContentType contentType) throws IOException {
+		HttpPost post = new HttpPost(uri);
+		post.setEntity(new StringEntity(content, contentType));
 		return execute(valueReader, post);
 	}
 

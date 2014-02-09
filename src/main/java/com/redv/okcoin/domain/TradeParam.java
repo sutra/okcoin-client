@@ -22,6 +22,9 @@ public class TradeParam extends AbstractObject {
 	@JsonProperty
 	private int symbol;
 
+	@JsonProperty
+	private int limited = 0;
+
 	public TradeParam(BigDecimal tradeAmount, BigDecimal tradeCnyPrice,
 			String tradePwd, int symbol) {
 		this.tradeAmount = tradeAmount;
@@ -93,6 +96,15 @@ public class TradeParam extends AbstractObject {
 		} catch (JsonProcessingException e) {
 			throw new RuntimeException(e);
 		}
+	}
+
+	public String toUrlencoded() {
+		return String.format("tradeAmount=%1$s&tradeCnyPrice=%2$s&tradePwd=%3$s&symbol=%4$d&limited=%5%s",
+				getTradeAmount().toPlainString(),
+				getTradeCnyPrice().toPlainString(),
+				getTradePwd(),
+				getSymbol(),
+				limited);
 	}
 
 }
