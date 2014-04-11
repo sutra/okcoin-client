@@ -1,6 +1,11 @@
 package com.redv.okcoin.domain;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -99,12 +104,22 @@ public class TradeParam extends AbstractObject {
 	}
 
 	public String toUrlencoded() {
-		return String.format("tradeAmount=%1$s&tradeCnyPrice=%2$s&tradePwd=%3$s&symbol=%4$d&limited=%5%s",
+		return String.format("tradeAmount=%1$s&tradeCnyPrice=%2$s&tradePwd=%3$s&symbol=%4$d&limited=%5$s",
 				getTradeAmount().toPlainString(),
 				getTradeCnyPrice().toPlainString(),
 				getTradePwd(),
 				getSymbol(),
 				limited);
+	}
+
+	public List<NameValuePair> toNameValurPairs() {
+		List<NameValuePair> params = new ArrayList<NameValuePair>(5);
+		params.add(new BasicNameValuePair("tradeAmount", getTradeAmount().toPlainString()));
+		params.add(new BasicNameValuePair("tradeCnyPrice", getTradeCnyPrice().toPlainString()));
+		params.add(new BasicNameValuePair("tradePwd", getTradePwd()));
+		params.add(new BasicNameValuePair("symbol", String.valueOf(getSymbol())));
+		params.add(new BasicNameValuePair("limited", String.valueOf(limited)));
+		return params;
 	}
 
 }

@@ -112,7 +112,7 @@ public class HttpClient implements AutoCloseable {
 		return execute(valueReader, post);
 	}
 
-	private <T> T execute(
+	public <T> T execute(
 			final ValueReader<T> valueReader,
 			final HttpUriRequest request) throws IOException {
 		log.debug("Executing: {}", request.getURI());

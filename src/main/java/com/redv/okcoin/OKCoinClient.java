@@ -7,6 +7,8 @@ import java.net.URISyntaxException;
 import java.util.List;
 
 import org.apache.http.Consts;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.utils.URIBuilder;
 import org.apache.http.client.utils.URIUtils;
 import org.apache.http.entity.ContentType;
@@ -45,6 +47,8 @@ public class OKCoinClient implements AutoCloseable {
 
 	private static final URI BUY_BTC_SUBMIT_URI = URIUtils.resolve(HTTPS_BASE, "trade/buyBtcSubmit.do");
 	private static final URI SELL_BTC_SUBMIT_URI = URIUtils.resolve(HTTPS_BASE, "trade/sellBtcSubmit.do");
+
+	private static final String TRADE_BTC_REFERER_PREFIX = HTTPS_BASE.toString() + "trade/btc.do?tradeType=";
 
 	private static final BigDecimal MIN_TRADE_AMOUNT = new BigDecimal("0.01");
 
@@ -243,11 +247,17 @@ public class OKCoinClient implements AutoCloseable {
 			throw new IOException(e);
 		}
 
-		String param = new TradeParam(tradeAmount, tradeCnyPrice, tradePwd,
-				symbol).toUrlencoded();
-		log.debug("param: {}", param);
-		Result result = httpClient.post(uri, ResultValueReader.getInstance(),
-				param, APPLICATION_FORM_URLENCODED);
+		TradeParam tradeParam = new TradeParam(
+				tradeAmount, tradeCnyPrice, tradePwd, symbol);
+
+		final HttpPost post = new HttpPost(uri);
+		post.setHeader("X-Requested-With", "XMLHttpRequest");
+		final String referer =  TRADE_BTC_REFERER_PREFIX + tradeType;
+		log.debug("Add referer header: {}", referer);
+		post.setHeader("Referer", referer);
+		post.setEntity(new UrlEncodedFormEntity(tradeParam.toNameValurPairs()));
+
+		Result result = httpClient.execute(ResultValueReader.getInstance(), post);
 
 		final String error;
 		if (result != null) {
