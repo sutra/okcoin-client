@@ -6,8 +6,12 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
 
+import org.apache.http.Consts;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.utils.URIBuilder;
 import org.apache.http.client.utils.URIUtils;
+import org.apache.http.entity.ContentType;
 import org.apache.http.message.BasicNameValuePair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,7 +32,9 @@ public class OKCoinClient implements AutoCloseable {
 
 	public static final String ENCODING = "UTF-8";
 
-	private static final URI HTTP_BASE = URI.create("http://www.okcoin.com/");
+	public static final ContentType APPLICATION_FORM_URLENCODED = ContentType.create(
+			"application/x-www-form-urlencoded", Consts.UTF_8);
+
 	private static final URI HTTPS_BASE = URI.create("https://www.okcoin.com/");
 	private static final URI API_BASE = URIUtils.resolve(HTTPS_BASE, "api/");
 
@@ -37,10 +43,12 @@ public class OKCoinClient implements AutoCloseable {
 	private static final URI TRADES_URI = URIUtils.resolve(API_BASE, "trades.do");
 
 	private static final URI LOGIN_URI = URIUtils.resolve(HTTPS_BASE, "login/index.do");
-	private static final URI LOGOUT_URI = URIUtils.resolve(HTTP_BASE, "logout.do");
+	private static final URI LOGOUT_URI = URIUtils.resolve(HTTPS_BASE, "user/logout.do");
 
 	private static final URI BUY_BTC_SUBMIT_URI = URIUtils.resolve(HTTPS_BASE, "trade/buyBtcSubmit.do");
 	private static final URI SELL_BTC_SUBMIT_URI = URIUtils.resolve(HTTPS_BASE, "trade/sellBtcSubmit.do");
+
+	private static final String TRADE_BTC_REFERER_PREFIX = HTTPS_BASE.toString() + "trade/btc.do?tradeType=";
 
 	private static final BigDecimal MIN_TRADE_AMOUNT = new BigDecimal("0.01");
 
@@ -239,11 +247,17 @@ public class OKCoinClient implements AutoCloseable {
 			throw new IOException(e);
 		}
 
-		String param = new TradeParam(tradeAmount, tradeCnyPrice, tradePwd,
-				symbol).toJson();
-		log.debug("param: {}", param);
-		Result result = httpClient.post(uri, ResultValueReader.getInstance(),
-				param, ENCODING);
+		TradeParam tradeParam = new TradeParam(
+				tradeAmount, tradeCnyPrice, tradePwd, symbol);
+
+		final HttpPost post = new HttpPost(uri);
+		post.setHeader("X-Requested-With", "XMLHttpRequest");
+		final String referer =  TRADE_BTC_REFERER_PREFIX + tradeType;
+		log.debug("Add referer header: {}", referer);
+		post.setHeader("Referer", referer);
+		post.setEntity(new UrlEncodedFormEntity(tradeParam.toNameValurPairs()));
+
+		Result result = httpClient.execute(ResultValueReader.getInstance(), post);
 
 		final String error;
 		if (result != null) {
