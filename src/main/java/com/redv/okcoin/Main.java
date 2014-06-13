@@ -12,6 +12,12 @@ import com.redv.okcoin.domain.Depth;
 import com.redv.okcoin.domain.Depth.Data;
 import com.redv.okcoin.domain.Ticker;
 import com.redv.okcoin.domain.Trade;
+import com.xeiam.xchange.Exchange;
+import com.xeiam.xchange.ExchangeFactory;
+import com.xeiam.xchange.currency.CurrencyPair;
+import com.xeiam.xchange.dto.marketdata.OrderBook;
+import com.xeiam.xchange.dto.marketdata.Trades;
+import com.xeiam.xchange.service.polling.PollingMarketDataService;
 
 public class Main {
 
@@ -21,6 +27,20 @@ public class Main {
 		String loginName = args[0];
 		String password = args[1];
 		String tradePwd = args[2];
+
+		Exchange publicExchange = ExchangeFactory.INSTANCE.createExchange(OKCoinExchange.class.getName());
+		PollingMarketDataService marketDataService = publicExchange.getPollingMarketDataService();
+		com.xeiam.xchange.dto.marketdata.Ticker ticker0 = marketDataService.getTicker(CurrencyPair.BTC_CNY);
+		log.debug("Ticker: {}", ticker0);
+
+		OrderBook orderBook = marketDataService.getOrderBook(CurrencyPair.BTC_CNY);
+		log.debug("Depth: {}", orderBook);
+
+		Trades trades0 = marketDataService.getTrades(CurrencyPair.BTC_CNY);
+		log.debug("Trades: {}", trades0);
+
+		trades0 = marketDataService.getTrades(CurrencyPair.BTC_CNY, 0);
+		log.debug("Trades: {}", trades0);
 
 		try (OKCoinClient client = new OKCoinClient(loginName, password,
 				tradePwd, 5000, 5000, 5000)) {
