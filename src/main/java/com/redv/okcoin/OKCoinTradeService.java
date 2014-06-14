@@ -25,6 +25,8 @@ import com.xeiam.xchange.service.polling.PollingTradeService;
 public class OKCoinTradeService extends OKCoinTradeServiceRaw implements
 		PollingTradeService {
 
+	private static final long INTERVAL = 2_000;
+
 	private final Logger log = LoggerFactory.getLogger(OKCoinTradeService.class);
 
 	/**
@@ -43,16 +45,21 @@ public class OKCoinTradeService extends OKCoinTradeServiceRaw implements
 			NotYetImplementedForExchangeException, IOException {
 		Collection<CurrencyPair> symbols = getExchangeSymbols();
 		List<OrderResult> orderResults = new ArrayList<>(symbols.size());
+
+		long last = 0;
 		for (CurrencyPair symbol : symbols) {
+			if (System.currentTimeMillis() - last < INTERVAL) {
+				sleep();
+			}
+
 			log.debug("Getting order: {}", symbol);
 			OrderResult orderResult = getOrder(-1,
 					OKCoinAdapters.adaptSymbol(symbol));
-			if (log.isDebugEnabled()) {
-				log.debug("Got orders: {}", orderResult.getOrders().length);
-			}
+			last = System.currentTimeMillis();
+
 			orderResults.add(orderResult);
-			sleep();
 		}
+
 		return OKCoinAdapters.adaptOpenOrders(orderResults);
 	}
 
@@ -89,12 +96,19 @@ public class OKCoinTradeService extends OKCoinTradeServiceRaw implements
 			NotAvailableFromExchangeException,
 			NotYetImplementedForExchangeException, IOException {
 		boolean ret = false;
-
 		long id = Long.parseLong(orderId);
+
+		long last = 0;
 		for (CurrencyPair symbol : getExchangeSymbols()) {
 			try {
+				if (System.currentTimeMillis() - last < INTERVAL) {
+					sleep();
+				}
+
 				TradeResult cancelResult = cancelOrder(id,
 						OKCoinAdapters.adaptSymbol(symbol));
+				last = System.currentTimeMillis();
+
 				if (id == cancelResult.getOrderId()) {
 					ret = true;
 				}
@@ -102,8 +116,6 @@ public class OKCoinTradeService extends OKCoinTradeServiceRaw implements
 			} catch (OKCoinException e) {
 				if (e.getErrorCode() == 10009) {
 					// order not found.
-
-					sleep();
 					continue;
 				}
 			}
@@ -123,7 +135,8 @@ public class OKCoinTradeService extends OKCoinTradeServiceRaw implements
 
 	private void sleep() {
 		try {
-			Thread.sleep(2_000);
+			log.debug("Sleeping for {} ms.", INTERVAL);
+			Thread.sleep(INTERVAL);
 		} catch (InterruptedException e) {
 			throw new RuntimeException(e);
 		}

@@ -1,9 +1,17 @@
 package com.redv.okcoin;
 
+import java.util.Arrays;
+import java.util.List;
+
 import com.xeiam.xchange.BaseExchange;
 import com.xeiam.xchange.ExchangeSpecification;
+import com.xeiam.xchange.currency.CurrencyPair;
 
 public class OKCoinExchange extends BaseExchange {
+
+	private static final List<CurrencyPair> SYMBOLS = Arrays.asList(
+			CurrencyPair.BTC_CNY,
+			CurrencyPair.LTC_CNY);
 
 	@Override
 	public void applySpecification(ExchangeSpecification exchangeSpecification) {
@@ -27,6 +35,7 @@ public class OKCoinExchange extends BaseExchange {
 		exchangeSpecification.setExchangeName("OKCoin");
 		exchangeSpecification
 				.setExchangeDescription("OKCoin is a globally oriented crypto-currency trading platform.");
+		exchangeSpecification.setExchangeSpecificParametersItem("symbols", SYMBOLS);
 		return exchangeSpecification;
 	}
 
