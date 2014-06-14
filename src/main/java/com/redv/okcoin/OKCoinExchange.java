@@ -9,6 +9,10 @@ public class OKCoinExchange extends BaseExchange {
 	public void applySpecification(ExchangeSpecification exchangeSpecification) {
 		super.applySpecification(exchangeSpecification);
 		this.pollingMarketDataService = new OKCoinMarketDataService(exchangeSpecification);
+		if (exchangeSpecification.getApiKey() != null) {
+			this.pollingAccountService = new OKCoinAccountService(exchangeSpecification);
+			this.pollingTradeService = new OKCoinTradeService(exchangeSpecification);
+		}
 	}
 
 	/**
