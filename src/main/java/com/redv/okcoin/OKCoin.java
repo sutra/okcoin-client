@@ -20,29 +20,29 @@ public interface OKCoin {
 
 	@GET
 	@Path("ticker.do")
-	public TickerResponse getTicker(@QueryParam("symbol") String symbol);
+	TickerResponse getTicker(@QueryParam("symbol") String symbol);
 
 	@GET
 	@Path("depth.do")
-	public Depth getDepth(@QueryParam("symbol") String symbol);
+	Depth getDepth(@QueryParam("symbol") String symbol);
 
 	@GET
 	@Path("trades.do")
-	public Trade[] getTrades(@QueryParam("symbol") String symbol);
+	Trade[] getTrades(@QueryParam("symbol") String symbol);
 
 	@GET
 	@Path("trades.do")
-	public Trade[] getTrades(@QueryParam("symbol") String symbol,
+	Trade[] getTrades(@QueryParam("symbol") String symbol,
 			@QueryParam("since") int since);
 
 	@POST
 	@Path("userinfo.do")
-	public UserInfo getUserInfo(@QueryParam("partner") long partner,
+	UserInfo getUserInfo(@QueryParam("partner") long partner,
 			@QueryParam("sign") String sign);
 
 	@POST
 	@Path("trade.do")
-	public TradeResult trade(@QueryParam("partner") long partner,
+	TradeResult trade(@QueryParam("partner") long partner,
 			@QueryParam("symbol") String symbol,
 			@QueryParam("type") String type,
 			@QueryParam("rate") String rate,
@@ -51,14 +51,14 @@ public interface OKCoin {
 
 	@POST
 	@Path("cancelorder.do")
-	public TradeResult cancelOrder(@QueryParam("partner") long partner,
+	TradeResult cancelOrder(@QueryParam("partner") long partner,
 			@QueryParam("order_id") long orderId,
 			@QueryParam("symbol") String symbol,
 			@QueryParam("sign") String sign);
 
 	@POST
 	@Path("getorder.do")
-	public OrderResult getOrder(@QueryParam("partner") long partner,
+	OrderResult getOrder(@QueryParam("partner") long partner,
 			@QueryParam("order_id") long orderId,
 			@QueryParam("symbol") String symbol,
 			@QueryParam("sign") String sign);
