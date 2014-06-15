@@ -110,12 +110,6 @@ public class Main {
 			// Balance
 			Balance balance = client.getBalance();
 			log.debug("Balance: {}", balance);
-
-			// Bid
-			client.bid(new BigDecimal("0.01"), BigDecimal.ONE);
-
-			// Ask
-			client.ask(new BigDecimal("0.01"), BigDecimal.ONE);
 		}
 	}
 
