@@ -1,4 +1,4 @@
-package com.redv.okcoin;
+package com.redv.okcoin.service.polling;
 
 import com.redv.okcoin.domain.UserInfo;
 import com.xeiam.xchange.ExchangeSpecification;

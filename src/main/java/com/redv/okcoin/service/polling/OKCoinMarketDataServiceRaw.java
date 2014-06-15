@@ -1,7 +1,9 @@
-package com.redv.okcoin;
+package com.redv.okcoin.service.polling;
 
 import si.mazi.rescu.RestProxyFactory;
 
+import com.redv.okcoin.OKCoin;
+import com.redv.okcoin.OKCoinAdapters;
 import com.redv.okcoin.domain.Depth;
 import com.redv.okcoin.domain.TickerResponse;
 import com.redv.okcoin.domain.Trade;

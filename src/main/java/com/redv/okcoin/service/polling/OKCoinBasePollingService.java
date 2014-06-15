@@ -1,4 +1,4 @@
-package com.redv.okcoin;
+package com.redv.okcoin.service.polling;
 
 import java.util.Collection;
 

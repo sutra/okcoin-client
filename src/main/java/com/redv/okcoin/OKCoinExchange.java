@@ -3,6 +3,9 @@ package com.redv.okcoin;
 import java.util.Arrays;
 import java.util.List;
 
+import com.redv.okcoin.service.polling.OKCoinAccountService;
+import com.redv.okcoin.service.polling.OKCoinMarketDataService;
+import com.redv.okcoin.service.polling.OKCoinTradeService;
 import com.xeiam.xchange.BaseExchange;
 import com.xeiam.xchange.ExchangeSpecification;
 import com.xeiam.xchange.currency.CurrencyPair;

@@ -1,4 +1,4 @@
-package com.redv.okcoin;
+package com.redv.okcoin.service.polling;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -8,6 +8,8 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.redv.okcoin.OKCoinAdapters;
+import com.redv.okcoin.OKCoinException;
 import com.redv.okcoin.domain.OrderResult;
 import com.redv.okcoin.domain.TradeResult;
 import com.xeiam.xchange.ExchangeException;
@@ -32,7 +34,7 @@ public class OKCoinTradeService extends OKCoinTradeServiceRaw implements
 	/**
 	 * @param exchangeSpecification
 	 */
-	protected OKCoinTradeService(ExchangeSpecification exchangeSpecification) {
+	public OKCoinTradeService(ExchangeSpecification exchangeSpecification) {
 		super(exchangeSpecification);
 	}
 

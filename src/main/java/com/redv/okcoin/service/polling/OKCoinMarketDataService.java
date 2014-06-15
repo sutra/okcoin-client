@@ -1,8 +1,9 @@
-package com.redv.okcoin;
+package com.redv.okcoin.service.polling;
 
 import java.io.IOException;
 import java.util.ArrayList;
 
+import com.redv.okcoin.OKCoinAdapters;
 import com.redv.okcoin.domain.Trade;
 import com.xeiam.xchange.ExchangeException;
 import com.xeiam.xchange.ExchangeSpecification;
@@ -23,7 +24,7 @@ public class OKCoinMarketDataService extends OKCoinMarketDataServiceRaw
 	 * 
 	 * @param exchangeSpecification The {@link ExchangeSpecification}.
 	 */
-	protected OKCoinMarketDataService(
+	public OKCoinMarketDataService(
 			ExchangeSpecification exchangeSpecification) {
 		super(exchangeSpecification);
 	}

@@ -1,7 +1,6 @@
 package com.redv.okcoin;
 
 import java.io.IOException;
-import java.math.BigDecimal;
 import java.util.List;
 
 import org.slf4j.Logger;

@@ -1,7 +1,11 @@
-package com.redv.okcoin;
+package com.redv.okcoin.service.polling;
 
 import si.mazi.rescu.RestProxyFactory;
 
+import com.redv.okcoin.Messages;
+import com.redv.okcoin.OKCoin;
+import com.redv.okcoin.OKCoinException;
+import com.redv.okcoin.SignatureCreator;
 import com.redv.okcoin.domain.ErrorResult;
 import com.xeiam.xchange.ExchangeSpecification;
 

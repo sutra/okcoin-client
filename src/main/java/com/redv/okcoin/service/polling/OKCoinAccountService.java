@@ -1,8 +1,9 @@
-package com.redv.okcoin;
+package com.redv.okcoin.service.polling;
 
 import java.io.IOException;
 import java.math.BigDecimal;
 
+import com.redv.okcoin.OKCoinAdapters;
 import com.xeiam.xchange.ExchangeException;
 import com.xeiam.xchange.ExchangeSpecification;
 import com.xeiam.xchange.NotAvailableFromExchangeException;
@@ -16,7 +17,7 @@ public class OKCoinAccountService extends OKCoinAccountServiceRaw implements
 	/**
 	 * @param exchangeSpecification
 	 */
-	protected OKCoinAccountService(ExchangeSpecification exchangeSpecification) {
+	public OKCoinAccountService(ExchangeSpecification exchangeSpecification) {
 		super(exchangeSpecification);
 	}
 
