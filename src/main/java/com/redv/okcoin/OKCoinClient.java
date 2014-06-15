@@ -90,10 +90,20 @@ public class OKCoinClient implements AutoCloseable {
 		this.tradePwd = tradePwd;
 	}
 
+	/**
+	 * @deprecated Use {@link OKCoinMarketDataService#getTicker(com.xeiam.xchange.currency.CurrencyPair)} instead.
+	 */
+	@Deprecated
 	public Ticker getTicker() throws IOException {
 		return httpClient.get(TICKER_URI, TickerResponse.class).getTicker();
 	}
 
+	/**
+	 * @deprecated Use {@link OKCoinMarketDataService#getTicker(com.xeiam.xchange.currency.CurrencyPair)} instead.
+	 * @return
+	 * @throws IOException
+	 */
+	@Deprecated
 	public Depth getDepth() throws IOException {
 		return httpClient.get(DEPTH_URI, Depth.class);
 	}
@@ -103,12 +113,18 @@ public class OKCoinClient implements AutoCloseable {
 	 *
 	 * @return the recent 80 trades.
 	 * @throws IOException indicates I/O exception.
+	 * @deprecated Use {@link OKCoinMarketDataService#getTrades(com.xeiam.xchange.currency.CurrencyPair, Object...)} instead.
 	 */
+	@Deprecated
 	public List<Trade> getTrades() throws IOException {
 		return httpClient.get(TRADES_URI, new TypeReference<List<Trade>>() {
 		});
 	}
 
+	/**
+	 * @deprecated Use @link {@link OKCoinMarketDataService#getTrades(com.xeiam.xchange.currency.CurrencyPair, Object...)} instead.
+	 */
+	@Deprecated
 	public List<Trade> getTrades(int since) throws IOException {
 		URIBuilder builder = new URIBuilder(TRADES_URI);
 		builder.addParameter("since", Integer.toString(since));
@@ -168,6 +184,10 @@ public class OKCoinClient implements AutoCloseable {
 		httpClient.get(LOGOUT_URI, VoidValueReader.getInstance());
 	}
 
+	/**
+	 * @deprecated Use {@link OKCoinAccountService#getAccountInfo()} instead.
+	 */
+	@Deprecated
 	public Balance getBalance() throws IOException {
 		return httpClient.get(HTTPS_BASE, new IndexHtmlPageReader());
 	}
@@ -176,6 +196,10 @@ public class OKCoinClient implements AutoCloseable {
 		return MIN_TRADE_AMOUNT;
 	}
 
+	/**
+	 * @deprecated Use {@link OKCoinTradeService#placeLimitOrder(com.xeiam.xchange.dto.trade.LimitOrder)} instead.
+	 */
+	@Deprecated
 	public void bid(BigDecimal amount, BigDecimal cnyPrice) throws IOException {
 		final int tradeType = 0;
 		final int symbol = 0;
@@ -184,6 +208,10 @@ public class OKCoinClient implements AutoCloseable {
 		trade(amount, cnyPrice, tradeType, symbol, isopen);
 	}
 
+	/**
+	 * @deprecated Use {@link OKCoinTradeService#placeLimitOrder(com.xeiam.xchange.dto.trade.LimitOrder)} instead.
+	 */
+	@Deprecated
 	public void ask(BigDecimal amount, BigDecimal cnyPrice) throws IOException {
 		final int tradeType = 1;
 		final int symbol = 0;
