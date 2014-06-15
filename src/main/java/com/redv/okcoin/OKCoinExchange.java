@@ -12,6 +12,11 @@ import com.xeiam.xchange.currency.CurrencyPair;
 
 public class OKCoinExchange extends BaseExchange {
 
+	/**
+	 * The parameter name of the symbols that will focus on.
+	 */
+	public static final String SYMBOLS_PARAMETER = "symbols";
+
 	private static final List<CurrencyPair> SYMBOLS = Arrays.asList(
 			CurrencyPair.BTC_CNY,
 			CurrencyPair.LTC_CNY);
@@ -38,7 +43,8 @@ public class OKCoinExchange extends BaseExchange {
 		exchangeSpecification.setExchangeName("OKCoin");
 		exchangeSpecification
 				.setExchangeDescription("OKCoin is a globally oriented crypto-currency trading platform.");
-		exchangeSpecification.setExchangeSpecificParametersItem("symbols", SYMBOLS);
+		exchangeSpecification.setExchangeSpecificParametersItem(
+				SYMBOLS_PARAMETER, SYMBOLS);
 		return exchangeSpecification;
 	}
 
