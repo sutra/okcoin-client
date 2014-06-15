@@ -36,6 +36,7 @@ public class Main {
 		String partner = args[3];
 		String secretKey = args[4];
 
+		// Market data service
 		Exchange publicExchange = ExchangeFactory.INSTANCE.createExchange(OKCoinExchange.class.getName());
 		PollingMarketDataService marketDataService = publicExchange.getPollingMarketDataService();
 
@@ -58,6 +59,7 @@ public class Main {
 		spec.setApiKey(partner);
 		spec.setSecretKey(secretKey);
 
+		// Account service.
 		Exchange tradeExchange = ExchangeFactory.INSTANCE.createExchange(spec);
 		PollingAccountService accountService = tradeExchange.getPollingAccountService();
 
@@ -65,6 +67,7 @@ public class Main {
 		AccountInfo accountInfo = accountService.getAccountInfo();
 		log.debug("Account info: {}", accountInfo);
 
+		// Trade service
 		PollingTradeService tradeService = tradeExchange.getPollingTradeService();
 
 		// Open orders
