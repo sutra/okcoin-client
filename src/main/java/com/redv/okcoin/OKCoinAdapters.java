@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -11,6 +12,7 @@ import org.apache.commons.lang3.math.NumberUtils;
 
 import com.redv.okcoin.domain.Depth;
 import com.redv.okcoin.domain.Depth.Data;
+import com.redv.okcoin.domain.Funds;
 import com.redv.okcoin.domain.Order;
 import com.redv.okcoin.domain.OrderResult;
 import com.redv.okcoin.domain.TickerResponse;
@@ -83,22 +85,37 @@ public final class OKCoinAdapters {
 	}
 
 	public static AccountInfo adaptAccountInfo(UserInfo userInfo) {
-		List<Wallet> wallets = new ArrayList<>(
-				userInfo.getInfo().getFunds().getFree().size()
-				+ userInfo.getInfo().getFunds().getFreezed().size());
+		Funds funds = userInfo.getInfo().getFunds();
+
+		Map<String, BigDecimal> balances = new LinkedHashMap<>(
+				Math.max(funds.getFree().size(), funds.getFreezed().size()));
 
 		for (Map.Entry<String, BigDecimal> entry : userInfo.getInfo()
 				.getFunds().getFree().entrySet()) {
 			String currency = entry.getKey().toUpperCase();
-			BigDecimal balance = entry.getValue();
-			Wallet wallet = new Wallet(currency, balance, "Free " + currency);
-			wallets.add(wallet);
+			BigDecimal balance = balances.get(currency);
+			if (balance == null) {
+				balance = entry.getValue();
+			} else {
+				balance = balance.add(entry.getValue());
+			}
+			balances.put(currency, balance);
 		}
+
 		for (Map.Entry<String, BigDecimal> entry : userInfo.getInfo().getFunds().getFreezed().entrySet()) {
 			String currency = entry.getKey().toUpperCase();
-			BigDecimal balance = entry.getValue();
-			Wallet wallet = new Wallet(currency, balance, "Frozen " + currency);
-			wallets.add(wallet);
+			BigDecimal balance = balances.get(currency);
+			if (balance == null) {
+				balance = entry.getValue();
+			} else {
+				balance = balance.add(entry.getValue());
+			}
+			balances.put(currency, balance);
+		}
+
+		List<Wallet> wallets = new ArrayList<>(balances.size());
+		for (Map.Entry<String, BigDecimal> balance : balances.entrySet()) {
+			wallets.add(new Wallet(balance.getKey(), balance.getValue()));
 		}
 
 		return new AccountInfo(null, wallets);
