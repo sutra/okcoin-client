@@ -1,0 +1,17 @@
+{
+	"result": true,
+	"info": {
+		"funds": {
+			"free": {
+				"cny": 1000,
+				"btc": 10,
+				"ltc": 0
+			},
+			"freezed": {
+				"cny": 1000,
+				"btc": 10,
+				"ltc": 0
+			}
+		}
+	}
+}
