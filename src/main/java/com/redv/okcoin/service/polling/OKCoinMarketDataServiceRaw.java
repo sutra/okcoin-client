@@ -36,7 +36,7 @@ public class OKCoinMarketDataServiceRaw extends OKCoinBasePollingService {
 		return okCoin.getTrades(OKCoinAdapters.adaptSymbol(currencyPair));
 	}
 
-	public Trade[] getTrades(CurrencyPair currencyPair, int since) {
+	public Trade[] getTrades(CurrencyPair currencyPair, long since) {
 		return okCoin.getTrades(OKCoinAdapters.adaptSymbol(currencyPair), since);
 	}
 

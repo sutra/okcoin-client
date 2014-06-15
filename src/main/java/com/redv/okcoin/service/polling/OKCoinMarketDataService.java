@@ -60,7 +60,7 @@ public class OKCoinMarketDataService extends OKCoinMarketDataServiceRaw
 		if (args.length == 0) {
 			trades = getTrades(currencyPair);
 		} else {
-			trades = getTrades(currencyPair, (Integer) args[0]);
+			trades = getTrades(currencyPair, (Long) args[0]);
 		}
 		return OKCoinAdapters.adaptTrades(trades, currencyPair);
 	}

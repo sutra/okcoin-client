@@ -7,6 +7,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang3.math.NumberUtils;
+
 import com.redv.okcoin.domain.Depth;
 import com.redv.okcoin.domain.Depth.Data;
 import com.redv.okcoin.domain.Order;
@@ -76,7 +78,8 @@ public final class OKCoinAdapters {
 		for (Trade trade : trades) {
 			tradeList.add(adaptTrade(trade, currencyPair));
 		}
-		return new Trades(tradeList, TradeSortType.SortByTimestamp);
+		long lastTid = NumberUtils.toLong(trades[trades.length - 1].getTid());
+		return new Trades(tradeList, lastTid, TradeSortType.SortByTimestamp);
 	}
 
 	public static AccountInfo adaptAccountInfo(UserInfo userInfo) {

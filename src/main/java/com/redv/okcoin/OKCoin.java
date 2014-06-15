@@ -33,7 +33,7 @@ public interface OKCoin {
 	@GET
 	@Path("trades.do")
 	Trade[] getTrades(@QueryParam("symbol") String symbol,
-			@QueryParam("since") int since);
+			@QueryParam("since") long since);
 
 	@POST
 	@Path("userinfo.do")

@@ -41,18 +41,28 @@ public class Main {
 
 		// Ticker
 		com.xeiam.xchange.dto.marketdata.Ticker ticker0 = marketDataService.getTicker(CurrencyPair.BTC_CNY);
-		log.debug("Ticker: {}", ticker0);
+		log.info("Ticker: {}", ticker0);
 
 		// Depth
 		OrderBook orderBook = marketDataService.getOrderBook(CurrencyPair.BTC_CNY);
-		log.debug("Depth: {}", orderBook);
+		log.info("Depth time stamp: {}", orderBook.getTimeStamp());
 
 		// Trades
 		Trades trades0 = marketDataService.getTrades(CurrencyPair.BTC_CNY);
-		log.debug("Trades: {}", trades0);
+		log.info("Trades count: {}, lastID: {}", trades0.getTrades().size(), trades0.getlastID());
+		for (com.xeiam.xchange.dto.marketdata.Trade trade : trades0.getTrades()) {
+			log.info("{} {} {} {}@{}",
+					trade.getId(), trade.getTimestamp(), trade.getType(),
+					trade.getTradableAmount(), trade.getPrice());
+		}
 
-		trades0 = marketDataService.getTrades(CurrencyPair.BTC_CNY, 0);
-		log.debug("Trades: {}", trades0);
+		trades0 = marketDataService.getTrades(CurrencyPair.BTC_CNY, trades0.getlastID());
+		log.info("Trades count: {}, lastID: {}", trades0.getTrades().size(), trades0.getlastID());
+		for (com.xeiam.xchange.dto.marketdata.Trade trade : trades0.getTrades()) {
+			log.info("{} {} {} {}@{}",
+					trade.getId(), trade.getTimestamp(), trade.getType(),
+					trade.getTradableAmount(), trade.getPrice());
+		}
 
 		ExchangeSpecification spec = new ExchangeSpecification(OKCoinExchange.class);
 		spec.setApiKey(partner);
@@ -64,31 +74,31 @@ public class Main {
 
 		// User info
 		AccountInfo accountInfo = accountService.getAccountInfo();
-		log.debug("Account info: {}", accountInfo);
+		log.info("Account info: {}", accountInfo);
 
 		// Trade service
 		PollingTradeService tradeService = tradeExchange.getPollingTradeService();
 
 		// Open orders
 		OpenOrders openOrders = tradeService.getOpenOrders();
-		log.debug("Open orders count: {}", openOrders.getOpenOrders().size());
+		log.info("Open orders count: {}", openOrders.getOpenOrders().size());
 
 		try (OKCoinClient client = new OKCoinClient(loginName, password,
 				tradePwd, 5000, 5000, 5000)) {
 			// Ticker
 			Ticker ticker = client.getTicker();
-			log.debug("Ticker: {}", ticker);
+			log.info("Ticker: {}", ticker);
 
 			// Depth
 			Depth depth = client.getDepth();
-			log.debug("Depth: {}", depth);
+			log.info("Depth: {}", depth);
 
 			for (Data data : depth.getBids()) {
-				log.debug("{}", data);
+				log.info("{}", data);
 			}
 
 			for (Data data : depth.getAsks()) {
-				log.debug("{}", data);
+				log.info("{}", data);
 			}
 
 			// Trades.
@@ -108,7 +118,7 @@ public class Main {
 
 			// Balance
 			Balance balance = client.getBalance();
-			log.debug("Balance: {}", balance);
+			log.info("Balance: {}", balance);
 		}
 	}
 
