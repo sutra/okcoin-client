@@ -1,0 +1,22 @@
+{
+	"result": true,
+	"orders": [{
+		"orders_id": 15088,
+		"status": 0,
+		"symbol": "btc_cny",
+		"type": "sell",
+		"rate": 811,
+		"amount": 1.39901357,
+		"deal_amount": 1,
+		"avg_rate": 811
+	}, {
+		"orders_id": 15088,
+		"status": -1,
+		"symbol": "btc_cny",
+		"type": "sell",
+		"rate": 811,
+		"amount": 1.39901357,
+		"deal_amount": 1,
+		"avg_rate": 811
+	}]
+}

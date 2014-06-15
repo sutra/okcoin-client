@@ -12,7 +12,7 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
- * Test for parsing the result of /api/trades.do.
+ * Test for parsing the result of /api/trades.do or /api/cancelorder.do.
  */
 public class TradesTest {
 

@@ -31,7 +31,7 @@ public class Order extends AbstractObject {
 		return orderId;
 	}
 
-	@JsonProperty("order_id")
+	@JsonProperty("orders_id")
 	public void setOrderId(long orderId) {
 		this.orderId = orderId;
 	}

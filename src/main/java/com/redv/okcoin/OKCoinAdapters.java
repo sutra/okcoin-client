@@ -78,7 +78,7 @@ public final class OKCoinAdapters {
 		for (Trade trade : trades) {
 			tradeList.add(adaptTrade(trade, currencyPair));
 		}
-		long lastTid = NumberUtils.toLong(trades[trades.length - 1].getTid());
+		long lastTid = trades.length > 1 ? NumberUtils.toLong(trades[trades.length - 1].getTid()) : 0L;
 		return new Trades(tradeList, lastTid, TradeSortType.SortByTimestamp);
 	}
 
