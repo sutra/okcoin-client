@@ -1,0 +1,13 @@
+{
+	"orders": [{
+		"amount": 0,
+		"avg_rate": 0,
+		"createDate": 1391741134000,
+		"deal_amount": 0,
+		"orders_id": 66079,
+		"rate": 4500,
+		"status": 0,
+		"type": "buy_market"
+	}],
+	"result": true
+}
