@@ -177,7 +177,7 @@ public final class OKCoinAdapters {
 
 	private static LimitOrder adaptOpenOrder(Order order) {
 		return new LimitOrder(
-				adaptType(order.getType()),
+				adaptOrderType(order.getType()),
 				order.getAmount().subtract(order.getDealAmount()),
 				adaptSymbol(order.getSymbol()),
 				String.valueOf(order.getOrderId()),
@@ -185,7 +185,7 @@ public final class OKCoinAdapters {
 				order.getRate());
 	}
 
-	private static OrderType adaptType(String type) {
+	public static OrderType adaptOrderType(String type) {
 		return type.equals("buy") || type.equals("buy_market")
 				? OrderType.BID : OrderType.ASK;
 	}
@@ -193,7 +193,7 @@ public final class OKCoinAdapters {
 	private static com.xeiam.xchange.dto.marketdata.Trade adaptTrade(
 			Order order) {
 		return new com.xeiam.xchange.dto.marketdata.Trade(
-				adaptType(order.getType()),
+				adaptOrderType(order.getType()),
 				order.getDealAmount(),
 				adaptSymbol(order.getSymbol()),
 				order.getAvgRate(), 
