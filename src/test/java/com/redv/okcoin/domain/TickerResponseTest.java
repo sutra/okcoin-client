@@ -9,16 +9,15 @@ import org.junit.Test;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
-public class TickerResponseTest {
+public class TickerResponseTest extends UnmarshalTest {
 
 	@Test
 	public void test() throws JsonParseException, JsonMappingException,
 			IOException {
-		ObjectMapper mapper = new ObjectMapper();
-		TickerResponse tickerResponse = mapper.readValue(getClass()
-				.getResource("tickerResponse.json"), TickerResponse.class);
+		TickerResponse tickerResponse = readValue(
+				"tickerResponse.json",
+				TickerResponse.class);
 		Ticker ticker = tickerResponse.getTicker();
 		assertEquals(new BigDecimal("809.00"), ticker.getHigh());
 		assertEquals(new BigDecimal("770.01"), ticker.getLow());

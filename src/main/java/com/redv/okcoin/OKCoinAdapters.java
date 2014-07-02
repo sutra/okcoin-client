@@ -11,7 +11,6 @@ import java.util.Map;
 import org.apache.commons.lang3.math.NumberUtils;
 
 import com.redv.okcoin.domain.Depth;
-import com.redv.okcoin.domain.Depth.Data;
 import com.redv.okcoin.domain.Funds;
 import com.redv.okcoin.domain.Order;
 import com.redv.okcoin.domain.OrderResult;
@@ -141,19 +140,19 @@ public final class OKCoinAdapters {
 	}
 
 	private static List<LimitOrder> adaptLimitOrders(OrderType type,
-			List<Data> list, CurrencyPair currencyPair) {
-		List<LimitOrder> limitOrders = new ArrayList<>(list.size());
-		for (Data data : list) {
+			BigDecimal[][] list, CurrencyPair currencyPair) {
+		List<LimitOrder> limitOrders = new ArrayList<>(list.length);
+		for (BigDecimal[] data : list) {
 			limitOrders.add(adaptLimitOrder(type, data, currencyPair, null,
 					null));
 		}
 		return limitOrders;
 	}
 
-	private static LimitOrder adaptLimitOrder(OrderType type, Data data,
+	private static LimitOrder adaptLimitOrder(OrderType type, BigDecimal[] data,
 			CurrencyPair currencyPair, String id, Date timestamp) {
-		return new LimitOrder(type, data.getAmount(), currencyPair, id,
-				timestamp, data.getRate());
+		return new LimitOrder(type, data[1], currencyPair, id,
+				timestamp, data[0]);
 	}
 
 	private static com.xeiam.xchange.dto.marketdata.Trade adaptTrade(

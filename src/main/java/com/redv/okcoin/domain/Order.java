@@ -9,97 +9,79 @@ public class Order extends AbstractObject {
 
 	private static final long serialVersionUID = 20140614L;
 
-	private long orderId;
+	private final long orderId;
 
-	private int status;
+	private final int status;
 
-	private String symbol;
+	private final String symbol;
 
-	private String type;
+	private final String type;
 
-	private BigDecimal rate;
+	private final BigDecimal rate;
 
-	private BigDecimal amount;
+	private final BigDecimal amount;
 
-	private BigDecimal dealAmount;
+	private final BigDecimal dealAmount;
 
-	private BigDecimal avgRate;
+	private final BigDecimal avgRate;
 
-	private Date createDate;
+	private final Date createDate;
+
+	public Order(
+			@JsonProperty("orders_id") final long orderId,
+			@JsonProperty("status") final int status,
+			@JsonProperty("symbol") final String symbol,
+			@JsonProperty("type") final String type,
+			@JsonProperty("rate") final BigDecimal rate,
+			@JsonProperty("amount") final BigDecimal amount,
+			@JsonProperty("deal_amount") final BigDecimal dealAmount,
+			@JsonProperty("avg_rate") final BigDecimal avgRate,
+			@JsonProperty("createDate") final Date createDate) {
+		this.orderId = orderId;
+		this.status = status;
+		this.symbol = symbol;
+		this.type = type;
+		this.rate = rate;
+		this.amount = amount;
+		this.dealAmount = dealAmount;
+		this.avgRate = avgRate;
+		this.createDate = createDate;
+	}
 
 	public long getOrderId() {
 		return orderId;
-	}
-
-	@JsonProperty("orders_id")
-	public void setOrderId(long orderId) {
-		this.orderId = orderId;
 	}
 
 	public int getStatus() {
 		return status;
 	}
 
-	public void setStatus(int status) {
-		this.status = status;
-	}
-
 	public String getSymbol() {
 		return symbol;
-	}
-
-	public void setSymbol(String symbol) {
-		this.symbol = symbol;
 	}
 
 	public String getType() {
 		return type;
 	}
 
-	public void setType(String type) {
-		this.type = type;
-	}
-
 	public BigDecimal getRate() {
 		return rate;
-	}
-
-	public void setRate(BigDecimal rate) {
-		this.rate = rate;
 	}
 
 	public BigDecimal getAmount() {
 		return amount;
 	}
 
-	public void setAmount(BigDecimal amount) {
-		this.amount = amount;
-	}
-
 	public BigDecimal getDealAmount() {
 		return dealAmount;
-	}
-
-	@JsonProperty("deal_amount")
-	public void setDealAmount(BigDecimal dealAmount) {
-		this.dealAmount = dealAmount;
 	}
 
 	public BigDecimal getAvgRate() {
 		return avgRate;
 	}
 
-	@JsonProperty("avg_rate")
-	public void setAvgRate(BigDecimal avgRate) {
-		this.avgRate = avgRate;
-	}
-
 	public Date getCreateDate() {
 		return createDate;
-	}
-
-	public void setCreateDate(Date createDate) {
-		this.createDate = createDate;
 	}
 
 }

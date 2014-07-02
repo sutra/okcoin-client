@@ -7,8 +7,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.redv.okcoin.domain.Balance;
-import com.redv.okcoin.domain.Depth;
-import com.redv.okcoin.domain.Depth.Data;
 import com.redv.okcoin.domain.Ticker;
 import com.redv.okcoin.domain.Trade;
 import com.xeiam.xchange.Exchange;
@@ -88,18 +86,6 @@ public class Main {
 			// Ticker
 			Ticker ticker = client.getTicker();
 			log.info("Ticker: {}", ticker);
-
-			// Depth
-			Depth depth = client.getDepth();
-			log.info("Depth: {}", depth);
-
-			for (Data data : depth.getBids()) {
-				log.info("{}", data);
-			}
-
-			for (Data data : depth.getAsks()) {
-				log.info("{}", data);
-			}
 
 			// Trades.
 			List<Trade> trades = client.getTrades();

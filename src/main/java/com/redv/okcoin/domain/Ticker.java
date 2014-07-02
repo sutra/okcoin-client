@@ -2,27 +2,31 @@ package com.redv.okcoin.domain;
 
 import java.math.BigDecimal;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class Ticker extends AbstractObject {
 
 	private static final long serialVersionUID = 2013122001L;
 
-	private BigDecimal high;
+	private final BigDecimal high;
 
-	private BigDecimal low;
+	private final BigDecimal low;
 
-	private BigDecimal buy;
+	private final BigDecimal buy;
 
-	private BigDecimal sell;
+	private final BigDecimal sell;
 
-	private BigDecimal last;
+	private final BigDecimal last;
 
-	private BigDecimal vol;
+	private final BigDecimal vol;
 
-	public Ticker() {
-	}
-
-	public Ticker(BigDecimal high, BigDecimal low, BigDecimal buy,
-			BigDecimal sell, BigDecimal last, BigDecimal vol) {
+	public Ticker(
+			@JsonProperty("high") final BigDecimal high,
+			@JsonProperty("low") final BigDecimal low,
+			@JsonProperty("buy") final BigDecimal buy,
+			@JsonProperty("sell") final BigDecimal sell,
+			@JsonProperty("last") final BigDecimal last,
+			@JsonProperty("vol") final BigDecimal vol) {
 		this.high = high;
 		this.low = low;
 		this.buy = buy;
