@@ -13,6 +13,34 @@
 		Client for <a href="https://www.okcoin.com">OKCoin</a>.
 	]]></description>
 
+	<inceptionYear>2013</inceptionYear>
+
+	<licenses>
+		<license>
+			<name>The BSD 2-Clause License</name>
+			<url>http://opensource.org/licenses/bsd-license.php</url>
+			<distribution>manual</distribution>
+		</license>
+	</licenses>
+
+	<developers>
+		<developer>
+			<id>sutra</id>
+			<name>Joe Zhou</name>
+			<email>zhoushuqun@gmail.com</email>
+			<url>https://shuqun.com</url>
+			<roles>
+				<role>owner</role>
+				<role>developer</role>
+			</roles>
+			<timezone>+8</timezone>
+			<properties>
+				<legalGivenName>Shuqun</legalGivenName>
+				<legalSurname>Zhou</legalSurname>
+			</properties>
+		</developer>
+	</developers>
+
 	<prerequisites>
 		<maven>2.2.1</maven>
 	</prerequisites>
