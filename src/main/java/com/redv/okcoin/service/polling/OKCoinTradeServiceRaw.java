@@ -14,7 +14,7 @@ public class OKCoinTradeServiceRaw extends OKCoinBaseTradePollingService {
 	private static final String METHOD_GET_ORDER = "getorder";
 
 	/**
-	 * @param exchangeSpecification
+	 * @param exchangeSpecification the exchange specification.
 	 */
 	protected OKCoinTradeServiceRaw(ExchangeSpecification exchangeSpecification) {
 		super(exchangeSpecification);

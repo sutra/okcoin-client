@@ -12,7 +12,7 @@ public class OKCoinBasePollingService extends BasePollingExchangeService {
 	private final Collection<CurrencyPair> symbols;
 
 	/**
-	 * @param exchangeSpecification
+	 * @param exchangeSpecification the exchange specification.
 	 */
 	@SuppressWarnings("unchecked")
 	protected OKCoinBasePollingService(

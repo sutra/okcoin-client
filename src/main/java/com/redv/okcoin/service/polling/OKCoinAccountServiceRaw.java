@@ -8,7 +8,7 @@ public class OKCoinAccountServiceRaw extends OKCoinBaseTradePollingService {
 	private static final String METHOD_GET_USER_INFO = "userinfo";
 
 	/**
-	 * @param exchangeSpecification
+	 * @param exchangeSpecification the exchange specification.
 	 */
 	protected OKCoinAccountServiceRaw(
 			ExchangeSpecification exchangeSpecification) {

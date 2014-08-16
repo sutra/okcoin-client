@@ -15,7 +15,7 @@ public class OKCoinMarketDataServiceRaw extends OKCoinBasePollingService {
 	private final OKCoin okCoin;
 
 	/**
-	 * @param exchangeSpecification
+	 * @param exchangeSpecification the exchange specification.
 	 */
 	protected OKCoinMarketDataServiceRaw(
 			ExchangeSpecification exchangeSpecification) {

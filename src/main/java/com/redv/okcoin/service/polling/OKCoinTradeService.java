@@ -30,7 +30,7 @@ public class OKCoinTradeService extends OKCoinTradeServiceRaw implements
 	private final Logger log = LoggerFactory.getLogger(OKCoinTradeService.class);
 
 	/**
-	 * @param exchangeSpecification
+	 * @param exchangeSpecification the exchange specification.
 	 */
 	public OKCoinTradeService(ExchangeSpecification exchangeSpecification) {
 		super(exchangeSpecification);

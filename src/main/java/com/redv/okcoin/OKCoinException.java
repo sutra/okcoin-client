@@ -9,7 +9,10 @@ public class OKCoinException extends ExchangeException {
 	private final int errorCode;
 
 	/**
-	 * @param message
+	 * Constructor.
+	 *
+	 * @param errorCode the error code.
+	 * @param message the exception message.
 	 */
 	public OKCoinException(int errorCode, String message) {
 		super(message);
@@ -17,7 +20,7 @@ public class OKCoinException extends ExchangeException {
 	}
 
 	/**
-	 * @return the errorCode
+	 * @return the error code.
 	 */
 	public int getErrorCode() {
 		return errorCode;
