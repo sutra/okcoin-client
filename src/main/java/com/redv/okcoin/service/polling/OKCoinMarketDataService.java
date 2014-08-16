@@ -1,7 +1,6 @@
 package com.redv.okcoin.service.polling;
 
 import java.io.IOException;
-import java.util.ArrayList;
 
 import com.redv.okcoin.OKCoinAdapters;
 import com.redv.okcoin.domain.Trade;
@@ -10,7 +9,6 @@ import com.xeiam.xchange.ExchangeSpecification;
 import com.xeiam.xchange.NotAvailableFromExchangeException;
 import com.xeiam.xchange.NotYetImplementedForExchangeException;
 import com.xeiam.xchange.currency.CurrencyPair;
-import com.xeiam.xchange.dto.ExchangeInfo;
 import com.xeiam.xchange.dto.marketdata.OrderBook;
 import com.xeiam.xchange.dto.marketdata.Ticker;
 import com.xeiam.xchange.dto.marketdata.Trades;
@@ -63,16 +61,6 @@ public class OKCoinMarketDataService extends OKCoinMarketDataServiceRaw
 			trades = getTrades(currencyPair, (Long) args[0]);
 		}
 		return OKCoinAdapters.adaptTrades(trades, currencyPair);
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public ExchangeInfo getExchangeInfo() throws ExchangeException,
-			IOException, NotAvailableFromExchangeException,
-			NotYetImplementedForExchangeException {
-		return new ExchangeInfo(new ArrayList<>(getExchangeSymbols()));
 	}
 
 }

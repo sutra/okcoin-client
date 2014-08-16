@@ -3,6 +3,7 @@ package com.redv.okcoin;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -69,7 +70,10 @@ public final class OKCoinAdapters {
 
 	public static OrderBook adaptOrderBook(Depth depth, CurrencyPair currencyPair) {
 		List<LimitOrder> asks = adaptLimitOrders(OrderType.ASK, depth.getAsks(), currencyPair);
+		Collections.reverse(asks);
+
 		List<LimitOrder> bids = adaptLimitOrders(OrderType.BID, depth.getBids(), currencyPair);
+
 		return new OrderBook(null, asks, bids);
 	}
 
