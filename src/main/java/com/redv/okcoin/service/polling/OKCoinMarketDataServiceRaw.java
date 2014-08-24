@@ -1,5 +1,7 @@
 package com.redv.okcoin.service.polling;
 
+import java.io.IOException;
+
 import si.mazi.rescu.RestProxyFactory;
 
 import com.redv.okcoin.OKCoin;
@@ -24,19 +26,21 @@ public class OKCoinMarketDataServiceRaw extends OKCoinBasePollingService {
 		okCoin = RestProxyFactory.createProxy(OKCoin.class, baseUrl);
 	}
 
-	public TickerResponse getTicker(CurrencyPair currencyPair) {
+	public TickerResponse getTicker(CurrencyPair currencyPair)
+			throws IOException {
 		return okCoin.getTicker(OKCoinAdapters.adaptSymbol(currencyPair));
 	}
 
-	public Depth getDepth(CurrencyPair currencyPair) {
+	public Depth getDepth(CurrencyPair currencyPair) throws IOException {
 		return okCoin.getDepth(OKCoinAdapters.adaptSymbol(currencyPair));
 	}
 
-	public Trade[] getTrades(CurrencyPair currencyPair) {
+	public Trade[] getTrades(CurrencyPair currencyPair) throws IOException {
 		return okCoin.getTrades(OKCoinAdapters.adaptSymbol(currencyPair));
 	}
 
-	public Trade[] getTrades(CurrencyPair currencyPair, long since) {
+	public Trade[] getTrades(CurrencyPair currencyPair, long since)
+			throws IOException {
 		return okCoin.getTrades(OKCoinAdapters.adaptSymbol(currencyPair), since);
 	}
 
