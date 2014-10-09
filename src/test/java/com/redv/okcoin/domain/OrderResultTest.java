@@ -13,14 +13,13 @@ import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-public class OrderResultTest {
+public class OrderResultTest extends UnmarshalTest {
 
 	@Test
 	public void testLimitOrders() throws JsonParseException,
 			JsonMappingException, IOException {
-		ObjectMapper mapper = new ObjectMapper();
-		OrderResult orderResult = mapper.readValue(
-				getClass().getResource("getorder-limit-orders.json"),
+		OrderResult orderResult = readValue(
+				"getorder-limit-orders.json",
 				OrderResult.class);
 
 		assertTrue(orderResult.isResult());
@@ -69,9 +68,8 @@ public class OrderResultTest {
 	@Test
 	public void testError() throws JsonParseException, JsonMappingException,
 			IOException {
-		ObjectMapper mapper = new ObjectMapper();
-		OrderResult orderResult = mapper.readValue(
-				getClass().getResource("getorder-error.json"),
+		OrderResult orderResult = readValue(
+				"getorder-error.json",
 				OrderResult.class);
 
 		assertFalse(orderResult.isResult());

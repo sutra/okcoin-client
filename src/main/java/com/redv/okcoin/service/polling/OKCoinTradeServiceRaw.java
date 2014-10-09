@@ -1,5 +1,6 @@
 package com.redv.okcoin.service.polling;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -14,13 +15,14 @@ public class OKCoinTradeServiceRaw extends OKCoinBaseTradePollingService {
 	private static final String METHOD_GET_ORDER = "getorder";
 
 	/**
-	 * @param exchangeSpecification
+	 * @param exchangeSpecification the exchange specification.
 	 */
 	protected OKCoinTradeServiceRaw(ExchangeSpecification exchangeSpecification) {
 		super(exchangeSpecification);
 	}
 
-	public TradeResult trade(String symbol, String type, String rate, String amount) {
+	public TradeResult trade(String symbol, String type, String rate,
+			String amount) throws IOException {
 		Map<String, Object> params = new HashMap<>();
 		params.put("symbol", symbol);
 		params.put("type", type);
@@ -36,7 +38,8 @@ public class OKCoinTradeServiceRaw extends OKCoinBaseTradePollingService {
 		return returnOrThrow(tradeResult);
 	}
 
-	public TradeResult cancelOrder(long orderId, String symbol) {
+	public TradeResult cancelOrder(long orderId, String symbol)
+			throws IOException {
 		Map<String, Object> params = new HashMap<>();
 		params.put("order_id", orderId);
 		params.put("symbol", symbol);
@@ -50,7 +53,7 @@ public class OKCoinTradeServiceRaw extends OKCoinBaseTradePollingService {
 		return returnOrThrow(tradeResult);
 	}
 
-	public OrderResult getOrder(long orderId, String symbol) {
+	public OrderResult getOrder(long orderId, String symbol) throws IOException {
 		Map<String, Object> params = new HashMap<>();
 		params.put("order_id", orderId);
 		params.put("symbol", symbol);

@@ -94,6 +94,10 @@ public class OKCoinClient implements AutoCloseable {
 	}
 
 	/**
+	 * Gets ticker.
+	 *
+	 * @return the ticker.
+	 * @throws IOException indicates I/O exception.
 	 * @deprecated Use {@link OKCoinMarketDataService#getTicker(com.xeiam.xchange.currency.CurrencyPair)} instead.
 	 */
 	@Deprecated
@@ -103,8 +107,8 @@ public class OKCoinClient implements AutoCloseable {
 
 	/**
 	 * @deprecated Use {@link OKCoinMarketDataService#getTicker(com.xeiam.xchange.currency.CurrencyPair)} instead.
-	 * @return
-	 * @throws IOException
+	 * @return the market order book.
+	 * @throws IOException indicates I/O exception.
 	 */
 	@Deprecated
 	public Depth getDepth() throws IOException {
@@ -125,6 +129,11 @@ public class OKCoinClient implements AutoCloseable {
 	}
 
 	/**
+	 * Gets trades.
+	 *
+	 * @param since 0 based. When pass 0, will return the trades from the first trade.
+	 * @return the trades.
+	 * @throws IOException indicates I/O exception.
 	 * @deprecated Use @link {@link OKCoinMarketDataService#getTrades(com.xeiam.xchange.currency.CurrencyPair, Object...)} instead.
 	 */
 	@Deprecated
@@ -188,6 +197,10 @@ public class OKCoinClient implements AutoCloseable {
 	}
 
 	/**
+	 * Gets the balance.
+	 *
+	 * @return the balance.
+	 * @throws IOException indicates I/O exception.
 	 * @deprecated Use {@link OKCoinAccountService#getAccountInfo()} instead.
 	 */
 	@Deprecated
@@ -200,6 +213,11 @@ public class OKCoinClient implements AutoCloseable {
 	}
 
 	/**
+	 * Places bid order.
+	 *
+	 * @param amount the order quantity.
+	 * @param cnyPrice the order price in CNY.
+	 * @throws IOException indicates I/O exception.
 	 * @deprecated Use {@link OKCoinTradeService#placeLimitOrder(com.xeiam.xchange.dto.trade.LimitOrder)} instead.
 	 */
 	@Deprecated
@@ -212,6 +230,11 @@ public class OKCoinClient implements AutoCloseable {
 	}
 
 	/**
+	 * Places ask order.
+	 *
+	 * @param amount the order quantity.
+	 * @param cnyPrice the order price in CNY.
+	 * @throws IOException indicates I/O exception.
 	 * @deprecated Use {@link OKCoinTradeService#placeLimitOrder(com.xeiam.xchange.dto.trade.LimitOrder)} instead.
 	 */
 	@Deprecated

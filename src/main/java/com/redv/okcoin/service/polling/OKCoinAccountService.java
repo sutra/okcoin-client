@@ -15,7 +15,7 @@ public class OKCoinAccountService extends OKCoinAccountServiceRaw implements
 		PollingAccountService {
 
 	/**
-	 * @param exchangeSpecification
+	 * @param exchangeSpecification the exchange specification.
 	 */
 	public OKCoinAccountService(ExchangeSpecification exchangeSpecification) {
 		super(exchangeSpecification);

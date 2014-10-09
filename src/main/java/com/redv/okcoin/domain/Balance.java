@@ -2,38 +2,37 @@ package com.redv.okcoin.domain;
 
 import java.math.BigDecimal;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class Balance extends AbstractObject {
 
 	private static final long serialVersionUID = 2013113001L;
 
-	private BigDecimal cny;
+	private final BigDecimal cny;
 
-	private BigDecimal cnyFreez;
+	private final BigDecimal cnyFreez;
 
-	private BigDecimal btc;
+	private final BigDecimal btc;
 
-	private BigDecimal btcFreez;
+	private final BigDecimal btcFreez;
 
-	private BigDecimal ltc;
+	private final BigDecimal ltc;
 
-	private BigDecimal ltcFreez;
+	private final BigDecimal ltcFreez;
 
 	/**
 	 * Total in CNY.
 	 */
-	private BigDecimal total;
-
-	public Balance() {
-	}
+	private final BigDecimal total;
 
 	public Balance(
-			BigDecimal cny,
-			BigDecimal cnyFreez,
-			BigDecimal btc,
-			BigDecimal btcFreez,
-			BigDecimal ltc,
-			BigDecimal ltcFreez,
-			BigDecimal total) {
+			@JsonProperty("cny") final BigDecimal cny,
+			@JsonProperty("cnyFreez") final BigDecimal cnyFreez,
+			@JsonProperty("btc") final BigDecimal btc,
+			@JsonProperty("btcFreez") final BigDecimal btcFreez,
+			@JsonProperty("ltc") final BigDecimal ltc,
+			@JsonProperty("ltcFreez") final BigDecimal ltcFreez,
+			@JsonProperty("total") final BigDecimal total) {
 		this.cny = cny;
 		this.cnyFreez = cnyFreez;
 		this.btc = btc;

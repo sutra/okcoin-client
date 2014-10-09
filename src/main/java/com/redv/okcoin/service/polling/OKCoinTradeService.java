@@ -30,7 +30,7 @@ public class OKCoinTradeService extends OKCoinTradeServiceRaw implements
 	private final Logger log = LoggerFactory.getLogger(OKCoinTradeService.class);
 
 	/**
-	 * @param exchangeSpecification
+	 * @param exchangeSpecification the exchange specification.
 	 */
 	public OKCoinTradeService(ExchangeSpecification exchangeSpecification) {
 		super(exchangeSpecification);
@@ -117,7 +117,16 @@ public class OKCoinTradeService extends OKCoinTradeServiceRaw implements
 	public Trades getTradeHistory(Object... arguments)
 			throws ExchangeException, NotAvailableFromExchangeException,
 			NotYetImplementedForExchangeException, IOException {
-		throw new NotAvailableFromExchangeException();
+		int argc = arguments.length;
+		CurrencyPair currencyPair = argc > 0 ? (CurrencyPair) arguments[0] : null;
+		Long orderId = argc > 0 ? (Long) arguments[1] : null;
+
+		if (currencyPair != null && orderId != null) {
+			return OKCoinAdapters.adaptTrades(
+					getOrder(orderId, OKCoinAdapters.adaptSymbol(currencyPair)));
+		} else {
+			throw new IllegalArgumentException();
+		}
 	}
 
 }

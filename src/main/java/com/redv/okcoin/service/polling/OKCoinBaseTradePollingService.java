@@ -30,7 +30,7 @@ public class OKCoinBaseTradePollingService extends OKCoinBasePollingService {
 	private Map<String, Long> lasts = new HashMap<String, Long>();
 
 	/**
-	 * @param exchangeSpecification
+	 * @param exchangeSpecification the exchange specification.
 	 */
 	protected OKCoinBaseTradePollingService(
 			ExchangeSpecification exchangeSpecification) {

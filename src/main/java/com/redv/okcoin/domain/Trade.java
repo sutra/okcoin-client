@@ -3,30 +3,33 @@ package com.redv.okcoin.domain;
 import java.math.BigDecimal;
 import java.util.Date;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class Trade extends AbstractObject {
 
 	private static final long serialVersionUID = 2013112501L;
 
-	private Date date;
+	private final Date date;
 
-	private BigDecimal price;
+	private final BigDecimal price;
 
-	private BigDecimal amount;
+	private final BigDecimal amount;
 
-	private String tid;
+	private final String tid;
 
-	private Type type;
+	private final Type type;
 
-	public Trade() {
-	}
-
-	public Trade(Date date, BigDecimal price, BigDecimal amount, String tid,
-			Type type) {
-		this.date = date;
+	public Trade(
+			@JsonProperty("date") final long date,
+			@JsonProperty("price") final BigDecimal price,
+			@JsonProperty("amount") final BigDecimal amount,
+			@JsonProperty("tid") final String tid,
+			@JsonProperty("type") final String type) {
+		this.date = new Date(date * 1000);
 		this.price = price;
 		this.amount = amount;
 		this.tid = tid;
-		this.type = type;
+		this.type = Type.toType(type);;
 	}
 
 	public Date getDate() {
@@ -47,14 +50,6 @@ public class Trade extends AbstractObject {
 
 	public Type getType() {
 		return type;
-	}
-
-	public void setDate(long date) {
-		this.date = new Date(date * 1000);
-	}
-
-	public void setType(String type) {
-		this.type = Type.toType(type);
 	}
 
 }

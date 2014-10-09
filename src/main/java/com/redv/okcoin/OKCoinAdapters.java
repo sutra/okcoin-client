@@ -3,6 +3,7 @@ package com.redv.okcoin;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -11,7 +12,6 @@ import java.util.Map;
 import org.apache.commons.lang3.math.NumberUtils;
 
 import com.redv.okcoin.domain.Depth;
-import com.redv.okcoin.domain.Depth.Data;
 import com.redv.okcoin.domain.Funds;
 import com.redv.okcoin.domain.Order;
 import com.redv.okcoin.domain.OrderResult;
@@ -70,7 +70,10 @@ public final class OKCoinAdapters {
 
 	public static OrderBook adaptOrderBook(Depth depth, CurrencyPair currencyPair) {
 		List<LimitOrder> asks = adaptLimitOrders(OrderType.ASK, depth.getAsks(), currencyPair);
+		Collections.reverse(asks);
+
 		List<LimitOrder> bids = adaptLimitOrders(OrderType.BID, depth.getBids(), currencyPair);
+
 		return new OrderBook(null, asks, bids);
 	}
 
@@ -80,7 +83,9 @@ public final class OKCoinAdapters {
 		for (Trade trade : trades) {
 			tradeList.add(adaptTrade(trade, currencyPair));
 		}
-		long lastTid = trades.length > 1 ? NumberUtils.toLong(trades[trades.length - 1].getTid()) : 0L;
+		long lastTid = trades.length > 0
+				? NumberUtils.toLong(trades[trades.length - 1].getTid())
+				: 0L;
 		return new Trades(tradeList, lastTid, TradeSortType.SortByTimestamp);
 	}
 
@@ -129,20 +134,29 @@ public final class OKCoinAdapters {
 		return new OpenOrders(openOrders);
 	}
 
+	public static Trades adaptTrades(OrderResult orderResult) {
+		List<com.xeiam.xchange.dto.marketdata.Trade> trades
+			= new ArrayList<>(orderResult.getOrders().length);
+		for (Order order : orderResult.getOrders()) {
+			trades.add(adaptTrade(order));
+		}
+		return new Trades(trades, TradeSortType.SortByTimestamp);
+	}
+
 	private static List<LimitOrder> adaptLimitOrders(OrderType type,
-			List<Data> list, CurrencyPair currencyPair) {
-		List<LimitOrder> limitOrders = new ArrayList<>(list.size());
-		for (Data data : list) {
+			BigDecimal[][] list, CurrencyPair currencyPair) {
+		List<LimitOrder> limitOrders = new ArrayList<>(list.length);
+		for (BigDecimal[] data : list) {
 			limitOrders.add(adaptLimitOrder(type, data, currencyPair, null,
 					null));
 		}
 		return limitOrders;
 	}
 
-	private static LimitOrder adaptLimitOrder(OrderType type, Data data,
+	private static LimitOrder adaptLimitOrder(OrderType type, BigDecimal[] data,
 			CurrencyPair currencyPair, String id, Date timestamp) {
-		return new LimitOrder(type, data.getAmount(), currencyPair, id,
-				timestamp, data.getRate());
+		return new LimitOrder(type, data[1], currencyPair, id,
+				timestamp, data[0]);
 	}
 
 	private static com.xeiam.xchange.dto.marketdata.Trade adaptTrade(
@@ -166,7 +180,7 @@ public final class OKCoinAdapters {
 
 	private static LimitOrder adaptOpenOrder(Order order) {
 		return new LimitOrder(
-				adaptType(order.getType()),
+				adaptOrderType(order.getType()),
 				order.getAmount().subtract(order.getDealAmount()),
 				adaptSymbol(order.getSymbol()),
 				String.valueOf(order.getOrderId()),
@@ -174,8 +188,22 @@ public final class OKCoinAdapters {
 				order.getRate());
 	}
 
-	private static OrderType adaptType(String type) {
-		return type.equals("buy") || type.equals("buy_market") ? OrderType.BID : OrderType.ASK;
+	public static OrderType adaptOrderType(String type) {
+		return type.equals("buy") || type.equals("buy_market")
+				? OrderType.BID : OrderType.ASK;
+	}
+
+	private static com.xeiam.xchange.dto.marketdata.Trade adaptTrade(
+			Order order) {
+		return new com.xeiam.xchange.dto.marketdata.Trade(
+				adaptOrderType(order.getType()),
+				order.getDealAmount(),
+				adaptSymbol(order.getSymbol()),
+				order.getAvgRate(), 
+				null,
+				null,
+				String.valueOf(order.getOrderId())
+				);
 	}
 
 }

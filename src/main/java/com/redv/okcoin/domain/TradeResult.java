@@ -6,15 +6,18 @@ public class TradeResult extends ErrorResult {
 
 	private static final long serialVersionUID = 20140614L;
 
-	private long orderId;
+	private final long orderId;
+
+	public TradeResult(
+			@JsonProperty("result") final boolean result,
+			@JsonProperty("errorCode") final int errorCode,
+			@JsonProperty("order_id") final long orderId) {
+		super(result, errorCode);
+		this.orderId = orderId;
+	}
 
 	public long getOrderId() {
 		return orderId;
-	}
-
-	@JsonProperty("order_id")
-	public void setOrderId(long orderId) {
-		this.orderId = orderId;
 	}
 
 }

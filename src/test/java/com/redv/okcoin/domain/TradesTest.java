@@ -9,19 +9,16 @@ import org.junit.Test;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
  * Test for parsing the result of /api/trades.do or /api/cancelorder.do.
  */
-public class TradesTest {
+public class TradesTest extends UnmarshalTest {
 
 	@Test
 	public void test() throws JsonParseException, JsonMappingException,
 			IOException {
-		ObjectMapper mapper = new ObjectMapper();
-		Trade[] trades = mapper.readValue(
-				getClass().getResource("trades.json"), Trade[].class);
+		Trade[] trades = readValue("trades.json", Trade[].class);
 		assertEquals(4, trades.length);
 
 		assertEquals(1367130137000L, trades[0].getDate().getTime());

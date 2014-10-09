@@ -6,13 +6,15 @@ import com.redv.okcoin.OKCoinExchange;
 import com.xeiam.xchange.ExchangeSpecification;
 import com.xeiam.xchange.currency.CurrencyPair;
 import com.xeiam.xchange.service.polling.BasePollingExchangeService;
+import com.xeiam.xchange.service.polling.BasePollingService;
 
-public class OKCoinBasePollingService extends BasePollingExchangeService {
+public class OKCoinBasePollingService extends BasePollingExchangeService
+		implements BasePollingService {
 
 	private final Collection<CurrencyPair> symbols;
 
 	/**
-	 * @param exchangeSpecification
+	 * @param exchangeSpecification the exchange specification.
 	 */
 	@SuppressWarnings("unchecked")
 	protected OKCoinBasePollingService(

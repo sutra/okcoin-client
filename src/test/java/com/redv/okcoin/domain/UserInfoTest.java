@@ -11,14 +11,13 @@ import org.junit.Test;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
-public class UserInfoTest {
+public class UserInfoTest extends UnmarshalTest {
 
 	@Test
 	public void test() throws JsonParseException, JsonMappingException, IOException {
-		ObjectMapper mapper = new ObjectMapper();
-		UserInfo userInfo = mapper.readValue(getClass().getResource("userinfo.json"),
+		UserInfo userInfo = readValue(
+				"userinfo.json",
 				UserInfo.class);
 
 		assertTrue(userInfo.isResult());
@@ -35,9 +34,7 @@ public class UserInfoTest {
 	@Test
 	public void testError() throws JsonParseException, JsonMappingException,
 			IOException {
-		ObjectMapper mapper = new ObjectMapper();
-		UserInfo userInfo = mapper.readValue(
-				getClass().getResource("userinfo-error.json"), UserInfo.class);
+		UserInfo userInfo = readValue("userinfo-error.json", UserInfo.class);
 
 		assertFalse(userInfo.isResult());
 		assertEquals(10000, userInfo.getErrorCode());

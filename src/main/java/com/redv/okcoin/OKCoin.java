@@ -1,5 +1,7 @@
 package com.redv.okcoin;
 
+import java.io.IOException;
+
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -20,25 +22,26 @@ public interface OKCoin {
 
 	@GET
 	@Path("ticker.do")
-	TickerResponse getTicker(@QueryParam("symbol") String symbol);
+	TickerResponse getTicker(@QueryParam("symbol") String symbol)
+			throws IOException;
 
 	@GET
 	@Path("depth.do")
-	Depth getDepth(@QueryParam("symbol") String symbol);
+	Depth getDepth(@QueryParam("symbol") String symbol) throws IOException;
 
 	@GET
 	@Path("trades.do")
-	Trade[] getTrades(@QueryParam("symbol") String symbol);
+	Trade[] getTrades(@QueryParam("symbol") String symbol) throws IOException;
 
 	@GET
 	@Path("trades.do")
 	Trade[] getTrades(@QueryParam("symbol") String symbol,
-			@QueryParam("since") long since);
+			@QueryParam("since") long since) throws IOException;
 
 	@POST
 	@Path("userinfo.do")
 	UserInfo getUserInfo(@QueryParam("partner") long partner,
-			@QueryParam("sign") String sign);
+			@QueryParam("sign") String sign) throws IOException;
 
 	@POST
 	@Path("trade.do")
@@ -47,20 +50,20 @@ public interface OKCoin {
 			@QueryParam("type") String type,
 			@QueryParam("rate") String rate,
 			@QueryParam("amount") String amount,
-			@QueryParam("sign") String sign);
+			@QueryParam("sign") String sign) throws IOException;
 
 	@POST
 	@Path("cancelorder.do")
 	TradeResult cancelOrder(@QueryParam("partner") long partner,
 			@QueryParam("order_id") long orderId,
 			@QueryParam("symbol") String symbol,
-			@QueryParam("sign") String sign);
+			@QueryParam("sign") String sign) throws IOException;
 
 	@POST
 	@Path("getorder.do")
 	OrderResult getOrder(@QueryParam("partner") long partner,
 			@QueryParam("order_id") long orderId,
 			@QueryParam("symbol") String symbol,
-			@QueryParam("sign") String sign);
+			@QueryParam("sign") String sign) throws IOException;
 
 }

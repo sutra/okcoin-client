@@ -1,13 +1,21 @@
 package com.redv.okcoin.domain;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class Result extends AbstractObject {
 
 	private static final long serialVersionUID = 2013122001L;
 
-	private int errorNum;
+	private final int errorNum;
 
-	private int resultCode;
+	private final int resultCode;
+
+	public Result(
+			@JsonProperty("errorNum") final int errorNum,
+			@JsonProperty("resultCode") final int resultCode) {
+		this.errorNum = errorNum;
+		this.resultCode = resultCode;
+	}
 
 	/**
 	 * @return the errorNum
@@ -17,24 +25,10 @@ public class Result extends AbstractObject {
 	}
 
 	/**
-	 * @param errorNum the errorNum to set
-	 */
-	public void setErrorNum(int errorNum) {
-		this.errorNum = errorNum;
-	}
-
-	/**
 	 * @return the resultCode
 	 */
 	public int getResultCode() {
 		return resultCode;
-	}
-
-	/**
-	 * @param resultCode the resultCode to set
-	 */
-	public void setResultCode(int resultCode) {
-		this.resultCode = resultCode;
 	}
 
 }
