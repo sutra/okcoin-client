@@ -24,9 +24,8 @@ import com.xeiam.xchange.dto.Order.OrderType;
 import com.xeiam.xchange.dto.account.AccountInfo;
 import com.xeiam.xchange.dto.marketdata.OrderBook;
 import com.xeiam.xchange.dto.marketdata.Ticker;
-import com.xeiam.xchange.dto.marketdata.Ticker.TickerBuilder;
-import com.xeiam.xchange.dto.marketdata.Trades.TradeSortType;
 import com.xeiam.xchange.dto.marketdata.Trades;
+import com.xeiam.xchange.dto.marketdata.Trades.TradeSortType;
 import com.xeiam.xchange.dto.trade.LimitOrder;
 import com.xeiam.xchange.dto.trade.OpenOrders;
 import com.xeiam.xchange.dto.trade.Wallet;
@@ -56,15 +55,14 @@ public final class OKCoinAdapters {
 
 	public static Ticker adaptTicker(TickerResponse tickerResponse,
 			CurrencyPair currencyPair) {
-		return TickerBuilder
-				.newInstance()
-				.withCurrencyPair(currencyPair)
-				.withHigh(tickerResponse.getTicker().getHigh())
-				.withLow(tickerResponse.getTicker().getLow())
-				.withBid(tickerResponse.getTicker().getBuy())
-				.withAsk(tickerResponse.getTicker().getSell())
-				.withLast(tickerResponse.getTicker().getLast())
-				.withVolume(tickerResponse.getTicker().getVol())
+		return new Ticker.Builder()
+				.currencyPair(currencyPair)
+				.high(tickerResponse.getTicker().getHigh())
+				.low(tickerResponse.getTicker().getLow())
+				.bid(tickerResponse.getTicker().getBuy())
+				.ask(tickerResponse.getTicker().getSell())
+				.last(tickerResponse.getTicker().getLast())
+				.volume(tickerResponse.getTicker().getVol())
 				.build();
 	}
 
@@ -199,11 +197,12 @@ public final class OKCoinAdapters {
 				adaptOrderType(order.getType()),
 				order.getDealAmount(),
 				adaptSymbol(order.getSymbol()),
-				order.getAvgRate(), 
+				order.getAvgRate(),
 				null,
 				null,
-				String.valueOf(order.getOrderId())
-				);
+				String.valueOf(order.getOrderId()),
+				null,
+				null);
 	}
 
 }
