@@ -28,6 +28,7 @@ import com.xeiam.xchange.dto.marketdata.Trades;
 import com.xeiam.xchange.dto.marketdata.Trades.TradeSortType;
 import com.xeiam.xchange.dto.trade.LimitOrder;
 import com.xeiam.xchange.dto.trade.OpenOrders;
+import com.xeiam.xchange.dto.trade.UserTrades;
 import com.xeiam.xchange.dto.trade.Wallet;
 
 /**
@@ -132,13 +133,13 @@ public final class OKCoinAdapters {
 		return new OpenOrders(openOrders);
 	}
 
-	public static Trades adaptTrades(OrderResult orderResult) {
-		List<com.xeiam.xchange.dto.marketdata.Trade> trades
+	public static UserTrades adaptUserTrades(OrderResult orderResult) {
+		List<com.xeiam.xchange.dto.trade.UserTrade> userTrades
 			= new ArrayList<>(orderResult.getOrders().length);
 		for (Order order : orderResult.getOrders()) {
-			trades.add(adaptTrade(order));
+			userTrades.add(adaptUserTrade(order));
 		}
-		return new Trades(trades, TradeSortType.SortByTimestamp);
+		return new UserTrades(userTrades, TradeSortType.SortByTimestamp);
 	}
 
 	private static List<LimitOrder> adaptLimitOrders(OrderType type,
@@ -191,9 +192,9 @@ public final class OKCoinAdapters {
 				? OrderType.BID : OrderType.ASK;
 	}
 
-	private static com.xeiam.xchange.dto.marketdata.Trade adaptTrade(
+	private static com.xeiam.xchange.dto.trade.UserTrade adaptUserTrade(
 			Order order) {
-		return new com.xeiam.xchange.dto.marketdata.Trade(
+		return new com.xeiam.xchange.dto.trade.UserTrade(
 				adaptOrderType(order.getType()),
 				order.getDealAmount(),
 				adaptSymbol(order.getSymbol()),

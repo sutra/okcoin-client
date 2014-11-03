@@ -18,10 +18,10 @@ import com.xeiam.xchange.NotAvailableFromExchangeException;
 import com.xeiam.xchange.NotYetImplementedForExchangeException;
 import com.xeiam.xchange.currency.CurrencyPair;
 import com.xeiam.xchange.dto.Order.OrderType;
-import com.xeiam.xchange.dto.marketdata.Trades;
 import com.xeiam.xchange.dto.trade.LimitOrder;
 import com.xeiam.xchange.dto.trade.MarketOrder;
 import com.xeiam.xchange.dto.trade.OpenOrders;
+import com.xeiam.xchange.dto.trade.UserTrades;
 import com.xeiam.xchange.service.polling.PollingTradeService;
 
 public class OKCoinTradeService extends OKCoinTradeServiceRaw implements
@@ -114,7 +114,7 @@ public class OKCoinTradeService extends OKCoinTradeServiceRaw implements
 	 * {@inheritDoc}
 	 */
 	@Override
-	public Trades getTradeHistory(Object... arguments)
+	public UserTrades getTradeHistory(Object... arguments)
 			throws ExchangeException, NotAvailableFromExchangeException,
 			NotYetImplementedForExchangeException, IOException {
 		int argc = arguments.length;
@@ -122,7 +122,7 @@ public class OKCoinTradeService extends OKCoinTradeServiceRaw implements
 		Long orderId = argc > 0 ? (Long) arguments[1] : null;
 
 		if (currencyPair != null && orderId != null) {
-			return OKCoinAdapters.adaptTrades(
+			return OKCoinAdapters.adaptUserTrades(
 					getOrder(orderId, OKCoinAdapters.adaptSymbol(currencyPair)));
 		} else {
 			throw new IllegalArgumentException();
