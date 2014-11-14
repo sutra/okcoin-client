@@ -23,6 +23,7 @@ import com.xeiam.xchange.dto.trade.MarketOrder;
 import com.xeiam.xchange.dto.trade.OpenOrders;
 import com.xeiam.xchange.dto.trade.UserTrades;
 import com.xeiam.xchange.service.polling.PollingTradeService;
+import com.xeiam.xchange.service.polling.trade.TradeHistoryParams;
 
 public class OKCoinTradeService extends OKCoinTradeServiceRaw implements
 		PollingTradeService {
@@ -127,6 +128,24 @@ public class OKCoinTradeService extends OKCoinTradeServiceRaw implements
 		} else {
 			throw new IllegalArgumentException();
 		}
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public UserTrades getTradeHistory(TradeHistoryParams params)
+			throws ExchangeException, NotAvailableFromExchangeException,
+			NotYetImplementedForExchangeException, IOException {
+		throw new NotYetImplementedForExchangeException();
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public TradeHistoryParams createTradeHistoryParams() {
+		return null;
 	}
 
 }
