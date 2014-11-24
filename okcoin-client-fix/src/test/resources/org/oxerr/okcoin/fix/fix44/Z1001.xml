@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="ISO-8859-1" standalone="no"?>
+<message>
+	<header>
+		<field tag="8"><![CDATA[FIX.4.4]]></field>
+		<field tag="9"><![CDATA[139]]></field>
+		<field tag="34"><![CDATA[2]]></field>
+		<field tag="35"><![CDATA[Z1001]]></field>
+		<field tag="49"><![CDATA[OKSERVER]]></field>
+		<field tag="52"><![CDATA[20141123-17:14:32.925]]></field>
+		<field tag="56"><![CDATA[BD703B2E-7ED8-491D-84DD-A7E73BFEE422]]></field>
+	</header>
+	<body>
+		<field tag="1"><![CDATA[1234567]]></field>
+		<field tag="15"><![CDATA[CNY/BTC/LTC]]></field>
+		<field tag="8001"><![CDATA[8.290051/1.0623/0]]></field>
+	</body>
+	<trailer>
+		<field tag="10"><![CDATA[111]]></field>
+	</trailer>
+</message>
