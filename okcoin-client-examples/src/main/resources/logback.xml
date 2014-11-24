@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<configuration>
+
+	<appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+		<filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+			<level>INFO</level>
+		</filter>
+		<encoder>
+			<pattern>%d{HH:mm:ss.SSS} [%t] %-5p [%c{16}#%M:%3L] - %m%n</pattern>
+		</encoder>
+	</appender>
+
+	<appender name="FILE" class="ch.qos.logback.core.FileAppender">
+		<file>target/okcoin-client-examples.log</file>
+		<encoder>
+			<charset>UTF-8</charset>
+			<pattern>%d [%t] %-5p [%c{16}#%M:%3L] - %m%n</pattern>
+		</encoder>
+	</appender>
+
+	<root level="WARN">
+		<appender-ref ref="STDOUT" />
+		<appender-ref ref="FILE" />
+	</root>
+
+	<logger name="quickfix" level="TRACE" />
+	<logger name="org.quickfixj" level="TRACE" />
+	<logger name="org.oxerr.okcoin" level="TRACE" />
+
+</configuration>

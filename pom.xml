@@ -49,11 +49,15 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+		<quickfixj.version>1.5.3-bd</quickfixj.version>
+		<mina.version>1.1.7</mina.version>
 	</properties>
 
 	<modules>
 		<module>redv</module>
 		<module>okcoin-client-rest</module>
+		<module>okcoin-client-fix</module>
+		<module>okcoin-client-examples</module>
 	</modules>
 
 	<build>
@@ -166,6 +170,16 @@
 				<version>4.3.4</version>
 			</dependency>
 			<dependency>
+				<groupId>org.apache.mina</groupId>
+				<artifactId>mina-core</artifactId>
+				<version>${mina.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.mina</groupId>
+				<artifactId>mina-filter-ssl</artifactId>
+				<version>${mina.version}</version>
+			</dependency>
+			<dependency>
 				<groupId>org.slf4j</groupId>
 				<artifactId>slf4j-api</artifactId>
 				<version>1.7.7</version>
@@ -205,6 +219,16 @@
 				<artifactId>junit</artifactId>
 				<version>4.11</version>
 			</dependency>
+			<dependency>
+				<groupId>quickfixj</groupId>
+				<artifactId>quickfixj-core</artifactId>
+				<version>${quickfixj.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>quickfixj</groupId>
+				<artifactId>quickfixj-msg-fix44</artifactId>
+				<version>${quickfixj.version}</version>
+			</dependency>
 		</dependencies>
 	</dependencyManagement>
 	<dependencies>
@@ -214,6 +238,15 @@
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
+	<repositories>
+		<repository>
+			<id>MarketceteraRepo</id>
+			<url>http://repo.marketcetera.org/maven</url>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
+		</repository>
+	</repositories>
 	<scm>
 		<url>https://github.com/sutra/okcoin-client</url>
 	</scm>
