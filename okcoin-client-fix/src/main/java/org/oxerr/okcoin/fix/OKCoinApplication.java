@@ -82,7 +82,7 @@ public class OKCoinApplication extends MessageCracker implements Application {
 			throw new RuntimeException(e.getMessage(), e);
 		}
 
-		if (MsgType.LOGON.equals(msgType)) {
+		if (MsgType.LOGON.equals(msgType) || MsgType.HEARTBEAT.equals(msgType)) {
 			message.setField(new Username(partner));
 			message.setField(new Password(secretKey));
 		}
