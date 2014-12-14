@@ -36,6 +36,7 @@ public class Client {
 	private final DataDictionary dataDictionary;
 	private final OKCoinApplication app;
 	private final SessionID sessionId;
+	private final Initiator initiator;
 
 	public Client(String partner, String secretKey) throws IOException,
 			ConfigError, InterruptedException {
@@ -72,7 +73,7 @@ public class Client {
 		MessageStoreFactory storeFactory = new FileStoreFactory(settings);
 		LogFactory logFactory = new FileLogFactory(settings);
 		MessageFactory messageFactory = new OKCoinMessageFactory();
-		Initiator initiator = new SocketInitiator(app, storeFactory, settings,
+		initiator = new SocketInitiator(app, storeFactory, settings,
 				logFactory, messageFactory);
 		initiator.start();
 
@@ -111,6 +112,7 @@ public class Client {
 
 		log.info("Waiting a moment and exiting.");
 		TimeUnit.SECONDS.sleep(30);
+		client.initiator.stop();
 	}
 
 }
