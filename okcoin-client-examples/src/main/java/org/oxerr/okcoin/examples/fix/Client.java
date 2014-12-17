@@ -2,6 +2,8 @@ package org.oxerr.okcoin.examples.fix;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.math.BigDecimal;
+import java.util.Date;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
@@ -16,6 +18,7 @@ import quickfix.DataDictionary;
 import quickfix.FieldNotFound;
 import quickfix.FileLogFactory;
 import quickfix.FileStoreFactory;
+import quickfix.Group;
 import quickfix.IncorrectTagValue;
 import quickfix.Initiator;
 import quickfix.LogFactory;
@@ -25,7 +28,12 @@ import quickfix.SessionID;
 import quickfix.SessionSettings;
 import quickfix.SocketInitiator;
 import quickfix.UnsupportedMessageType;
+import quickfix.field.MDEntryPx;
+import quickfix.field.MDEntrySize;
+import quickfix.field.MDEntryType;
 import quickfix.field.MDUpdateType;
+import quickfix.field.NoMDEntries;
+import quickfix.field.OrigTime;
 import quickfix.field.SubscriptionRequestType;
 import quickfix.fix44.MarketDataSnapshotFullRefresh;
 
@@ -50,6 +58,21 @@ public class Client {
 					UnsupportedMessageType, IncorrectTagValue {
 				log.info("MarketDataSnapshotFullRefresh: {}, {}",
 						message, message.toXML(dataDictionary));
+				Date origTime = message.getField(new OrigTime()).getValue();
+				String symbol = message.getSymbol().getValue();
+				String mdReqId = message.isSetMDReqID() ? message.getMDReqID().getValue() : null;
+
+				log.info("OrigTime: {}", origTime);
+				log.info("Symbol: {}", symbol);
+				log.info("MDReqID: {}", mdReqId);
+
+				for (int i = 1, l = message.getNoMDEntries().getValue(); i <= l; i++) {
+					Group group = message.getGroup(i, NoMDEntries.FIELD);
+					char type = group.getChar(MDEntryType.FIELD);
+					BigDecimal px = group.getField(new MDEntryPx()).getValue();
+					BigDecimal size = group.isSetField(MDEntrySize.FIELD) ? group.getField(new MDEntrySize()).getValue() : null;
+					log.info("type: {}, px: {}, size: {}", type, px, size);
+				}
 			}
 
 			@Override
