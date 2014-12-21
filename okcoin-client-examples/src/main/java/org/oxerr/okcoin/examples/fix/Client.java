@@ -8,8 +8,8 @@ import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 import org.oxerr.okcoin.fix.OKCoinApplication;
-import org.oxerr.okcoin.fix.fix44.AccountInfoResponse;
 import org.oxerr.okcoin.fix.fix44.OKCoinMessageFactory;
+import org.oxerr.okcoin.xchange.service.fix.OKCoinXChangeApplication;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -37,6 +37,8 @@ import quickfix.field.OrigTime;
 import quickfix.field.SubscriptionRequestType;
 import quickfix.fix44.MarketDataSnapshotFullRefresh;
 
+import com.xeiam.xchange.dto.account.AccountInfo;
+
 public class Client {
 
 	private static final Logger log = LoggerFactory.getLogger(Client.class);
@@ -50,7 +52,7 @@ public class Client {
 			ConfigError, InterruptedException {
 		dataDictionary = new DataDictionary("FIX44.xml");
 
-		app = new OKCoinApplication(partner, secretKey) {
+		app = new OKCoinXChangeApplication(partner, secretKey) {
 
 			@Override
 			public void onMessage(MarketDataSnapshotFullRefresh message,
@@ -76,14 +78,9 @@ public class Client {
 			}
 
 			@Override
-			public void onMessage(AccountInfoResponse message,
-					SessionID sessionId) throws FieldNotFound,
-					UnsupportedMessageType, IncorrectTagValue {
-				String[] currencies = message.getCurrency().getValue().split("/");
-				String[] balances = message.getBalance().getValue().split("/");
-				for (int i = 0, l = currencies.length; i < l; i++) {
-					log.info("{}: {}", currencies[i], balances[i]);
-				}
+			public void onAccountInfo(AccountInfo accountInfo,
+					SessionID sessionId) {
+				log.info("AccountInfo: {}", accountInfo);
 			}
 
 		};

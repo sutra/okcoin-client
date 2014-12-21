@@ -10,19 +10,22 @@
 		<version>1.3.0-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>okcoin-client-examples</artifactId>
+	<artifactId>okcoin-client-xchange</artifactId>
 
-	<name>OKCoin Client - Examples</name>
+	<name>OKCoin Client - XChange</name>
+	<description>
+	<![CDATA[
+		Client for <a href="http://xeiam.com/xchange/">XChange</a> compatibility.
+	]]></description>
 
 	<dependencies>
 		<dependency>
-			<groupId>ch.qos.logback</groupId>
-			<artifactId>logback-classic</artifactId>
-			<optional>true</optional>
+			<groupId>com.xeiam.xchange</groupId>
+			<artifactId>xchange-core</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>${project.groupId}</groupId>
-			<artifactId>okcoin-client-xchange</artifactId>
+			<artifactId>okcoin-client-fix</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 	</dependencies>

@@ -57,6 +57,7 @@
 		<module>redv</module>
 		<module>okcoin-client-rest</module>
 		<module>okcoin-client-fix</module>
+		<module>okcoin-client-xchange</module>
 		<module>okcoin-client-examples</module>
 	</modules>
 
