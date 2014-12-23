@@ -10,6 +10,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import quickfix.Application;
+import quickfix.ConfigError;
+import quickfix.DataDictionary;
 import quickfix.DoNotSend;
 import quickfix.FieldNotFound;
 import quickfix.IncorrectDataFormat;
@@ -32,6 +34,7 @@ import quickfix.fix44.TradeCaptureReportRequest;
 public class OKCoinApplication extends MessageCracker implements Application {
 
 	private final Logger log = LoggerFactory.getLogger(OKCoinApplication.class);
+	private final DataDictionary dataDictionary;
 	private final ExecutorService executorService;
 	private final MarketDataRequestCreator marketDataRequestCreator;
 	private final TradeRequestCreator tradeRequestCreator;
@@ -45,6 +48,12 @@ public class OKCoinApplication extends MessageCracker implements Application {
 		this.tradeRequestCreator = new TradeRequestCreator(partner, secretKey);
 		executorService = Executors.newFixedThreadPool(Runtime.getRuntime()
 				.availableProcessors() * 2 + 1);
+
+		try {
+			dataDictionary = new DataDictionary("org/oxerr/okcoin/fix/FIX44.xml");
+		} catch (ConfigError e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 	/**
@@ -73,8 +82,6 @@ public class OKCoinApplication extends MessageCracker implements Application {
 	 */
 	@Override
 	public void toAdmin(Message message, SessionID sessionId) {
-		log.trace("toAdmin: {}", message);
-
 		String msgType;
 		try {
 			msgType = message.getHeader().getString(MsgType.FIELD);
@@ -86,6 +93,11 @@ public class OKCoinApplication extends MessageCracker implements Application {
 			message.setField(new Username(partner));
 			message.setField(new Password(secretKey));
 		}
+
+		if (log.isTraceEnabled()) {
+			log.trace("toAdmin: {}", message);
+			log.trace("toAdmin: {}", message.toXML(dataDictionary));
+		}
 	}
 
 	/**
@@ -95,7 +107,10 @@ public class OKCoinApplication extends MessageCracker implements Application {
 	public void fromAdmin(Message message, SessionID sessionId)
 			throws FieldNotFound, IncorrectDataFormat, IncorrectTagValue,
 			RejectLogon {
-		log.trace("fromAdmin: {}", message);
+		if (log.isTraceEnabled()) {
+			log.trace("fromAdmin: {}", message);
+			log.trace("fromAdmin: {}", message.toXML(dataDictionary));
+		}
 	}
 
 	/**
@@ -103,7 +118,10 @@ public class OKCoinApplication extends MessageCracker implements Application {
 	 */
 	@Override
 	public void toApp(Message message, SessionID sessionId) throws DoNotSend {
-		log.trace("toApp: {}", message);
+		if (log.isTraceEnabled()) {
+			log.trace("toApp: {}", message);
+			log.trace("toApp: {}", message.toXML(dataDictionary));
+		}
 	}
 
 	/**
@@ -113,7 +131,10 @@ public class OKCoinApplication extends MessageCracker implements Application {
 	public void fromApp(Message message, SessionID sessionId)
 			throws FieldNotFound, IncorrectDataFormat, IncorrectTagValue,
 			UnsupportedMessageType {
-		log.trace("fromApp: {}", message);
+		if (log.isTraceEnabled()) {
+			log.trace("fromApp: {}", message);
+			log.trace("fromApp: {}", message.toXML(dataDictionary));
+		}
 		crack(message, sessionId);
 	}
 
