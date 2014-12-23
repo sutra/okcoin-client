@@ -13,11 +13,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import quickfix.ConfigError;
-import quickfix.DataDictionary;
-import quickfix.FieldNotFound;
 import quickfix.FileLogFactory;
 import quickfix.FileStoreFactory;
-import quickfix.IncorrectTagValue;
 import quickfix.Initiator;
 import quickfix.LogFactory;
 import quickfix.MessageFactory;
@@ -25,10 +22,8 @@ import quickfix.MessageStoreFactory;
 import quickfix.SessionID;
 import quickfix.SessionSettings;
 import quickfix.SocketInitiator;
-import quickfix.UnsupportedMessageType;
 import quickfix.field.MDUpdateType;
 import quickfix.field.SubscriptionRequestType;
-import quickfix.fix44.MarketDataSnapshotFullRefresh;
 
 import com.xeiam.xchange.dto.account.AccountInfo;
 import com.xeiam.xchange.dto.marketdata.OrderBook;
@@ -39,26 +34,13 @@ public class Client {
 
 	private static final Logger log = LoggerFactory.getLogger(Client.class);
 
-	private final DataDictionary dataDictionary;
 	private final OKCoinApplication app;
 	private final SessionID sessionId;
 	private final Initiator initiator;
 
 	public Client(String partner, String secretKey) throws IOException,
 			ConfigError, InterruptedException {
-		dataDictionary = new DataDictionary("FIX44.xml");
-
 		app = new OKCoinXChangeApplication(partner, secretKey) {
-
-			@Override
-			public void onMessage(MarketDataSnapshotFullRefresh message,
-					SessionID sessionId) throws FieldNotFound,
-					UnsupportedMessageType, IncorrectTagValue {
-				log.info("MarketDataSnapshotFullRefresh: {}, {}",
-						message, message.toXML(dataDictionary));
-
-				super.onMessage(message, sessionId);
-			}
 
 			@Override
 			public void onOrderBook(OrderBook orderBook, SessionID sessionId) {
