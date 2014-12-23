@@ -24,8 +24,7 @@
 		<appender-ref ref="FILE" />
 	</root>
 
-	<logger name="quickfix" level="TRACE" />
-	<logger name="org.quickfixj" level="TRACE" />
+	<logger name="quickfix" level="INFO" />
 	<logger name="org.oxerr.okcoin" level="TRACE" />
 
 </configuration>

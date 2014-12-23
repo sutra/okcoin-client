@@ -21,12 +21,14 @@ import quickfix.field.MDEntrySize;
 import quickfix.field.MDEntryType;
 import quickfix.field.NoMDEntries;
 import quickfix.field.OrigTime;
+import quickfix.field.Side;
 import quickfix.fix44.MarketDataSnapshotFullRefresh;
 
 import com.xeiam.xchange.currency.CurrencyPair;
 import com.xeiam.xchange.dto.Order.OrderType;
 import com.xeiam.xchange.dto.account.AccountInfo;
 import com.xeiam.xchange.dto.marketdata.OrderBook;
+import com.xeiam.xchange.dto.marketdata.Trade;
 import com.xeiam.xchange.dto.trade.LimitOrder;
 
 /**
@@ -56,6 +58,7 @@ public class OKCoinXChangeApplication extends OKCoinApplication {
 
 		List<LimitOrder> asks = new ArrayList<LimitOrder>();
 		List<LimitOrder> bids = new ArrayList<LimitOrder>();
+		List<Trade> trades = new ArrayList<Trade>();
 
 		for (int i = 1, l = message.getNoMDEntries().getValue(); i <= l; i++) {
 			Group group = message.getGroup(i, NoMDEntries.FIELD);
@@ -75,6 +78,11 @@ public class OKCoinXChangeApplication extends OKCoinApplication {
 				// asks should be sorted by limit price ascending
 				asks.add(0, new LimitOrder.Builder(OrderType.ASK, currencyPair).limitPrice(px).tradableAmount(size).build());
 				break;
+			case MDEntryType.TRADE:
+				OrderType orderType = group.getField(new Side()).getValue() == Side.BUY ? OrderType.BID : OrderType.ASK;
+				Trade trade = new Trade.Builder().currencyPair(currencyPair).type(orderType).price(px).tradableAmount(size).build();
+				trades.add(trade);
+				break;
 			default:
 				break;
 			}
@@ -92,6 +100,10 @@ public class OKCoinXChangeApplication extends OKCoinApplication {
 			OrderBook orderBook = new OrderBook(origTime, asks, bids);
 			onOrderBook(orderBook, sessionId);
 		}
+
+		if (trades.size() > 0) {
+			onTrades(trades, sessionId);
+		}
 	}
 
 
@@ -102,6 +114,9 @@ public class OKCoinXChangeApplication extends OKCoinApplication {
 	}
 
 	public void onOrderBook(OrderBook orderBook, SessionID sessionId) {
+	}
+
+	public void onTrades(List<Trade> trade, SessionID sessionId) {
 	}
 
 	public void onAccountInfo(AccountInfo accountInfo, SessionID sessionId) {

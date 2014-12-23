@@ -2,6 +2,7 @@ package org.oxerr.okcoin.examples.fix;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
@@ -31,6 +32,7 @@ import quickfix.fix44.MarketDataSnapshotFullRefresh;
 
 import com.xeiam.xchange.dto.account.AccountInfo;
 import com.xeiam.xchange.dto.marketdata.OrderBook;
+import com.xeiam.xchange.dto.marketdata.Trade;
 import com.xeiam.xchange.dto.trade.LimitOrder;
 
 public class Client {
@@ -86,6 +88,13 @@ public class Client {
 				LimitOrder bid = orderBook.getBids().get(0);
 				log.info("lowest  ask: {}, {}", ask.getLimitPrice(), ask.getTradableAmount());
 				log.info("highest bid: {}, {}", bid.getLimitPrice(), bid.getTradableAmount());
+			}
+
+			@Override
+			public void onTrades(List<Trade> trades, SessionID sessionId) {
+				for (Trade trade : trades) {
+					log.info("{}", trade);
+				}
 			}
 
 			@Override
