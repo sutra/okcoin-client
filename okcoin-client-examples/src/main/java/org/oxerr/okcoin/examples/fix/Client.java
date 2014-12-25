@@ -44,6 +44,8 @@ public class Client {
 
 			@Override
 			public void onOrderBook(OrderBook orderBook, SessionID sessionId) {
+				log.info("asks: {}, bids: {}", orderBook.getAsks().size(), orderBook.getBids().size());
+
 				// bids should be sorted by limit price descending
 				LimitOrder preOrder = null;
 				for (LimitOrder order : orderBook.getBids()) {
@@ -70,6 +72,11 @@ public class Client {
 				LimitOrder bid = orderBook.getBids().get(0);
 				log.info("lowest  ask: {}, {}", ask.getLimitPrice(), ask.getTradableAmount());
 				log.info("highest bid: {}, {}", bid.getLimitPrice(), bid.getTradableAmount());
+
+				if (ask.getLimitPrice().compareTo(bid.getLimitPrice()) <= 0) {
+					throw new IllegalStateException(String.format("Lowest ask %s is not higher than the highest bid %s.",
+							ask.getLimitPrice(), bid.getLimitPrice()));
+				}
 			}
 
 			@Override

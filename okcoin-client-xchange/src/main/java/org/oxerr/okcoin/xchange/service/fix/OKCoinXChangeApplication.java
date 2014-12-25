@@ -2,6 +2,7 @@ package org.oxerr.okcoin.xchange.service.fix;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -68,15 +69,11 @@ public class OKCoinXChangeApplication extends OKCoinApplication {
 			log.debug("type: {}, px: {}, size: {}", type, px, size);
 
 			switch (type) {
-			case MDEntryType.OFFER:
-				// OKCoin's bid/ask are reversed?
-				// bids should be sorted by limit price descending
+			case MDEntryType.BID:
 				bids.add(new LimitOrder.Builder(OrderType.BID, currencyPair).limitPrice(px).tradableAmount(size).build());
 				break;
-			case MDEntryType.BID:
-				// OKCoin's bid/ask are reversed?
-				// asks should be sorted by limit price ascending
-				asks.add(0, new LimitOrder.Builder(OrderType.ASK, currencyPair).limitPrice(px).tradableAmount(size).build());
+			case MDEntryType.OFFER:
+				asks.add(new LimitOrder.Builder(OrderType.ASK, currencyPair).limitPrice(px).tradableAmount(size).build());
 				break;
 			case MDEntryType.TRADE:
 				OrderType orderType = group.getField(new Side()).getValue() == Side.BUY ? OrderType.BID : OrderType.ASK;
@@ -93,9 +90,26 @@ public class OKCoinXChangeApplication extends OKCoinApplication {
 			LimitOrder highestBid = bids.get(0);
 
 			if (lowestAsk.getLimitPrice().compareTo(highestBid.getLimitPrice()) <= 0) {
-				throw new IllegalStateException(String.format("Lowest ask %s is not higher than the highest bid %s.",
-						lowestAsk.getLimitPrice(), highestBid.getLimitPrice()));
+				// OKCoin's bid/ask of SNAPSHOT are reversed?
+				// Swap the bid/ask orders
+				List<LimitOrder> tmpAsks = new ArrayList<>(asks);
+
+				asks.clear();
+				for (LimitOrder limitOrder : bids) {
+					asks.add(LimitOrder.Builder.from(limitOrder).orderType(OrderType.ASK).build());
+				}
+
+				bids.clear();
+				for (LimitOrder limitOrder : tmpAsks) {
+					bids.add(LimitOrder.Builder.from(limitOrder).orderType(OrderType.BID).build());
+				}
 			}
+
+			// bids should be sorted by limit price descending
+			Collections.sort(bids);
+
+			// asks should be sorted by limit price ascending
+			Collections.sort(asks);
 
 			OrderBook orderBook = new OrderBook(origTime, asks, bids);
 			onOrderBook(orderBook, sessionId);
