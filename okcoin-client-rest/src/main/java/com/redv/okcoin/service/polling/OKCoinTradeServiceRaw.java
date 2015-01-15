@@ -53,6 +53,14 @@ public class OKCoinTradeServiceRaw extends OKCoinBaseTradePollingService {
 		return returnOrThrow(tradeResult);
 	}
 
+	/**
+	 * Returns order details.
+	 *
+	 * @param orderId the order ID.
+	 * @param symbol could be "btc_cny" or "ltc_cny".
+	 * @return the order detail.
+	 * @throws IOException indicates I/O exception.
+	 */
 	public OrderResult getOrder(long orderId, String symbol) throws IOException {
 		Map<String, Object> params = new HashMap<>();
 		params.put("order_id", orderId);
