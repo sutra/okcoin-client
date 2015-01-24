@@ -1,6 +1,6 @@
 package com.redv.okcoin;
 
-import com.xeiam.xchange.ExchangeException;
+import com.xeiam.xchange.exceptions.ExchangeException;
 
 public class OKCoinException extends ExchangeException {
 
