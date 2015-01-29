@@ -103,6 +103,12 @@
       <field name="Currency" required="N"/>
       <field name="Currency" required="N"/>
       <field name="Balance" required="N"/>
+      <field name="FreeBtc" required="N"/>
+      <field name="FreeLtc" required="N"/>
+      <field name="FreeQtCcy" required="N"/>
+      <field name="FrozenBtc" required="N"/>
+      <field name="FrozenLtc" required="N"/>
+      <field name="FrozenQtCcy" required="N"/>
     </message>
     <message name="BusinessMessageReject" msgtype="j" msgcat="app">
       <field name="RefSeqNum" required="N"/>
@@ -6825,6 +6831,12 @@
     <field number="956" name="LegInterestAccrualDate" type="LOCALMKTDATE"/>
     <field number="8000" name="AccReqID" type="STRING"/>
     <field number="8001" name="Balance" type="STRING"/>
+    <field number="8101" name="FreeBtc" type="QTY"/>
+    <field number="8102" name="FreeLtc" type="QTY"/>
+    <field number="8103" name="FreeQtCcy" type="QTY"/>
+    <field number="8104" name="FrozenBtc" type="QTY"/>
+    <field number="8105" name="FrozenLtc" type="QTY"/>
+    <field number="8106" name="FrozenQtCcy" type="QTY"/>
     <field number="8500" name="ErrorMessageLogout" type="INT"/>
     <field number="8600" name="ExceptionMessage" type="STRING"/>
   </fields>

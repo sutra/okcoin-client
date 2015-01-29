@@ -2,6 +2,12 @@ package org.oxerr.okcoin.fix.fix44;
 
 import org.oxerr.okcoin.fix.field.AccReqID;
 import org.oxerr.okcoin.fix.field.Balance;
+import org.oxerr.okcoin.fix.field.FreeBtc;
+import org.oxerr.okcoin.fix.field.FreeLtc;
+import org.oxerr.okcoin.fix.field.FreeQtCcy;
+import org.oxerr.okcoin.fix.field.FrozenBtc;
+import org.oxerr.okcoin.fix.field.FrozenLtc;
+import org.oxerr.okcoin.fix.field.FrozenQtCcy;
 
 import quickfix.FieldNotFound;
 import quickfix.field.Account;
@@ -112,6 +118,121 @@ public class AccountInfoResponse extends Message {
 
 	public boolean isSetBalance() {
 		return isSetField(Balance.FIELD);
+	}
+
+	public void set(FreeBtc value) {
+		setField(value);
+	}
+
+	public FreeBtc get(FreeBtc value) throws FieldNotFound {
+		getField(value);
+		return value;
+	}
+
+	public FreeBtc getFreeBtc() throws FieldNotFound {
+		FreeBtc value = new FreeBtc();
+		getField(value);
+		return value;
+	}
+
+	public boolean isSet(FreeBtc field) {
+		return isSetField(field);
+	}
+
+	public boolean isSetFreeBtc() {
+		return isSetField(FreeBtc.FIELD);
+	}
+
+	public void set(FreeLtc value) {
+		setField(value);
+	}
+
+	public FreeLtc get(FreeLtc value) throws FieldNotFound {
+		getField(value);
+		return value;
+	}
+
+	public FreeQtCcy getFreeQtCcy() throws FieldNotFound {
+		FreeQtCcy value = new FreeQtCcy();
+		getField(value);
+		return value;
+	}
+
+	public boolean isSet(FreeQtCcy field) {
+		return isSetField(field);
+	}
+
+	public boolean isSetFreeQtCcy() {
+		return isSetField(FreeQtCcy.FIELD);
+	}
+
+	public void set(FrozenBtc value) {
+		setField(value);
+	}
+
+	public FrozenBtc get(FrozenBtc value) throws FieldNotFound {
+		getField(value);
+		return value;
+	}
+
+	public FrozenBtc getFrozenBtc() throws FieldNotFound {
+		FrozenBtc value = new FrozenBtc();
+		getField(value);
+		return value;
+	}
+
+	public boolean isSet(FrozenBtc field) {
+		return isSetField(field);
+	}
+
+	public boolean isSetFrozenBtc() {
+		return isSetField(FrozenBtc.FIELD);
+	}
+
+	public void set(FrozenLtc value) {
+		setField(value);
+	}
+
+	public FrozenLtc get(FrozenLtc value) throws FieldNotFound {
+		getField(value);
+		return value;
+	}
+
+	public FrozenLtc getFrozenLtc() throws FieldNotFound {
+		FrozenLtc value = new FrozenLtc();
+		getField(value);
+		return value;
+	}
+
+	public boolean isSet(FrozenLtc field) {
+		return isSetField(field);
+	}
+
+	public boolean isSetFrozenLtc() {
+		return isSetField(FrozenLtc.FIELD);
+	}
+
+	public void set(FrozenQtCcy value) {
+		setField(value);
+	}
+
+	public FrozenQtCcy get(FrozenQtCcy value) throws FieldNotFound {
+		getField(value);
+		return value;
+	}
+
+	public FrozenQtCcy getFrozenQtCcy() throws FieldNotFound {
+		FrozenQtCcy value = new FrozenQtCcy();
+		getField(value);
+		return value;
+	}
+
+	public boolean isSet(FrozenQtCcy field) {
+		return isSetField(field);
+	}
+
+	public boolean isSetFrozenQtCcy() {
+		return isSetField(FrozenQtCcy.FIELD);
 	}
 
 }
