@@ -97,7 +97,7 @@
       <field name="Account" required="N"/>
       <field name="AccReqID" required="N"/>
     </message>
-    <message name="ExceptionResponseMessage" msgtype="Z1001" msgcat="app">
+    <message name="AccountInfoResponseMessage" msgtype="Z1001" msgcat="app">
       <field name="Account" required="Y"/>
       <field name="AccReqID" required="N"/>
       <field name="Currency" required="N"/>
