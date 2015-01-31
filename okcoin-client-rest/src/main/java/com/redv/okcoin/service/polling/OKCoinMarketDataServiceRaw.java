@@ -9,6 +9,7 @@ import com.redv.okcoin.OKCoinAdapters;
 import com.redv.okcoin.domain.Depth;
 import com.redv.okcoin.domain.TickerResponse;
 import com.redv.okcoin.domain.Trade;
+import com.xeiam.xchange.Exchange;
 import com.xeiam.xchange.ExchangeSpecification;
 import com.xeiam.xchange.currency.CurrencyPair;
 
@@ -16,13 +17,10 @@ public class OKCoinMarketDataServiceRaw extends OKCoinBasePollingService {
 
 	private final OKCoin okCoin;
 
-	/**
-	 * @param exchangeSpecification the exchange specification.
-	 */
-	protected OKCoinMarketDataServiceRaw(
-			ExchangeSpecification exchangeSpecification) {
-		super(exchangeSpecification);
-		final String baseUrl = exchangeSpecification.getSslUri();
+	protected OKCoinMarketDataServiceRaw(Exchange exchange) {
+		super(exchange);
+		ExchangeSpecification spec = exchange.getExchangeSpecification();
+		final String baseUrl = spec.getSslUri();
 		okCoin = RestProxyFactory.createProxy(OKCoin.class, baseUrl);
 	}
 

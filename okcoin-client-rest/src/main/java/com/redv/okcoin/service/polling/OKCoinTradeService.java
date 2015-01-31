@@ -12,7 +12,7 @@ import com.redv.okcoin.OKCoinAdapters;
 import com.redv.okcoin.OKCoinException;
 import com.redv.okcoin.domain.OrderResult;
 import com.redv.okcoin.domain.TradeResult;
-import com.xeiam.xchange.ExchangeSpecification;
+import com.xeiam.xchange.Exchange;
 import com.xeiam.xchange.currency.CurrencyPair;
 import com.xeiam.xchange.dto.Order.OrderType;
 import com.xeiam.xchange.dto.trade.LimitOrder;
@@ -30,11 +30,8 @@ public class OKCoinTradeService extends OKCoinTradeServiceRaw implements
 
 	private final Logger log = LoggerFactory.getLogger(OKCoinTradeService.class);
 
-	/**
-	 * @param exchangeSpecification the exchange specification.
-	 */
-	public OKCoinTradeService(ExchangeSpecification exchangeSpecification) {
-		super(exchangeSpecification);
+	public OKCoinTradeService(Exchange exchange) {
+		super(exchange);
 	}
 
 	/**

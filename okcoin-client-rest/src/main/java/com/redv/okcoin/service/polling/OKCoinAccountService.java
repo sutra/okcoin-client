@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.math.BigDecimal;
 
 import com.redv.okcoin.OKCoinAdapters;
-import com.xeiam.xchange.ExchangeSpecification;
+import com.xeiam.xchange.Exchange;
 import com.xeiam.xchange.dto.account.AccountInfo;
 import com.xeiam.xchange.exceptions.ExchangeException;
 import com.xeiam.xchange.exceptions.NotAvailableFromExchangeException;
@@ -14,11 +14,8 @@ import com.xeiam.xchange.service.polling.account.PollingAccountService;
 public class OKCoinAccountService extends OKCoinAccountServiceRaw implements
 		PollingAccountService {
 
-	/**
-	 * @param exchangeSpecification the exchange specification.
-	 */
-	public OKCoinAccountService(ExchangeSpecification exchangeSpecification) {
-		super(exchangeSpecification);
+	public OKCoinAccountService(Exchange exchange) {
+		super(exchange);
 	}
 
 	/**

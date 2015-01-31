@@ -6,7 +6,7 @@ import java.util.Map;
 
 import com.redv.okcoin.domain.OrderResult;
 import com.redv.okcoin.domain.TradeResult;
-import com.xeiam.xchange.ExchangeSpecification;
+import com.xeiam.xchange.Exchange;
 
 public class OKCoinTradeServiceRaw extends OKCoinBaseTradePollingService {
 
@@ -14,11 +14,8 @@ public class OKCoinTradeServiceRaw extends OKCoinBaseTradePollingService {
 	private static final String METHOD_CANCEL_ORDER = "cancelorder";
 	private static final String METHOD_GET_ORDER = "getorder";
 
-	/**
-	 * @param exchangeSpecification the exchange specification.
-	 */
-	protected OKCoinTradeServiceRaw(ExchangeSpecification exchangeSpecification) {
-		super(exchangeSpecification);
+	protected OKCoinTradeServiceRaw(Exchange exchange) {
+		super(exchange);
 	}
 
 	public TradeResult trade(String symbol, String type, String rate,

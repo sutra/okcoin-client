@@ -13,6 +13,7 @@ import com.redv.okcoin.OKCoin;
 import com.redv.okcoin.OKCoinException;
 import com.redv.okcoin.SignatureCreator;
 import com.redv.okcoin.domain.ErrorResult;
+import com.xeiam.xchange.Exchange;
 import com.xeiam.xchange.ExchangeSpecification;
 
 public class OKCoinBaseTradePollingService extends OKCoinBasePollingService {
@@ -29,18 +30,14 @@ public class OKCoinBaseTradePollingService extends OKCoinBasePollingService {
 
 	private Map<String, Long> lasts = new HashMap<String, Long>();
 
-	/**
-	 * @param exchangeSpecification the exchange specification.
-	 */
-	protected OKCoinBaseTradePollingService(
-			ExchangeSpecification exchangeSpecification) {
-		super(exchangeSpecification);
-		okCoin = RestProxyFactory.createProxy(OKCoin.class,
-				exchangeSpecification.getSslUri());
-		final String apiKey = exchangeSpecification.getApiKey();
+	protected OKCoinBaseTradePollingService(Exchange exchange) {
+		super(exchange);
+		ExchangeSpecification spec = exchange.getExchangeSpecification();
+		okCoin = RestProxyFactory.createProxy(OKCoin.class, spec.getSslUri());
+		final String apiKey = spec.getApiKey();
 		signatureCreator = new SignatureCreator(
 				apiKey,
-				exchangeSpecification.getSecretKey());
+				spec.getSecretKey());
 		partner = Long.parseLong(apiKey);
 	}
 

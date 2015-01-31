@@ -3,6 +3,8 @@ package com.redv.okcoin;
 import java.util.Arrays;
 import java.util.List;
 
+import si.mazi.rescu.SynchronizedValueFactory;
+
 import com.redv.okcoin.service.polling.OKCoinAccountService;
 import com.redv.okcoin.service.polling.OKCoinMarketDataService;
 import com.redv.okcoin.service.polling.OKCoinTradeService;
@@ -24,10 +26,10 @@ public class OKCoinExchange extends BaseExchange {
 	@Override
 	public void applySpecification(ExchangeSpecification exchangeSpecification) {
 		super.applySpecification(exchangeSpecification);
-		this.pollingMarketDataService = new OKCoinMarketDataService(exchangeSpecification);
+		this.pollingMarketDataService = new OKCoinMarketDataService(this);
 		if (exchangeSpecification.getApiKey() != null) {
-			this.pollingAccountService = new OKCoinAccountService(exchangeSpecification);
-			this.pollingTradeService = new OKCoinTradeService(exchangeSpecification);
+			this.pollingAccountService = new OKCoinAccountService(this);
+			this.pollingTradeService = new OKCoinTradeService(this);
 		}
 	}
 
@@ -46,6 +48,14 @@ public class OKCoinExchange extends BaseExchange {
 		exchangeSpecification.setExchangeSpecificParametersItem(
 				SYMBOLS_PARAMETER, SYMBOLS);
 		return exchangeSpecification;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public SynchronizedValueFactory<Long> getNonceFactory() {
+		return null;
 	}
 
 }

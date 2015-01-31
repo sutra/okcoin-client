@@ -3,7 +3,7 @@ package com.redv.okcoin.service.polling;
 import java.io.IOException;
 
 import com.redv.okcoin.domain.UserInfo;
-import com.xeiam.xchange.ExchangeSpecification;
+import com.xeiam.xchange.Exchange;
 
 public class OKCoinAccountServiceRaw extends OKCoinBaseTradePollingService {
 
@@ -12,9 +12,8 @@ public class OKCoinAccountServiceRaw extends OKCoinBaseTradePollingService {
 	/**
 	 * @param exchangeSpecification the exchange specification.
 	 */
-	protected OKCoinAccountServiceRaw(
-			ExchangeSpecification exchangeSpecification) {
-		super(exchangeSpecification);
+	protected OKCoinAccountServiceRaw(Exchange exchange) {
+		super(exchange);
 	}
 
 	public UserInfo getUserInfo() throws IOException {

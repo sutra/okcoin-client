@@ -1,8 +1,9 @@
 package com.redv.okcoin.service.polling;
 
-import java.util.Collection;
+import java.util.List;
 
 import com.redv.okcoin.OKCoinExchange;
+import com.xeiam.xchange.Exchange;
 import com.xeiam.xchange.ExchangeSpecification;
 import com.xeiam.xchange.currency.CurrencyPair;
 import com.xeiam.xchange.service.polling.BasePollingExchangeService;
@@ -11,16 +12,13 @@ import com.xeiam.xchange.service.polling.BasePollingService;
 public class OKCoinBasePollingService extends BasePollingExchangeService
 		implements BasePollingService {
 
-	private final Collection<CurrencyPair> symbols;
+	private final List<CurrencyPair> symbols;
 
-	/**
-	 * @param exchangeSpecification the exchange specification.
-	 */
 	@SuppressWarnings("unchecked")
-	protected OKCoinBasePollingService(
-			ExchangeSpecification exchangeSpecification) {
-		super(exchangeSpecification);
-		symbols = (Collection<CurrencyPair>) exchangeSpecification
+	protected OKCoinBasePollingService(Exchange exchange) {
+		super(exchange);
+		ExchangeSpecification spec = exchange.getExchangeSpecification();
+		symbols = (List<CurrencyPair>) spec
 				.getExchangeSpecificParametersItem(
 						OKCoinExchange.SYMBOLS_PARAMETER);
 	}
@@ -29,7 +27,7 @@ public class OKCoinBasePollingService extends BasePollingExchangeService
 	 * {@inheritDoc}
 	 */
 	@Override
-	public Collection<CurrencyPair> getExchangeSymbols() {
+	public List<CurrencyPair> getExchangeSymbols() {
 		return symbols;
 	}
 

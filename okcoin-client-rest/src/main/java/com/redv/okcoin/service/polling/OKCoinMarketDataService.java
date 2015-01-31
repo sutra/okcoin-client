@@ -4,7 +4,7 @@ import java.io.IOException;
 
 import com.redv.okcoin.OKCoinAdapters;
 import com.redv.okcoin.domain.Trade;
-import com.xeiam.xchange.ExchangeSpecification;
+import com.xeiam.xchange.Exchange;
 import com.xeiam.xchange.currency.CurrencyPair;
 import com.xeiam.xchange.dto.marketdata.OrderBook;
 import com.xeiam.xchange.dto.marketdata.Ticker;
@@ -17,14 +17,8 @@ import com.xeiam.xchange.service.polling.marketdata.PollingMarketDataService;
 public class OKCoinMarketDataService extends OKCoinMarketDataServiceRaw
 		implements PollingMarketDataService {
 
-	/**
-	 * Constructor.
-	 *
-	 * @param exchangeSpecification The {@link ExchangeSpecification}.
-	 */
-	public OKCoinMarketDataService(
-			ExchangeSpecification exchangeSpecification) {
-		super(exchangeSpecification);
+	public OKCoinMarketDataService(Exchange exchange) {
+		super(exchange);
 	}
 
 	/**
