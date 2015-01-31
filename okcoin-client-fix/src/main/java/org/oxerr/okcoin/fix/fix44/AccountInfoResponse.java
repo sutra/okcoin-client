@@ -152,6 +152,29 @@ public class AccountInfoResponse extends Message {
 		return value;
 	}
 
+	public FreeLtc getFreeLtc() throws FieldNotFound {
+		FreeLtc value = new FreeLtc();
+		getField(value);
+		return value;
+	}
+
+	public boolean isSet(FreeLtc field) {
+		return isSetField(field);
+	}
+
+	public boolean isSetFreeLtc() {
+		return isSetField(FreeLtc.FIELD);
+	}
+
+	public void set(FreeQtCcy value) {
+		setField(value);
+	}
+
+	public FreeQtCcy get(FreeQtCcy value) throws FieldNotFound {
+		getField(value);
+		return value;
+	}
+
 	public FreeQtCcy getFreeQtCcy() throws FieldNotFound {
 		FreeQtCcy value = new FreeQtCcy();
 		getField(value);
