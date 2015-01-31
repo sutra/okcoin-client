@@ -10,9 +10,6 @@ public class OKCoinAccountServiceRaw extends OKCoinBaseTradePollingService {
 
 	private static final String METHOD_GET_USER_INFO = "userinfo";
 
-	/**
-	 * @param exchangeSpecification the exchange specification.
-	 */
 	protected OKCoinAccountServiceRaw(Exchange exchange) {
 		super(exchange);
 	}

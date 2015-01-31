@@ -258,7 +258,7 @@ public class OKCoinApplication extends MessageCracker implements Application {
 	 * @param massStatusReqType Specifies the scope of the mass status request.
 	 * 1 = status of a specified order(Tag584 is ORDERID)
 	 * 7 = Status for all orders
-	 * @param sessionId
+	 * @param sessionId the FIX session ID.
 	 */
 	public void requestOrderMassStatus(
 			String massStatusReqId,
