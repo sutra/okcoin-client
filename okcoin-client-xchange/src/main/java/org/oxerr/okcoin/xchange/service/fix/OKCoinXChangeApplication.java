@@ -29,6 +29,7 @@ import com.xeiam.xchange.currency.CurrencyPair;
 import com.xeiam.xchange.dto.Order.OrderType;
 import com.xeiam.xchange.dto.account.AccountInfo;
 import com.xeiam.xchange.dto.marketdata.OrderBook;
+import com.xeiam.xchange.dto.marketdata.Ticker;
 import com.xeiam.xchange.dto.marketdata.Trade;
 import com.xeiam.xchange.dto.trade.LimitOrder;
 
@@ -60,6 +61,10 @@ public class OKCoinXChangeApplication extends OKCoinApplication {
 		List<LimitOrder> asks = new ArrayList<LimitOrder>();
 		List<LimitOrder> bids = new ArrayList<LimitOrder>();
 		List<Trade> trades = new ArrayList<Trade>();
+		BigDecimal openingPrice = null, closingPrice = null,
+			highPrice = null, lowPrice = null,
+			vwapPrice = null, lastPrice = null,
+			volume = null;
 
 		for (int i = 1, l = message.getNoMDEntries().getValue(); i <= l; i++) {
 			Group group = message.getGroup(i, NoMDEntries.FIELD);
@@ -79,6 +84,25 @@ public class OKCoinXChangeApplication extends OKCoinApplication {
 				OrderType orderType = group.getField(new Side()).getValue() == Side.BUY ? OrderType.BID : OrderType.ASK;
 				Trade trade = new Trade.Builder().currencyPair(currencyPair).type(orderType).price(px).tradableAmount(size).build();
 				trades.add(trade);
+				break;
+			case MDEntryType.OPENING_PRICE:
+				openingPrice = px;
+				break;
+			case MDEntryType.CLOSING_PRICE:
+				closingPrice = px;
+				break;
+			case MDEntryType.TRADING_SESSION_HIGH_PRICE:
+				highPrice = px;
+				break;
+			case MDEntryType.TRADING_SESSION_LOW_PRICE:
+				lowPrice = px;
+				break;
+			case MDEntryType.TRADING_SESSION_VWAP_PRICE:
+				vwapPrice = px;
+				break;
+			case MDEntryType.TRADE_VOLUME:
+				lastPrice = px;
+				volume = size;
 				break;
 			default:
 				break;
@@ -118,6 +142,21 @@ public class OKCoinXChangeApplication extends OKCoinApplication {
 		if (trades.size() > 0) {
 			onTrades(trades, sessionId);
 		}
+
+		if (openingPrice != null && closingPrice != null
+			&& highPrice != null && lowPrice != null
+			&& vwapPrice != null && lastPrice != null
+			&& volume != null) {
+			Ticker ticker = new Ticker.Builder()
+				.currencyPair(currencyPair)
+				.timestamp(origTime)
+				.high(highPrice)
+				.low(lowPrice)
+				.last(lastPrice)
+				.volume(volume)
+				.build();
+			onTicker(ticker);
+		}
 	}
 
 
@@ -131,6 +170,9 @@ public class OKCoinXChangeApplication extends OKCoinApplication {
 	}
 
 	public void onTrades(List<Trade> trade, SessionID sessionId) {
+	}
+
+	public void onTicker(Ticker ticker) {
 	}
 
 	public void onAccountInfo(AccountInfo accountInfo, SessionID sessionId) {
