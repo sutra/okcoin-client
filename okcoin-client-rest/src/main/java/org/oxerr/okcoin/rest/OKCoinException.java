@@ -1,12 +1,22 @@
 package org.oxerr.okcoin.rest;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.xeiam.xchange.exceptions.ExchangeException;
 
 public class OKCoinException extends ExchangeException {
 
 	private static final long serialVersionUID = 20140614L;
 
-	private final int errorCode;
+	private final Integer errorCode;
+
+	public OKCoinException(@JsonProperty("error_code") Integer errorCode) {
+		this(errorCode,
+			errorCode != null ? Messages.getString(String.valueOf(errorCode)) : null);
+	}
+
+	public OKCoinException() {
+		this(null, null);
+	}
 
 	/**
 	 * Constructor.
@@ -14,7 +24,7 @@ public class OKCoinException extends ExchangeException {
 	 * @param errorCode the error code.
 	 * @param message the exception message.
 	 */
-	public OKCoinException(int errorCode, String message) {
+	public OKCoinException(Integer errorCode, String message) {
 		super(message);
 		this.errorCode = errorCode;
 	}
@@ -22,7 +32,7 @@ public class OKCoinException extends ExchangeException {
 	/**
 	 * @return the error code.
 	 */
-	public int getErrorCode() {
+	public Integer getErrorCode() {
 		return errorCode;
 	}
 

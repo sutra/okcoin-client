@@ -7,8 +7,9 @@ import java.util.List;
 
 import org.oxerr.okcoin.rest.OKCoinAdapters;
 import org.oxerr.okcoin.rest.OKCoinException;
-import org.oxerr.okcoin.rest.domain.OrderResult;
-import org.oxerr.okcoin.rest.domain.TradeResult;
+import org.oxerr.okcoin.rest.dto.CancelOrderResult;
+import org.oxerr.okcoin.rest.dto.OrderResult;
+import org.oxerr.okcoin.rest.dto.Type;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -38,16 +39,14 @@ public class OKCoinTradeService extends OKCoinTradeServiceRaw implements
 	 * {@inheritDoc}
 	 */
 	@Override
-	public OpenOrders getOpenOrders() throws ExchangeException,
-			NotAvailableFromExchangeException,
-			NotYetImplementedForExchangeException, IOException {
+	public OpenOrders getOpenOrders() throws OKCoinException, IOException {
 		Collection<CurrencyPair> symbols = getExchangeSymbols();
 		List<OrderResult> orderResults = new ArrayList<>(symbols.size());
 
 		for (CurrencyPair symbol : symbols) {
 			log.debug("Getting order: {}", symbol);
-			OrderResult orderResult = getOrder(-1,
-					OKCoinAdapters.adaptSymbol(symbol));
+			OrderResult orderResult = getOrder(
+				OKCoinAdapters.adaptSymbol(symbol), -1);
 			orderResults.add(orderResult);
 		}
 
@@ -69,12 +68,11 @@ public class OKCoinTradeService extends OKCoinTradeServiceRaw implements
 	 */
 	@Override
 	public String placeLimitOrder(LimitOrder limitOrder)
-			throws ExchangeException, NotAvailableFromExchangeException,
-			NotYetImplementedForExchangeException, IOException {
+			throws OKCoinException, IOException {
 		long orderId = trade(OKCoinAdapters.adaptSymbol(limitOrder.getCurrencyPair()),
-				limitOrder.getType() == OrderType.BID ? "buy" : "sell",
-				limitOrder.getLimitPrice().toPlainString(),
-				limitOrder.getTradableAmount().toPlainString())
+				limitOrder.getType() == OrderType.BID ? Type.BUY : Type.SELL,
+				limitOrder.getLimitPrice(),
+				limitOrder.getTradableAmount())
 				.getOrderId();
 		return String.valueOf(orderId);
 	}
@@ -83,16 +81,15 @@ public class OKCoinTradeService extends OKCoinTradeServiceRaw implements
 	 * {@inheritDoc}
 	 */
 	@Override
-	public boolean cancelOrder(String orderId) throws ExchangeException,
-			NotAvailableFromExchangeException,
-			NotYetImplementedForExchangeException, IOException {
+	public boolean cancelOrder(String orderId) throws OKCoinException,
+			IOException {
 		boolean ret = false;
 		long id = Long.parseLong(orderId);
 
 		for (CurrencyPair symbol : getExchangeSymbols()) {
 			try {
-				TradeResult cancelResult = cancelOrder(id,
-						OKCoinAdapters.adaptSymbol(symbol));
+				CancelOrderResult cancelResult = cancelOrder(
+						OKCoinAdapters.adaptSymbol(symbol), id);
 
 				if (id == cancelResult.getOrderId()) {
 					ret = true;
@@ -120,8 +117,9 @@ public class OKCoinTradeService extends OKCoinTradeServiceRaw implements
 		Long orderId = argc > 0 ? (Long) arguments[1] : null;
 
 		if (currencyPair != null && orderId != null) {
-			return OKCoinAdapters.adaptUserTrades(
-					getOrder(orderId, OKCoinAdapters.adaptSymbol(currencyPair)));
+//			return OKCoinAdapters.adaptUserTrades(
+//					getOrder(OKCoinAdapters.adaptSymbol(currencyPair)), orderId);
+			return null; // TODO
 		} else {
 			throw new IllegalArgumentException();
 		}

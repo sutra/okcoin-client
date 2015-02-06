@@ -1,18 +1,19 @@
 package org.oxerr.okcoin.rest.service.polling;
 
+import static org.oxerr.okcoin.rest.OKCoinAdapters.adaptOrderBook;
+import static org.oxerr.okcoin.rest.OKCoinAdapters.adaptSymbol;
+import static org.oxerr.okcoin.rest.OKCoinAdapters.adaptTicker;
+
 import java.io.IOException;
 
 import org.oxerr.okcoin.rest.OKCoinAdapters;
-import org.oxerr.okcoin.rest.domain.Trade;
+import org.oxerr.okcoin.rest.dto.Trade;
 
 import com.xeiam.xchange.Exchange;
 import com.xeiam.xchange.currency.CurrencyPair;
 import com.xeiam.xchange.dto.marketdata.OrderBook;
 import com.xeiam.xchange.dto.marketdata.Ticker;
 import com.xeiam.xchange.dto.marketdata.Trades;
-import com.xeiam.xchange.exceptions.ExchangeException;
-import com.xeiam.xchange.exceptions.NotAvailableFromExchangeException;
-import com.xeiam.xchange.exceptions.NotYetImplementedForExchangeException;
 import com.xeiam.xchange.service.polling.marketdata.PollingMarketDataService;
 
 public class OKCoinMarketDataService extends OKCoinMarketDataServiceRaw
@@ -27,9 +28,8 @@ public class OKCoinMarketDataService extends OKCoinMarketDataServiceRaw
 	 */
 	@Override
 	public Ticker getTicker(CurrencyPair currencyPair, Object... args)
-			throws ExchangeException, NotAvailableFromExchangeException,
-			NotYetImplementedForExchangeException, IOException {
-		return OKCoinAdapters.adaptTicker(getTicker(currencyPair), currencyPair);
+			throws IOException {
+		return adaptTicker(getTicker(adaptSymbol(currencyPair)), currencyPair);
 	}
 
 	/**
@@ -37,9 +37,13 @@ public class OKCoinMarketDataService extends OKCoinMarketDataServiceRaw
 	 */
 	@Override
 	public OrderBook getOrderBook(CurrencyPair currencyPair, Object... args)
-			throws ExchangeException, NotAvailableFromExchangeException,
-			NotYetImplementedForExchangeException, IOException {
-		return OKCoinAdapters.adaptOrderBook(getDepth(currencyPair), currencyPair);
+			throws IOException {
+		return adaptOrderBook(
+			getDepth(
+				adaptSymbol(currencyPair),
+				args.length > 0 ? ((Number) args[0]).intValue() : null,
+				args.length > 1 ? ((Number) args[1]).intValue() : null),
+			currencyPair);
 	}
 
 	/**
@@ -47,13 +51,13 @@ public class OKCoinMarketDataService extends OKCoinMarketDataServiceRaw
 	 */
 	@Override
 	public Trades getTrades(CurrencyPair currencyPair, Object... args)
-			throws ExchangeException, NotAvailableFromExchangeException,
-			NotYetImplementedForExchangeException, IOException {
+			throws IOException {
+		final String symbol = OKCoinAdapters.adaptSymbol(currencyPair);
 		final Trade[] trades;
 		if (args.length == 0) {
-			trades = getTrades(currencyPair);
+			trades = getTrades(symbol, (Long) null);
 		} else {
-			trades = getTrades(currencyPair, (Long) args[0]);
+			trades = getTrades(symbol, ((Number) args[0]).longValue());
 		}
 		return OKCoinAdapters.adaptTrades(trades, currencyPair);
 	}

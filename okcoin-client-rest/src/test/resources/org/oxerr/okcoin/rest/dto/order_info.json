@@ -1,0 +1,29 @@
+{
+	"result": true,
+	"orders": [
+		{
+			"amount": 0.1,
+			"avg_price": 0,
+			"create_date": 1418008467000,
+			"deal_amount": 0,
+			"order_id": 10000591,
+			"orders_id": 10000591,
+			"price": 500,
+			"status": 0,
+			"symbol": "btc_cny",
+			"type": "sell"
+		},
+		{
+			"amount": 0.2,
+			"avg_price": 0,
+			"create_date": 1417417957000,
+			"deal_amount": 0,
+			"order_id": 10000724,
+			"orders_id": 10000724,
+			"price": 0.1,
+			"status": 0,
+			"symbol": "btc_cny",
+			"type": "buy"
+		}
+	]
+}

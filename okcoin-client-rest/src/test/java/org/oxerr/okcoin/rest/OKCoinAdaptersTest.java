@@ -7,12 +7,11 @@ import java.math.BigDecimal;
 import java.util.Arrays;
 
 import org.junit.Test;
-import org.oxerr.okcoin.rest.OKCoinAdapters;
-import org.oxerr.okcoin.rest.domain.Depth;
-import org.oxerr.okcoin.rest.domain.OrderResult;
-import org.oxerr.okcoin.rest.domain.TickerResponse;
-import org.oxerr.okcoin.rest.domain.Trade;
-import org.oxerr.okcoin.rest.domain.UserInfo;
+import org.oxerr.okcoin.rest.dto.Depth;
+import org.oxerr.okcoin.rest.dto.OrderResult;
+import org.oxerr.okcoin.rest.dto.TickerResponse;
+import org.oxerr.okcoin.rest.dto.Trade;
+import org.oxerr.okcoin.rest.dto.UserInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -47,21 +46,22 @@ public class OKCoinAdaptersTest {
 	@Test
 	public void testAdaptTicker() throws IOException {
 		TickerResponse tickerResponse = mapper.readValue(getClass()
-				.getResource("domain/tickerResponse.json"),
+				.getResource("dto/ticker.json"),
 				TickerResponse.class);
 		Ticker ticker = OKCoinAdapters.adaptTicker(tickerResponse, CurrencyPair.BTC_CNY);
-		assertEquals(new BigDecimal("809.00"), ticker.getHigh());
-		assertEquals(new BigDecimal("770.01"), ticker.getLow());
-		assertEquals(new BigDecimal("787.10"), ticker.getBid());
-		assertEquals(new BigDecimal("787.27"), ticker.getAsk());
-		assertEquals(new BigDecimal("787.00"), ticker.getLast());
-		assertEquals(new BigDecimal("2625.38100000"), ticker.getVolume());
+		assertEquals(1410431279_000L, ticker.getTimestamp().getTime());
+		assertEquals(new BigDecimal("34.15"), ticker.getHigh());
+		assertEquals(new BigDecimal("32.05"), ticker.getLow());
+		assertEquals(new BigDecimal("33.15"), ticker.getBid());
+		assertEquals(new BigDecimal("33.16"), ticker.getAsk());
+		assertEquals(new BigDecimal("33.15"), ticker.getLast());
+		assertEquals(new BigDecimal("10532696.39199642"), ticker.getVolume());
 	}
 
 	@Test
 	public void testAdaptOrderBook() throws IOException {
 		Depth depth = mapper.readValue(
-				getClass().getResource("domain/depth.json"), Depth.class);
+				getClass().getResource("dto/depth.json"), Depth.class);
 		OrderBook orderBook = OKCoinAdapters.adaptOrderBook(depth, CurrencyPair.BTC_CNY);
 		assertEquals(5, orderBook.getAsks().size());
 
@@ -145,7 +145,7 @@ public class OKCoinAdaptersTest {
 	@Test
 	public void testAdaptTrades() throws IOException {
 		Trade[] tradeArray = mapper.readValue(
-				getClass().getResource("domain/trades.json"), Trade[].class);
+				getClass().getResource("dto/trades.json"), Trade[].class);
 		Trades trades = OKCoinAdapters.adaptTrades(tradeArray, CurrencyPair.BTC_CNY);
 		assertEquals(230512L, trades.getlastID());
 		assertEquals(TradeSortType.SortByTimestamp, trades.getTradeSortType());
@@ -179,7 +179,7 @@ public class OKCoinAdaptersTest {
 	@Test
 	public void testAdaptAccountInfo() throws IOException {
 		UserInfo userInfo = mapper.readValue(
-				getClass().getResource("domain/userinfo.json"), UserInfo.class);
+				getClass().getResource("dto/userinfo.json"), UserInfo.class);
 		AccountInfo accountInfo = OKCoinAdapters.adaptAccountInfo(userInfo);
 		for (Wallet wallet : accountInfo.getWallets()) {
 			log.debug("{}: {}", wallet.getCurrency(), wallet.getBalance());
@@ -192,22 +192,22 @@ public class OKCoinAdaptersTest {
 	@Test
 	public void testAdaptOpenOrders() throws IOException {
 		OrderResult orderResult = mapper.readValue(
-				getClass().getResource("domain/getorder-limit-orders.json"),
+				getClass().getResource("dto/order_info.json"),
 				OrderResult.class);
 		OpenOrders openOrders = OKCoinAdapters.adaptOpenOrders(Arrays.asList(orderResult));
 		assertEquals(2, openOrders.getOpenOrders().size());
 
-		assertEquals("15088", openOrders.getOpenOrders().get(0).getId());
+		assertEquals("10000591", openOrders.getOpenOrders().get(0).getId());
 		assertEquals(CurrencyPair.BTC_CNY, openOrders.getOpenOrders().get(0).getCurrencyPair());
 		assertEquals(OrderType.ASK, openOrders.getOpenOrders().get(0).getType());
-		assertEquals(new BigDecimal("811"), openOrders.getOpenOrders().get(0).getLimitPrice());
-		assertEquals(new BigDecimal("0.39901357"), openOrders.getOpenOrders().get(0).getTradableAmount());
+		assertEquals(new BigDecimal("500"), openOrders.getOpenOrders().get(0).getLimitPrice());
+		assertEquals(new BigDecimal("0.1"), openOrders.getOpenOrders().get(0).getTradableAmount());
 
-		assertEquals("15088", openOrders.getOpenOrders().get(1).getId());
+		assertEquals("10000724", openOrders.getOpenOrders().get(1).getId());
 		assertEquals(CurrencyPair.BTC_CNY, openOrders.getOpenOrders().get(1).getCurrencyPair());
-		assertEquals(OrderType.ASK, openOrders.getOpenOrders().get(1).getType());
-		assertEquals(new BigDecimal("811"), openOrders.getOpenOrders().get(1).getLimitPrice());
-		assertEquals(new BigDecimal("0.39901357"), openOrders.getOpenOrders().get(1).getTradableAmount());
+		assertEquals(OrderType.BID, openOrders.getOpenOrders().get(1).getType());
+		assertEquals(new BigDecimal("0.1"), openOrders.getOpenOrders().get(1).getLimitPrice());
+		assertEquals(new BigDecimal("0.2"), openOrders.getOpenOrders().get(1).getTradableAmount());
 	}
 
 }

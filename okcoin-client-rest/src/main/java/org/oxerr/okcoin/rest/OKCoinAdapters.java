@@ -10,14 +10,14 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang3.math.NumberUtils;
-import org.oxerr.okcoin.rest.domain.Depth;
-import org.oxerr.okcoin.rest.domain.Funds;
-import org.oxerr.okcoin.rest.domain.Order;
-import org.oxerr.okcoin.rest.domain.OrderResult;
-import org.oxerr.okcoin.rest.domain.TickerResponse;
-import org.oxerr.okcoin.rest.domain.Trade;
-import org.oxerr.okcoin.rest.domain.Type;
-import org.oxerr.okcoin.rest.domain.UserInfo;
+import org.oxerr.okcoin.rest.dto.Depth;
+import org.oxerr.okcoin.rest.dto.Funds;
+import org.oxerr.okcoin.rest.dto.Order;
+import org.oxerr.okcoin.rest.dto.OrderResult;
+import org.oxerr.okcoin.rest.dto.TickerResponse;
+import org.oxerr.okcoin.rest.dto.Trade;
+import org.oxerr.okcoin.rest.dto.Type;
+import org.oxerr.okcoin.rest.dto.UserInfo;
 
 import com.xeiam.xchange.currency.CurrencyPair;
 import com.xeiam.xchange.dto.Order.OrderType;
@@ -58,6 +58,7 @@ public final class OKCoinAdapters {
 			CurrencyPair currencyPair) {
 		return new Ticker.Builder()
 				.currencyPair(currencyPair)
+				.timestamp(Date.from(tickerResponse.getDate()))
 				.high(tickerResponse.getTicker().getHigh())
 				.low(tickerResponse.getTicker().getLow())
 				.bid(tickerResponse.getTicker().getBuy())
@@ -92,7 +93,7 @@ public final class OKCoinAdapters {
 		Funds funds = userInfo.getInfo().getFunds();
 
 		Map<String, BigDecimal> balances = new LinkedHashMap<>(
-				Math.max(funds.getFree().size(), funds.getFreezed().size()));
+				Math.max(funds.getFree().size(), funds.getFrozen().size()));
 
 		for (Map.Entry<String, BigDecimal> entry : userInfo.getInfo()
 				.getFunds().getFree().entrySet()) {
@@ -106,7 +107,7 @@ public final class OKCoinAdapters {
 			balances.put(currency, balance);
 		}
 
-		for (Map.Entry<String, BigDecimal> entry : userInfo.getInfo().getFunds().getFreezed().entrySet()) {
+		for (Map.Entry<String, BigDecimal> entry : userInfo.getInfo().getFunds().getFrozen().entrySet()) {
 			String currency = entry.getKey().toUpperCase();
 			BigDecimal balance = balances.get(currency);
 			if (balance == null) {
@@ -160,10 +161,14 @@ public final class OKCoinAdapters {
 
 	private static com.xeiam.xchange.dto.marketdata.Trade adaptTrade(
 			Trade trade, CurrencyPair currencyPair) {
-		return new com.xeiam.xchange.dto.marketdata.Trade(
-				trade.getType() == Type.BUY ? OrderType.BID : OrderType.ASK,
-				trade.getAmount(), currencyPair, trade.getPrice(),
-				trade.getDate(), trade.getTid());
+		return new com.xeiam.xchange.dto.marketdata.Trade.Builder()
+			.id(trade.getTid())
+			.timestamp(Date.from(trade.getDate()))
+			.currencyPair(currencyPair)
+			.type(trade.getType() == Type.BUY ? OrderType.BID : OrderType.ASK)
+			.tradableAmount(trade.getAmount())
+			.price(trade.getPrice())
+			.build();
 	}
 
 	private static List<LimitOrder> adaptOpenOrders(OrderResult orderResult) {
@@ -183,12 +188,12 @@ public final class OKCoinAdapters {
 				order.getAmount().subtract(order.getDealAmount()),
 				adaptSymbol(order.getSymbol()),
 				String.valueOf(order.getOrderId()),
-				order.getCreateDate(),
-				order.getRate());
+				Date.from(order.getCreateDate()),
+				order.getPrice());
 	}
 
-	public static OrderType adaptOrderType(String type) {
-		return type.equals("buy") || type.equals("buy_market")
+	public static OrderType adaptOrderType(Type type) {
+		return type == Type.BUY || type == Type.BUY_MARKET
 				? OrderType.BID : OrderType.ASK;
 	}
 
@@ -198,7 +203,7 @@ public final class OKCoinAdapters {
 				adaptOrderType(order.getType()),
 				order.getDealAmount(),
 				adaptSymbol(order.getSymbol()),
-				order.getAvgRate(),
+				order.getAvgPrice(),
 				null,
 				null,
 				String.valueOf(order.getOrderId()),

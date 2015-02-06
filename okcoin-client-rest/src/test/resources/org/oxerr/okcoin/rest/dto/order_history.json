@@ -1,0 +1,20 @@
+{
+	"current_page": 1,
+	"orders": [
+		{
+			"amount": 0,
+			"avg_price": 0,
+			"create_date": 1405562100000,
+			"deal_amount": 0,
+			"order_id": 0,
+			"price": 0,
+			"status": 2,
+			"symbol": "btc_cny",
+			"type": "sell"
+		}
+	],
+	"page_length": 1,
+	"result": true,
+	"total": 3
+}
+]

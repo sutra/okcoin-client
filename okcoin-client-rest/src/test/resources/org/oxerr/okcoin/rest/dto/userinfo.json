@@ -1,0 +1,30 @@
+{
+	"result": true,
+	"info": {
+		"funds": {
+			"asset": {
+				"net": "0",
+				"total": "0"
+			},
+			"borrow": {
+				"btc": "0",
+				"cny": "0",
+				"ltc": "0"
+			},
+			"free": {
+				"cny": 1000,
+				"btc": 10,
+				"ltc": 0
+			},
+			"freezed": {
+				"cny": 1000,
+				"btc": 10,
+				"ltc": 0
+			},
+			"union_fund": {
+				"btc": "0",
+				"ltc": "0"
+			}
+		}
+	}
+}

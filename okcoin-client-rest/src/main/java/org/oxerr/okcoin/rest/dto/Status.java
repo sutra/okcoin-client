@@ -1,0 +1,23 @@
+package org.oxerr.okcoin.rest.dto;
+
+import java.util.Arrays;
+
+public enum Status {
+
+	CANCELLED(-1), UNFILLED(0), PARTIALLY_FILLED(1), FULLY_FILLED(2);
+
+	public static Status of(int code) {
+		return Arrays
+			.stream(Status.values())
+			.filter(status -> status.code == code)
+			.findFirst()
+			.get();
+	}
+
+	private int code;
+
+	Status(int code) {
+		this.code = code;
+	}
+
+}

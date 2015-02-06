@@ -24,6 +24,7 @@
 		<appender-ref ref="FILE" />
 	</root>
 
+	<logger name="si.mazi.rescu" level="TRACE" />
 	<logger name="quickfix" level="INFO" />
 	<logger name="org.oxerr.okcoin" level="TRACE" />
 

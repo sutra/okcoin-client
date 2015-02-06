@@ -20,6 +20,11 @@ public class OKCoinExchange extends BaseExchange {
 	 */
 	public static final String SYMBOLS_PARAMETER = "symbols";
 
+	/**
+	 * The parameter key of the trade password.
+	 */
+	public static final String TRADE_PASSWORD_PARAMETER = "trade_pwd";
+
 	private static final List<CurrencyPair> SYMBOLS = Arrays.asList(
 			CurrencyPair.BTC_CNY,
 			CurrencyPair.LTC_CNY);
@@ -41,7 +46,7 @@ public class OKCoinExchange extends BaseExchange {
 	public ExchangeSpecification getDefaultExchangeSpecification() {
 		ExchangeSpecification exchangeSpecification = new ExchangeSpecification(
 				this.getClass().getCanonicalName());
-		exchangeSpecification.setSslUri("https://www.okcoin.cn/api");
+		exchangeSpecification.setSslUri("https://www.okcoin.cn");
 		exchangeSpecification.setHost("www.okcoin.cn");
 		exchangeSpecification.setExchangeName("OKCoin");
 		exchangeSpecification

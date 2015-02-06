@@ -3,11 +3,8 @@ package org.oxerr.okcoin.rest.service.polling;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.oxerr.okcoin.rest.Messages;
 import org.oxerr.okcoin.rest.OKCoin;
-import org.oxerr.okcoin.rest.OKCoinException;
-import org.oxerr.okcoin.rest.SignatureCreator;
-import org.oxerr.okcoin.rest.domain.ErrorResult;
+import org.oxerr.okcoin.rest.service.OKCoinDigest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -24,9 +21,9 @@ public class OKCoinBaseTradePollingService extends OKCoinBasePollingService {
 
 	protected final OKCoin okCoin;
 
-	protected final SignatureCreator signatureCreator;
+	protected final OKCoinDigest sign;
 
-	protected final long partner;
+	protected final String apiKey;
 
 	private Map<String, Long> lasts = new HashMap<String, Long>();
 
@@ -34,24 +31,8 @@ public class OKCoinBaseTradePollingService extends OKCoinBasePollingService {
 		super(exchange);
 		ExchangeSpecification spec = exchange.getExchangeSpecification();
 		okCoin = RestProxyFactory.createProxy(OKCoin.class, spec.getSslUri());
-		final String apiKey = spec.getApiKey();
-		signatureCreator = new SignatureCreator(
-				apiKey,
-				spec.getSecretKey());
-		partner = Long.parseLong(apiKey);
-	}
-
-	protected <T extends ErrorResult> T returnOrThrow(T t) {
-		if (t.isResult()) {
-			return t;
-		} else {
-			throw createException(t.getErrorCode());
-		}
-	}
-
-	private OKCoinException createException(int errorCode) {
-		String message = Messages.getString(String.valueOf(errorCode));
-		return new OKCoinException(errorCode, message);
+		this.apiKey = spec.getApiKey();
+		sign = new OKCoinDigest(spec.getSecretKey());
 	}
 
 	private long getLast(String method) {
@@ -75,7 +56,7 @@ public class OKCoinBaseTradePollingService extends OKCoinBasePollingService {
 
 	private void sleep() {
 		try {
-			log.debug("Sleeping for {} ms.", INTERVAL);
+			log.trace("Sleeping for {} ms.", INTERVAL);
 			Thread.sleep(INTERVAL);
 		} catch (InterruptedException e) {
 			throw new RuntimeException(e);

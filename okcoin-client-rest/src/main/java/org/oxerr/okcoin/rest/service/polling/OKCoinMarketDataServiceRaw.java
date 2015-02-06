@@ -3,16 +3,15 @@ package org.oxerr.okcoin.rest.service.polling;
 import java.io.IOException;
 
 import org.oxerr.okcoin.rest.OKCoin;
-import org.oxerr.okcoin.rest.OKCoinAdapters;
-import org.oxerr.okcoin.rest.domain.Depth;
-import org.oxerr.okcoin.rest.domain.TickerResponse;
-import org.oxerr.okcoin.rest.domain.Trade;
+import org.oxerr.okcoin.rest.dto.CandlestickChart;
+import org.oxerr.okcoin.rest.dto.Depth;
+import org.oxerr.okcoin.rest.dto.TickerResponse;
+import org.oxerr.okcoin.rest.dto.Trade;
 
 import si.mazi.rescu.RestProxyFactory;
 
 import com.xeiam.xchange.Exchange;
 import com.xeiam.xchange.ExchangeSpecification;
-import com.xeiam.xchange.currency.CurrencyPair;
 
 public class OKCoinMarketDataServiceRaw extends OKCoinBasePollingService {
 
@@ -25,22 +24,32 @@ public class OKCoinMarketDataServiceRaw extends OKCoinBasePollingService {
 		okCoin = RestProxyFactory.createProxy(OKCoin.class, baseUrl);
 	}
 
-	public TickerResponse getTicker(CurrencyPair currencyPair)
+	public TickerResponse getTicker(String symbol) throws IOException {
+		return okCoin.getTicker(symbol);
+	}
+
+	public Depth getDepth(String symbol, Integer size, Integer merge)
 			throws IOException {
-		return okCoin.getTicker(OKCoinAdapters.adaptSymbol(currencyPair));
+		return okCoin.getDepth(symbol, size, merge);
 	}
 
-	public Depth getDepth(CurrencyPair currencyPair) throws IOException {
-		return okCoin.getDepth(OKCoinAdapters.adaptSymbol(currencyPair));
+	public Trade[] getTrades(String symbol, Long since) throws IOException {
+		return okCoin.getTrades(symbol, since);
 	}
 
-	public Trade[] getTrades(CurrencyPair currencyPair) throws IOException {
-		return okCoin.getTrades(OKCoinAdapters.adaptSymbol(currencyPair));
-	}
-
-	public Trade[] getTrades(CurrencyPair currencyPair, long since)
-			throws IOException {
-		return okCoin.getTrades(OKCoinAdapters.adaptSymbol(currencyPair), since);
+	/**
+	 * Get BTC/LTC Candlestick Data.
+	 *
+	 * @param symbol the symbol.
+	 * @param type type of candlestick.
+	 * @param size 1 based.
+	 * @param since since timestamp.
+	 * @return Candlestick data.
+	 * @throws IOException indicates I/O exception.
+	 */
+	public CandlestickChart getCandlestickChart(String symbol, String type,
+			Integer size, Long since) throws IOException {
+		return okCoin.getCandlestickChart(symbol, type, size, since);
 	}
 
 }
