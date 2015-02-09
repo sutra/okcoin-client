@@ -10,6 +10,9 @@ import com.xeiam.xchange.currency.CurrencyPair;
 import com.xeiam.xchange.service.polling.BasePollingExchangeService;
 import com.xeiam.xchange.service.polling.BasePollingService;
 
+/**
+ * {@link BasePollingService} implementation.
+ */
 public class OKCoinBasePollingService extends BasePollingExchangeService
 		implements BasePollingService {
 

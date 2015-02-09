@@ -26,6 +26,9 @@ import org.oxerr.okcoin.rest.dto.Withdrawal;
 
 import si.mazi.rescu.ParamsDigest;
 
+/**
+ * RESTful API.
+ */
 @Path("/api/v1/")
 @Produces(MediaType.APPLICATION_JSON)
 public interface OKCoin {

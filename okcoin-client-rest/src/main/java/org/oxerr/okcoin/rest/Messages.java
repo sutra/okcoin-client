@@ -3,6 +3,9 @@ package org.oxerr.okcoin.rest;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
+/**
+ * Error messages.
+ */
 public class Messages {
 	private static final String BUNDLE_NAME = "org.oxerr.okcoin.rest.messages"; //$NON-NLS-1$
 

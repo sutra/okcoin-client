@@ -18,6 +18,9 @@ import si.mazi.rescu.RestInvocation;
 
 import com.xeiam.xchange.utils.DigestUtils;
 
+/**
+ * {@link ParamsDigest} implementation.
+ */
 public class OKCoinDigest implements ParamsDigest {
 
 	private final Logger log = LoggerFactory.getLogger(OKCoinDigest.class);

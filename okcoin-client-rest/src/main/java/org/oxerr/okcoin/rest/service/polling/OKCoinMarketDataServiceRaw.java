@@ -13,6 +13,9 @@ import si.mazi.rescu.RestProxyFactory;
 import com.xeiam.xchange.Exchange;
 import com.xeiam.xchange.ExchangeSpecification;
 
+/**
+ * Raw market data service.
+ */
 public class OKCoinMarketDataServiceRaw extends OKCoinBasePollingService {
 
 	private final OKCoin okCoin;

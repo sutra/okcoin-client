@@ -16,6 +16,9 @@ import com.xeiam.xchange.exceptions.NotAvailableFromExchangeException;
 import com.xeiam.xchange.exceptions.NotYetImplementedForExchangeException;
 import com.xeiam.xchange.service.polling.account.PollingAccountService;
 
+/**
+ * {@link PollingAccountService} implementation.
+ */
 public class OKCoinAccountService extends OKCoinAccountServiceRaw implements
 		PollingAccountService {
 

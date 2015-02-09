@@ -2,6 +2,9 @@ package org.oxerr.okcoin.rest.dto;
 
 import java.util.Arrays;
 
+/**
+ * Order type.
+ */
 public enum Type {
 
 	BUY("buy"), SELL("sell"),

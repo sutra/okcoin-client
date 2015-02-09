@@ -9,6 +9,9 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 
+/**
+ * Deserializer to deserialize status integer to {@link Status}.
+ */
 public class StatusDeserializer extends JsonDeserializer<Status> {
 
 	/**

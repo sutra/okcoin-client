@@ -8,6 +8,9 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 
+/**
+ * Deserializer to deserialize epoch milliseconds in long to {@link Instant}.
+ */
 public class EpochMilliDeserializer extends JsonDeserializer<Instant> {
 
 	/**

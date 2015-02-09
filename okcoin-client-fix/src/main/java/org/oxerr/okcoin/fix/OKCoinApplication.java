@@ -31,6 +31,9 @@ import quickfix.fix44.OrderCancelRequest;
 import quickfix.fix44.OrderMassStatusRequest;
 import quickfix.fix44.TradeCaptureReportRequest;
 
+/**
+ * {@link Application} implementation.
+ */
 public class OKCoinApplication extends MessageCracker implements Application {
 
 	private final Logger log = LoggerFactory.getLogger(OKCoinApplication.class);

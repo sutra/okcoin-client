@@ -9,6 +9,9 @@ import org.oxerr.okcoin.rest.dto.Withdrawal;
 
 import com.xeiam.xchange.Exchange;
 
+/**
+ * Raw account service.
+ */
 public class OKCoinAccountServiceRaw extends OKCoinBaseTradePollingService {
 
 	private static final String METHOD_GET_USER_INFO = "userinfo";

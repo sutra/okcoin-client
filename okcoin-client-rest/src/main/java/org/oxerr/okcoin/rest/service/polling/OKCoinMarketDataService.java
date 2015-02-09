@@ -16,6 +16,9 @@ import com.xeiam.xchange.dto.marketdata.Ticker;
 import com.xeiam.xchange.dto.marketdata.Trades;
 import com.xeiam.xchange.service.polling.marketdata.PollingMarketDataService;
 
+/**
+ * {@link PollingMarketDataService} implementation.
+ */
 public class OKCoinMarketDataService extends OKCoinMarketDataServiceRaw
 		implements PollingMarketDataService {
 

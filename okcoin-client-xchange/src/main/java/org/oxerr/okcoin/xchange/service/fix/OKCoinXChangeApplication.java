@@ -34,7 +34,7 @@ import com.xeiam.xchange.dto.marketdata.Trade;
 import com.xeiam.xchange.dto.trade.LimitOrder;
 
 /**
- * {@link Application} implementation uses XChange DTOs as callback parameters.
+ * {@link Application} implementation using XChange DTOs as callback parameters.
  */
 public class OKCoinXChangeApplication extends OKCoinApplication {
 

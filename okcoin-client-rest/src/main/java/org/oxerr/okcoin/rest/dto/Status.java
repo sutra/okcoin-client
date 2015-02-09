@@ -2,6 +2,9 @@ package org.oxerr.okcoin.rest.dto;
 
 import java.util.Arrays;
 
+/**
+ * Order status.
+ */
 public enum Status {
 
 	CANCELLED(-1), UNFILLED(0), PARTIALLY_FILLED(1), FULLY_FILLED(2);

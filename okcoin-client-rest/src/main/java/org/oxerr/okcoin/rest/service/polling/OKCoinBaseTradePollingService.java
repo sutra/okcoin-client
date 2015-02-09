@@ -13,6 +13,9 @@ import si.mazi.rescu.RestProxyFactory;
 import com.xeiam.xchange.Exchange;
 import com.xeiam.xchange.ExchangeSpecification;
 
+/**
+ * Base trade service.
+ */
 public class OKCoinBaseTradePollingService extends OKCoinBasePollingService {
 
 	private static final long INTERVAL = 2_000;

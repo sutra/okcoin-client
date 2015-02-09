@@ -24,6 +24,9 @@ import quickfix.fix44.OrderCancelRequest;
 import quickfix.fix44.OrderMassStatusRequest;
 import quickfix.fix44.TradeCaptureReportRequest;
 
+/**
+ * Utilities for creating trade request messages.
+ */
 public class TradeRequestCreator {
 
 	private final String account;

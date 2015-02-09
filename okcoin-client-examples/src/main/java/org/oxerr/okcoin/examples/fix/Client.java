@@ -30,6 +30,9 @@ import com.xeiam.xchange.dto.marketdata.OrderBook;
 import com.xeiam.xchange.dto.marketdata.Trade;
 import com.xeiam.xchange.dto.trade.LimitOrder;
 
+/**
+ * Demonstration of FIX API.
+ */
 public class Client {
 
 	private static final Logger log = LoggerFactory.getLogger(Client.class);

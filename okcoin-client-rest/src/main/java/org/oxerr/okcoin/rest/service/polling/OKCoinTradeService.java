@@ -26,6 +26,9 @@ import com.xeiam.xchange.exceptions.NotYetImplementedForExchangeException;
 import com.xeiam.xchange.service.polling.trade.PollingTradeService;
 import com.xeiam.xchange.service.polling.trade.params.TradeHistoryParams;
 
+/**
+ * {@link PollingTradeService} implementation.
+ */
 public class OKCoinTradeService extends OKCoinTradeServiceRaw implements
 		PollingTradeService {
 

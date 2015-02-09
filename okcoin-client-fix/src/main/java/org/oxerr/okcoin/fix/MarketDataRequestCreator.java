@@ -10,6 +10,9 @@ import quickfix.fix44.MarketDataRequest;
 import quickfix.fix44.MarketDataRequest.NoMDEntryTypes;
 import quickfix.fix44.MarketDataRequest.NoRelatedSym;
 
+/**
+ * Utilities for creating market data request message.
+ */
 public class MarketDataRequestCreator {
 
 	public MarketDataRequestCreator() {

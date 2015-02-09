@@ -10,9 +10,13 @@ import org.oxerr.okcoin.rest.service.polling.OKCoinTradeService;
 import si.mazi.rescu.SynchronizedValueFactory;
 
 import com.xeiam.xchange.BaseExchange;
+import com.xeiam.xchange.Exchange;
 import com.xeiam.xchange.ExchangeSpecification;
 import com.xeiam.xchange.currency.CurrencyPair;
 
+/**
+ * {@link Exchange} implementation for OKCoin.
+ */
 public class OKCoinExchange extends BaseExchange {
 
 	/**

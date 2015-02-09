@@ -18,6 +18,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.xeiam.xchange.Exchange;
 
+/**
+ * Raw trade service.
+ */
 public class OKCoinTradeServiceRaw extends OKCoinBaseTradePollingService {
 
 	private static final String METHOD_TRADE = "trade";

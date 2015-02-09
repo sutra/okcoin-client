@@ -16,6 +16,9 @@ import com.fasterxml.jackson.core.JsonToken;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 
+/**
+ * Deserializer for {@link CandlestickChart}.
+ */
 public class CandlestickChartDeserializer extends JsonDeserializer<CandlestickChart> {
 
 	/**

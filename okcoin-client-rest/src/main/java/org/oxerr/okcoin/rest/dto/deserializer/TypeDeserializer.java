@@ -9,6 +9,9 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 
+/**
+ * Deserializer to deserialize type code in string to {@link Type}.
+ */
 public class TypeDeserializer extends JsonDeserializer<Type> {
 
 	/**
