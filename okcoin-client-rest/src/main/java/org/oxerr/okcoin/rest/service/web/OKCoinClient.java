@@ -51,6 +51,8 @@ public class OKCoinClient implements AutoCloseable {
 	private static final URI BUY_BTC_SUBMIT_URI = URIUtils.resolve(HTTPS_BASE, "trade/buyBtcSubmit.do");
 	private static final URI SELL_BTC_SUBMIT_URI = URIUtils.resolve(HTTPS_BASE, "trade/sellBtcSubmit.do");
 
+	private static final URI SUBMIT_CONTINOUS_ENTRUST_URI = URIUtils.resolve(HTTPS_BASE, "strategy/submitContinousEntrust.do");
+
 	private static final String TRADE_BTC_REFERER_PREFIX = HTTPS_BASE.toString() + "trade/btc.do?tradeType=";
 
 	private static final BigDecimal MIN_TRADE_AMOUNT = new BigDecimal("0.01");
@@ -245,6 +247,23 @@ public class OKCoinClient implements AutoCloseable {
 		final int isopen = 0;
 
 		trade(amount, cnyPrice, tradeType, symbol, isopen);
+	}
+
+	public void submitContinousEntrust(int symbol, int type,
+			BigDecimal tradeValue, BigDecimal singleAvg, BigDecimal depthRange,
+			BigDecimal protePrice) throws IOException {
+		final URI uri;
+		try {
+			uri = new URIBuilder(SUBMIT_CONTINOUS_ENTRUST_URI).setParameter("random",
+					randomInString()).build();
+		} catch (URISyntaxException e) {
+			throw new IOException(e);
+		}
+
+		final HttpPost post = new HttpPost(uri);
+
+		Result result = httpClient.execute(ResultValueReader.getInstance(), post);
+
 	}
 
 	/**
