@@ -13,6 +13,7 @@
 	<artifactId>okcoin-client-examples</artifactId>
 
 	<name>OKCoin Client - Examples</name>
+	<description>Examples demonstrate how to use this library.</description>
 
 	<dependencies>
 		<dependency>
