@@ -1,7 +1,10 @@
 package org.oxerr.okcoin.rest;
 
+import static java.util.stream.Collectors.toList;
+
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
@@ -13,6 +16,7 @@ import org.apache.commons.lang3.math.NumberUtils;
 import org.oxerr.okcoin.rest.dto.Depth;
 import org.oxerr.okcoin.rest.dto.Funds;
 import org.oxerr.okcoin.rest.dto.Order;
+import org.oxerr.okcoin.rest.dto.OrderHistory;
 import org.oxerr.okcoin.rest.dto.OrderResult;
 import org.oxerr.okcoin.rest.dto.TickerResponse;
 import org.oxerr.okcoin.rest.dto.Trade;
@@ -28,6 +32,7 @@ import com.xeiam.xchange.dto.marketdata.Trades;
 import com.xeiam.xchange.dto.marketdata.Trades.TradeSortType;
 import com.xeiam.xchange.dto.trade.LimitOrder;
 import com.xeiam.xchange.dto.trade.OpenOrders;
+import com.xeiam.xchange.dto.trade.UserTrade;
 import com.xeiam.xchange.dto.trade.UserTrades;
 import com.xeiam.xchange.dto.trade.Wallet;
 
@@ -134,12 +139,11 @@ public final class OKCoinAdapters {
 		return new OpenOrders(openOrders);
 	}
 
-	public static UserTrades adaptUserTrades(OrderResult orderResult) {
-		List<com.xeiam.xchange.dto.trade.UserTrade> userTrades
-			= new ArrayList<>(orderResult.getOrders().length);
-		for (Order order : orderResult.getOrders()) {
-			userTrades.add(adaptUserTrade(order));
-		}
+	public static UserTrades adaptUserTrades(OrderHistory orderHistory) {
+		List<UserTrade> userTrades = Arrays
+			.stream(orderHistory.getOrders())
+			.map(order -> adaptUserTrade(order))
+			.collect(toList());
 		return new UserTrades(userTrades, TradeSortType.SortByTimestamp);
 	}
 
@@ -199,16 +203,14 @@ public final class OKCoinAdapters {
 
 	private static com.xeiam.xchange.dto.trade.UserTrade adaptUserTrade(
 			Order order) {
-		return new com.xeiam.xchange.dto.trade.UserTrade(
-				adaptOrderType(order.getType()),
-				order.getDealAmount(),
-				adaptSymbol(order.getSymbol()),
-				order.getAvgPrice(),
-				null,
-				null,
-				String.valueOf(order.getOrderId()),
-				null,
-				null);
+		return new UserTrade.Builder()
+			.type(adaptOrderType(order.getType()))
+			.tradableAmount(order.getDealAmount())
+			.currencyPair(adaptSymbol(order.getSymbol()))
+			.price(order.getAvgPrice())
+			.timestamp(Date.from(order.getCreateDate()))
+			.orderId(String.valueOf(order.getOrderId()))
+			.build();
 	}
 
 }
