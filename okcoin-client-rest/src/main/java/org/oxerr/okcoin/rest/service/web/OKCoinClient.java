@@ -4,9 +4,11 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.http.Consts;
+import org.apache.http.NameValuePair;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.utils.URIBuilder;
@@ -15,12 +17,15 @@ import org.apache.http.entity.ContentType;
 import org.apache.http.message.BasicNameValuePair;
 import org.oxerr.okcoin.rest.dto.Depth;
 import org.oxerr.okcoin.rest.dto.Funds;
+import org.oxerr.okcoin.rest.dto.IcebergOrder;
 import org.oxerr.okcoin.rest.dto.Result;
 import org.oxerr.okcoin.rest.dto.Ticker;
 import org.oxerr.okcoin.rest.dto.TickerResponse;
 import org.oxerr.okcoin.rest.dto.Trade;
 import org.oxerr.okcoin.rest.dto.TradeParam;
+import org.oxerr.okcoin.rest.dto.valuereader.IcebergOrdersReader;
 import org.oxerr.okcoin.rest.dto.valuereader.IndexHtmlPageReader;
+import org.oxerr.okcoin.rest.dto.valuereader.PlainTextReader;
 import org.oxerr.okcoin.rest.dto.valuereader.ResultValueReader;
 import org.oxerr.okcoin.rest.dto.valuereader.VoidValueReader;
 import org.oxerr.okcoin.rest.service.polling.OKCoinAccountService;
@@ -51,7 +56,8 @@ public class OKCoinClient implements AutoCloseable {
 	private static final URI BUY_BTC_SUBMIT_URI = URIUtils.resolve(HTTPS_BASE, "trade/buyBtcSubmit.do");
 	private static final URI SELL_BTC_SUBMIT_URI = URIUtils.resolve(HTTPS_BASE, "trade/sellBtcSubmit.do");
 
-	private static final URI SUBMIT_CONTINOUS_ENTRUST_URI = URIUtils.resolve(HTTPS_BASE, "strategy/submitContinousEntrust.do");
+	private static final URI SUBMIT_CONTINUOUS_ENTRUST_URI = URIUtils.resolve(HTTPS_BASE, "strategy/submitContinousEntrust.do");
+	private static final URI CANCEL_CONTINUOUS_ENTRUST_URI = URIUtils.resolve(HTTPS_BASE, "strategy/cancelContinuousEntrust.do");
 
 	private static final String TRADE_BTC_REFERER_PREFIX = HTTPS_BASE.toString() + "trade/btc.do?tradeType=";
 
@@ -249,21 +255,71 @@ public class OKCoinClient implements AutoCloseable {
 		trade(amount, cnyPrice, tradeType, symbol, isopen);
 	}
 
-	public void submitContinousEntrust(int symbol, int type,
+	/**
+	 * Submits continuous entrust.
+	 *
+	 * @param symbol 0: BTC, 1: LTC.
+	 * @param type 1: Buy Iceberg Order, 2: Sell Iceberg Order.
+	 * @param tradeValue total Order amount.
+	 * @param singleAvg average order amount.
+	 * @param depthRange price variance.
+	 * @param protePrice highest buy price for buying, lowest sell price for selling.
+	 * @throws IOException indicates I/O exception.
+	 */
+	public Result submitContinuousEntrust(int symbol, int type,
 			BigDecimal tradeValue, BigDecimal singleAvg, BigDecimal depthRange,
 			BigDecimal protePrice) throws IOException {
-		final URI uri;
+		URI uri = randomUri(SUBMIT_CONTINUOUS_ENTRUST_URI);
+
+		HttpPost post = new HttpPost(uri);
+		post.setHeader("X-Requested-With", "XMLHttpRequest");
+		String referer =  URIUtils.resolve(HTTPS_BASE, "trade/btc.do").toString();
+		log.debug("Add referer header: {}", referer);
+		post.setHeader("Referer", referer);
+
+		List<NameValuePair> params = new ArrayList<>(6);
+		params.add(new BasicNameValuePair("symbol", String.valueOf(symbol)));
+		params.add(new BasicNameValuePair("type", String.valueOf(type)));
+		params.add(new BasicNameValuePair("tradeValue", tradeValue.toPlainString()));
+		params.add(new BasicNameValuePair("singleAvg", singleAvg.toPlainString()));
+		params.add(new BasicNameValuePair("depthRange", depthRange.toPlainString()));
+		params.add(new BasicNameValuePair("protePrice", protePrice.toPlainString()));
+		params.add(new BasicNameValuePair("tradePwd", tradePwd == null ? "" : tradePwd));
+
+		post.setEntity(new UrlEncodedFormEntity(params));
+		return httpClient.execute(ResultValueReader.getInstance(), post);
+	}
+
+	public String cancelContinuousEntrust(int symbol, long id) throws IOException {
+		URI uri = randomUri(CANCEL_CONTINUOUS_ENTRUST_URI);
+		HttpPost post = new HttpPost(uri);
+		post.setHeader("X-Requested-With", "XMLHttpRequest");
+		String referer =  URIUtils.resolve(HTTPS_BASE, "trade/btc.do").toString();
+		log.debug("Add referer header: {}", referer);
+		post.setHeader("Referer", referer);
+
+		List<NameValuePair> params = new ArrayList<>(2);
+		params.add(new BasicNameValuePair("symbol", String.valueOf(symbol)));
+		params.add(new BasicNameValuePair("id", String.valueOf(id)));
+
+		post.setEntity(new UrlEncodedFormEntity(params));
+		return httpClient.execute(PlainTextReader.getInstance(), post);
+	}
+
+	public IcebergOrder[] getIcebergeOrders(int symbol, int type, int sign,
+			int strategyType) throws IOException {
+		URI uri;
 		try {
-			uri = new URIBuilder(SUBMIT_CONTINOUS_ENTRUST_URI).setParameter("random",
-					randomInString()).build();
+			uri = new URIBuilder(URIUtils.resolve(HTTPS_BASE, "strategy/refrushRecordNew.do"))
+				.setParameter("symbol", String.valueOf(symbol))
+				.setParameter("type", String.valueOf(type))
+				.setParameter("sign", String.valueOf(sign))
+				.setParameter("strategyType", String.valueOf(strategyType))
+				.build();
 		} catch (URISyntaxException e) {
 			throw new IOException(e);
 		}
-
-		final HttpPost post = new HttpPost(uri);
-
-		Result result = httpClient.execute(ResultValueReader.getInstance(), post);
-
+		return httpClient.get(uri, IcebergOrdersReader.getInstance());
 	}
 
 	/**
@@ -313,13 +369,7 @@ public class OKCoinClient implements AutoCloseable {
 			submitUri = SELL_BTC_SUBMIT_URI;
 		}
 
-		final URI uri;
-		try {
-			uri = new URIBuilder(submitUri).setParameter("random",
-					randomInString()).build();
-		} catch (URISyntaxException e) {
-			throw new IOException(e);
-		}
+		final URI uri = randomUri(submitUri);
 
 		TradeParam tradeParam = new TradeParam(
 				tradeAmount, tradeCnyPrice, tradePwd, symbol);
@@ -393,6 +443,21 @@ public class OKCoinClient implements AutoCloseable {
 	private long random() {
 		long random = Math.round(Math.random() * 100);
 		return random;
+	}
+
+	/**
+	 * @return
+	 * @throws IOException
+	 */
+	private URI randomUri(URI uri) throws IOException {
+		final URI ret;
+		try {
+			ret = new URIBuilder(uri).setParameter("random",
+					randomInString()).build();
+		} catch (URISyntaxException e) {
+			throw new IOException(e);
+		}
+		return ret;
 	}
 
 }

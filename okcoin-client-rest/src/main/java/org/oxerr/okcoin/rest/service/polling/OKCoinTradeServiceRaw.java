@@ -8,15 +8,22 @@ import java.util.stream.Collectors;
 import org.oxerr.okcoin.rest.OKCoinException;
 import org.oxerr.okcoin.rest.dto.BatchTradeResult;
 import org.oxerr.okcoin.rest.dto.CancelOrderResult;
+import org.oxerr.okcoin.rest.dto.IcebergOrder;
 import org.oxerr.okcoin.rest.dto.OrderData;
 import org.oxerr.okcoin.rest.dto.OrderHistory;
 import org.oxerr.okcoin.rest.dto.OrderResult;
+import org.oxerr.okcoin.rest.dto.Result;
 import org.oxerr.okcoin.rest.dto.TradeResult;
 import org.oxerr.okcoin.rest.dto.Type;
+import org.oxerr.okcoin.rest.service.web.OKCoinClientException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.xeiam.xchange.Exchange;
+import com.xeiam.xchange.currency.CurrencyPair;
+import com.xeiam.xchange.dto.Order.OrderType;
 
 /**
  * Raw trade service.
@@ -26,6 +33,8 @@ public class OKCoinTradeServiceRaw extends OKCoinBaseTradePollingService {
 	private static final String METHOD_TRADE = "trade";
 	private static final String METHOD_CANCEL_ORDER = "cancel_order";
 	private static final String METHOD_GET_ORDER = "order_info";
+
+	private final Logger log = LoggerFactory.getLogger(OKCoinTradeServiceRaw.class);
 
 	private final ObjectMapper mapper;
 
@@ -85,6 +94,41 @@ public class OKCoinTradeServiceRaw extends OKCoinBaseTradePollingService {
 			IOException {
 		return okCoin.getOrderHistory(apiKey, symbol, status, currentPage,
 				pageLength, sign);
+	}
+
+	public IcebergOrder[] getOpenIcebergOrders(CurrencyPair currencyPair)
+			throws IOException {
+		int symbol = currencyPair.baseSymbol.equals("BTC") ? 0 : 1;
+		return okCoinClient.getIcebergeOrders(symbol, 5, 1, 2);
+	}
+
+	public long placeIcebergOrder(
+		CurrencyPair currencyPair,
+		OrderType type,
+		BigDecimal tradeValue,
+		BigDecimal singleAvg,
+		BigDecimal depthRange,
+		BigDecimal protectedPrice)
+			throws OKCoinClientException, IOException {
+		int symbol = currencyPair.baseSymbol.equals("BTC") ? 0 : 1;
+		Result result = okCoinClient.submitContinuousEntrust(
+				symbol,
+				type == OrderType.BID ? 1 : 2,
+				tradeValue, singleAvg, depthRange, protectedPrice);
+		log.debug("result: {}", result);
+		if (result.getResultCode() != 0) {
+			throw new OKCoinClientException(result);
+		}
+		IcebergOrder[] icebergOrders = okCoinClient.getIcebergeOrders(symbol, 5, 1, 2);
+		return icebergOrders[0].getId();
+	}
+
+	public boolean cancelIcebergeOrder(CurrencyPair currencyPair, long id)
+			throws IOException {
+		int symbol = currencyPair.baseSymbol.equals("BTC") ? 0 : 1;
+		String result = okCoinClient.cancelContinuousEntrust(symbol, id);
+		log.debug("result: {}", result);
+		return Integer.parseInt(result) == 0;
 	}
 
 }

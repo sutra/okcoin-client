@@ -1,10 +1,17 @@
 package org.oxerr.okcoin.rest.service.polling;
 
+import static org.oxerr.okcoin.rest.OKCoinExchange.CONNECTION_REQUEST_TIMEOUT_PARAMETER;
+import static org.oxerr.okcoin.rest.OKCoinExchange.CONNECT_TIMEOUT_PARAMETER;
+import static org.oxerr.okcoin.rest.OKCoinExchange.SOCKET_TIMEOUT_PARAMETER;
+import static org.oxerr.okcoin.rest.OKCoinExchange.TRADE_PASSWORD_PARAMETER;
+
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
 import org.oxerr.okcoin.rest.OKCoin;
 import org.oxerr.okcoin.rest.service.OKCoinDigest;
+import org.oxerr.okcoin.rest.service.web.OKCoinClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -30,12 +37,41 @@ public class OKCoinBaseTradePollingService extends OKCoinBasePollingService {
 
 	private Map<String, Long> lasts = new HashMap<String, Long>();
 
+	protected final OKCoinClient okCoinClient;
+
 	protected OKCoinBaseTradePollingService(Exchange exchange) {
 		super(exchange);
 		ExchangeSpecification spec = exchange.getExchangeSpecification();
-		okCoin = RestProxyFactory.createProxy(OKCoin.class, spec.getSslUri());
-		this.apiKey = spec.getApiKey();
-		sign = new OKCoinDigest(spec.getSecretKey());
+
+		if (spec.getApiKey() != null && spec.getSecretKey() != null) {
+			okCoin = RestProxyFactory.createProxy(OKCoin.class, spec.getSslUri());
+			this.apiKey = spec.getApiKey();
+			sign = new OKCoinDigest(spec.getSecretKey());
+		} else {
+			okCoin = null;
+			this.apiKey = null;
+			sign = null;
+		}
+
+		if (spec.getUserName() != null && spec.getPassword() != null) {
+			String tradePassword = (String) spec.getExchangeSpecificParametersItem(TRADE_PASSWORD_PARAMETER);
+			Number socketTimeout = (Number) spec.getExchangeSpecificParametersItem(SOCKET_TIMEOUT_PARAMETER);
+			Number connectTimeout = (Number) spec.getExchangeSpecificParametersItem(CONNECT_TIMEOUT_PARAMETER);
+			Number connectionRequestTimeout = (Number) spec.getExchangeSpecificParametersItem(CONNECTION_REQUEST_TIMEOUT_PARAMETER);
+
+			okCoinClient = new OKCoinClient(
+				spec.getUserName(), spec.getPassword(), tradePassword,
+				socketTimeout == null ? 0 : socketTimeout.intValue(),
+				connectTimeout == null ? 0 : connectTimeout.intValue(),
+				connectionRequestTimeout == null ? 0 : connectionRequestTimeout.intValue());
+			try {
+				okCoinClient.login();
+			} catch (IOException e) {
+				log.warn(e.getMessage(), e);
+			}
+		} else {
+			okCoinClient = null;
+		}
 	}
 
 	private long getLast(String method) {

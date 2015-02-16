@@ -24,6 +24,10 @@ public class OKCoinExchange extends BaseExchange {
 	 */
 	public static final String SYMBOLS_PARAMETER = "symbols";
 
+	public static final String SOCKET_TIMEOUT_PARAMETER = "socketTimeout";
+	public static final String CONNECT_TIMEOUT_PARAMETER = "connectTimeout";
+	public static final String CONNECTION_REQUEST_TIMEOUT_PARAMETER = "connectionRequestTimeout";
+
 	/**
 	 * The parameter key of the trade password.
 	 */
@@ -37,8 +41,16 @@ public class OKCoinExchange extends BaseExchange {
 	public void applySpecification(ExchangeSpecification exchangeSpecification) {
 		super.applySpecification(exchangeSpecification);
 		this.pollingMarketDataService = new OKCoinMarketDataService(this);
-		if (exchangeSpecification.getApiKey() != null) {
+
+		if (exchangeSpecification.getApiKey() != null
+			&& exchangeSpecification.getSecretKey() != null) {
 			this.pollingAccountService = new OKCoinAccountService(this);
+		}
+
+		if ((exchangeSpecification.getApiKey() != null
+				&& exchangeSpecification.getSecretKey() != null)
+			|| (exchangeSpecification.getUserName() != null
+				&& exchangeSpecification.getPassword() != null)) {
 			this.pollingTradeService = new OKCoinTradeService(this);
 		}
 	}

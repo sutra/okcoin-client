@@ -2,19 +2,13 @@ package org.oxerr.okcoin.rest.dto.valuereader;
 
 import static java.util.Collections.emptyMap;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.math.BigDecimal;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.cyberneko.html.parsers.DOMParser;
 import org.oxerr.okcoin.rest.dto.Funds;
 import org.oxerr.okcoin.rest.service.web.LoginRequiredException;
-import org.oxerr.okcoin.rest.service.web.OKCoinClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Element;
@@ -24,12 +18,8 @@ import org.w3c.dom.html.HTMLDocument;
 import org.w3c.dom.html.HTMLElement;
 import org.w3c.dom.html.HTMLLIElement;
 import org.w3c.dom.html.HTMLUListElement;
-import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
 
-public class IndexHtmlPageReader implements ValueReader<Funds>{
-
-	private static final String ENCODING = OKCoinClient.ENCODING;
+public class IndexHtmlPageReader extends HtmlPageReader<Funds> {
 
 	private final Logger log = LoggerFactory.getLogger(IndexHtmlPageReader.class);
 
@@ -37,15 +27,7 @@ public class IndexHtmlPageReader implements ValueReader<Funds>{
 	 * {@inheritDoc}
 	 */
 	@Override
-	public Funds read(InputStream inputStream) throws IOException {
-		try {
-			return parse(inputStream);
-		} catch (SAXException e) {
-			throw new IOException(e);
-		}
-	}
-
-	public Funds parse(InputStream inputStream) throws IOException, SAXException {
+	public Funds read(HTMLDocument doc) throws LoginRequiredException {
 		BigDecimal cny = null;
 		BigDecimal cnyFrozen = null;
 		BigDecimal btc = null;
@@ -55,7 +37,6 @@ public class IndexHtmlPageReader implements ValueReader<Funds>{
 		BigDecimal netAsset = null;
 		BigDecimal allAsset = null;
 
-		HTMLDocument doc = toDocument(inputStream);
 		NodeList divNodeList = doc.getElementsByTagName("div");
 		log.debug("divNodeList.length: {}", divNodeList.getLength());
 		for (int i = 0; i < divNodeList.getLength(); i++) {
@@ -142,25 +123,6 @@ public class IndexHtmlPageReader implements ValueReader<Funds>{
 		asset.put("net", netAsset);
 		asset.put("total", allAsset);
 		return new Funds(asset, emptyMap(), free, frozen, emptyMap());
-	}
-
-
-	private HTMLDocument toDocument(InputStream inputStream)
-			throws IOException, SAXException {
-		final InputSource inputSource;
-		if (log.isDebugEnabled()) {
-			String html = IOUtils.toString(inputStream, ENCODING);
-			log.debug("Parsing HTML:\n{}", html);
-			inputSource = new InputSource(new InputStreamReader(
-					IOUtils.toInputStream(html, ENCODING), ENCODING));
-		} else {
-			inputSource = new InputSource(new InputStreamReader(inputStream,
-					ENCODING));
-		}
-		DOMParser parser = new DOMParser();
-		parser.parse(inputSource);
-		HTMLDocument document = (HTMLDocument) parser.getDocument();
-		return document;
 	}
 
 }
