@@ -63,10 +63,10 @@ public class IcebergOrderDemo {
 		BigDecimal totalOrderAmount = new BigDecimal("0.01"); // BTC
 		BigDecimal averageOrderAmount = new BigDecimal("0.01"); // BTC
 		BigDecimal priceVariance = new BigDecimal("0.1");
-		BigDecimal highestBuyPrice = new BigDecimal(9999_9999); // CNY
+		BigDecimal lowestSellPrice = new BigDecimal(9999_9999); // CNY
 
 		long id = rawTradeService.placeIcebergOrder(currencyPair, OrderType.ASK,
-				totalOrderAmount, averageOrderAmount, priceVariance, highestBuyPrice);
+				totalOrderAmount, averageOrderAmount, priceVariance, lowestSellPrice);
 		log.info("buy iceberg order ID: {}", id);
 	}
 
