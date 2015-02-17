@@ -15,6 +15,7 @@ import org.oxerr.okcoin.rest.dto.OrderResult;
 import org.oxerr.okcoin.rest.dto.Result;
 import org.oxerr.okcoin.rest.dto.TradeResult;
 import org.oxerr.okcoin.rest.dto.Type;
+import org.oxerr.okcoin.rest.service.web.LoginRequiredException;
 import org.oxerr.okcoin.rest.service.web.OKCoinClientException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -98,8 +99,26 @@ public class OKCoinTradeServiceRaw extends OKCoinBaseTradePollingService {
 
 	public IcebergOrder[] getOpenIcebergOrders(CurrencyPair currencyPair)
 			throws IOException {
-		int symbol = currencyPair.baseSymbol.equals("BTC") ? 0 : 1;
-		return okCoinClient.getIcebergeOrders(symbol, 5, 1, 2);
+		int symbol = toSymbol(currencyPair);
+		return getOpenIcebergOrders(symbol);
+	}
+
+	private IcebergOrder[] getOpenIcebergOrders(int symbol) throws IOException {
+		int retry = 0;
+
+		while (true) {
+			try {
+				log.debug("Trying to get iceberge open orders.");
+				return okCoinClient.getIcebergeOrders(symbol, 5, 1, 2);
+			} catch (LoginRequiredException e) {
+				if (++retry <= this.loginMaxRetryTimes) {
+					log.debug("Not logged in. Try to login. Retry: {}.", retry);
+					okCoinClient.login();
+				} else {
+					throw e;
+				}
+			}
+		}
 	}
 
 	public long placeIcebergOrder(
@@ -110,8 +129,8 @@ public class OKCoinTradeServiceRaw extends OKCoinBaseTradePollingService {
 		BigDecimal depthRange,
 		BigDecimal protectedPrice)
 			throws OKCoinClientException, IOException {
-		int symbol = currencyPair.baseSymbol.equals("BTC") ? 0 : 1;
-		Result result = okCoinClient.submitContinuousEntrust(
+		int symbol = toSymbol(currencyPair);
+		Result result = submitContinuousEntrust(
 				symbol,
 				type == OrderType.BID ? 1 : 2,
 				tradeValue, singleAvg, depthRange, protectedPrice);
@@ -119,16 +138,52 @@ public class OKCoinTradeServiceRaw extends OKCoinBaseTradePollingService {
 		if (result.getResultCode() != 0) {
 			throw new OKCoinClientException(result);
 		}
-		IcebergOrder[] icebergOrders = okCoinClient.getIcebergeOrders(symbol, 5, 1, 2);
+		IcebergOrder[] icebergOrders = getOpenIcebergOrders(symbol);
 		return icebergOrders[0].getId();
+	}
+
+	private Result submitContinuousEntrust(int symbol, int type,
+			BigDecimal tradeValue, BigDecimal singleAvg, BigDecimal depthRange,
+			BigDecimal protePrice) throws IOException {
+		int retry = 0;
+
+		while (true) {
+			try {
+				return okCoinClient.submitContinuousEntrust(symbol, type, tradeValue, singleAvg, depthRange, protePrice);
+			} catch (LoginRequiredException e) {
+				if (++retry <= this.loginMaxRetryTimes) {
+					okCoinClient.login();
+				} else {
+					throw e;
+				}
+			}
+		}
 	}
 
 	public boolean cancelIcebergeOrder(CurrencyPair currencyPair, long id)
 			throws IOException {
-		int symbol = currencyPair.baseSymbol.equals("BTC") ? 0 : 1;
-		String result = okCoinClient.cancelContinuousEntrust(symbol, id);
-		log.debug("result: {}", result);
-		return Integer.parseInt(result) == 0;
+		int symbol = toSymbol(currencyPair);
+		return cancelContinuousEntrust(symbol, id);
+	}
+
+	private boolean cancelContinuousEntrust(int symbol, long id) throws IOException {
+		int retry = 0;
+
+		while (true) {
+			try {
+				return okCoinClient.cancelContinuousEntrust(symbol, id);
+			} catch (LoginRequiredException e) {
+				if (++retry <= this.loginMaxRetryTimes) {
+					okCoinClient.login();
+				} else {
+					throw e;
+				}
+			}
+		}
+	}
+
+	private int toSymbol(CurrencyPair currencyPair) {
+		return currencyPair.baseSymbol.equals("BTC") ? 0 : 1;
 	}
 
 }

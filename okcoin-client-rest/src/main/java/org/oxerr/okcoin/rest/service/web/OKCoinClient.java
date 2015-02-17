@@ -264,11 +264,12 @@ public class OKCoinClient implements AutoCloseable {
 	 * @param singleAvg average order amount.
 	 * @param depthRange price variance.
 	 * @param protePrice highest buy price for buying, lowest sell price for selling.
+	 * @throws LoginRequiredException indicates the client is not logged in.
 	 * @throws IOException indicates I/O exception.
 	 */
 	public Result submitContinuousEntrust(int symbol, int type,
 			BigDecimal tradeValue, BigDecimal singleAvg, BigDecimal depthRange,
-			BigDecimal protePrice) throws IOException {
+			BigDecimal protePrice) throws LoginRequiredException, IOException {
 		URI uri = randomUri(SUBMIT_CONTINUOUS_ENTRUST_URI);
 
 		HttpPost post = new HttpPost(uri);
@@ -290,7 +291,17 @@ public class OKCoinClient implements AutoCloseable {
 		return httpClient.execute(ResultValueReader.getInstance(), post);
 	}
 
-	public String cancelContinuousEntrust(int symbol, long id) throws IOException {
+	/**
+	 * Cancel a continuous entrust.
+	 *
+	 * @param symbol 0: BTC, 1: LTC.
+	 * @param id the order ID.
+	 * @return true if canceled successfully.
+	 * @throws LoginRequiredException indicates the client is not logged in.
+	 * @throws IOException indicates I/O exception.
+	 */
+	public boolean cancelContinuousEntrust(int symbol, long id)
+			throws LoginRequiredException, IOException {
 		URI uri = randomUri(CANCEL_CONTINUOUS_ENTRUST_URI);
 		HttpPost post = new HttpPost(uri);
 		post.setHeader("X-Requested-With", "XMLHttpRequest");
@@ -303,11 +314,16 @@ public class OKCoinClient implements AutoCloseable {
 		params.add(new BasicNameValuePair("id", String.valueOf(id)));
 
 		post.setEntity(new UrlEncodedFormEntity(params));
-		return httpClient.execute(PlainTextReader.getInstance(), post);
+		String result = httpClient.execute(PlainTextReader.getInstance(), post);
+		log.debug("result: {}", result);
+		if (result.length() == 0) {
+			throw new LoginRequiredException();
+		}
+		return Integer.parseInt(result) == 0;
 	}
 
 	public IcebergOrder[] getIcebergeOrders(int symbol, int type, int sign,
-			int strategyType) throws IOException {
+			int strategyType) throws LoginRequiredException, IOException {
 		URI uri;
 		try {
 			uri = new URIBuilder(URIUtils.resolve(HTTPS_BASE, "strategy/refrushRecordNew.do"))

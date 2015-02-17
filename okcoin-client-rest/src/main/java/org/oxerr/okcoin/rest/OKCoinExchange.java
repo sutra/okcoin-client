@@ -24,6 +24,11 @@ public class OKCoinExchange extends BaseExchange {
 	 */
 	public static final String SYMBOLS_PARAMETER = "symbols";
 
+	/**
+	 * Max count of retry in logging into via web form.
+	 */
+	public static final String LOGIN_MAX_RETRY_TIMES_PARAMETER = "login.max.retry.times";
+
 	public static final String SOCKET_TIMEOUT_PARAMETER = "socketTimeout";
 	public static final String CONNECT_TIMEOUT_PARAMETER = "connectTimeout";
 	public static final String CONNECTION_REQUEST_TIMEOUT_PARAMETER = "connectionRequestTimeout";

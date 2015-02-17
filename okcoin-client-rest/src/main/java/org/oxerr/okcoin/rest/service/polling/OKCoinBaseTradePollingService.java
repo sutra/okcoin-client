@@ -2,6 +2,7 @@ package org.oxerr.okcoin.rest.service.polling;
 
 import static org.oxerr.okcoin.rest.OKCoinExchange.CONNECTION_REQUEST_TIMEOUT_PARAMETER;
 import static org.oxerr.okcoin.rest.OKCoinExchange.CONNECT_TIMEOUT_PARAMETER;
+import static org.oxerr.okcoin.rest.OKCoinExchange.LOGIN_MAX_RETRY_TIMES_PARAMETER;
 import static org.oxerr.okcoin.rest.OKCoinExchange.SOCKET_TIMEOUT_PARAMETER;
 import static org.oxerr.okcoin.rest.OKCoinExchange.TRADE_PASSWORD_PARAMETER;
 
@@ -38,6 +39,7 @@ public class OKCoinBaseTradePollingService extends OKCoinBasePollingService {
 	private Map<String, Long> lasts = new HashMap<String, Long>();
 
 	protected final OKCoinClient okCoinClient;
+	protected final int loginMaxRetryTimes;
 
 	protected OKCoinBaseTradePollingService(Exchange exchange) {
 		super(exchange);
@@ -53,8 +55,12 @@ public class OKCoinBaseTradePollingService extends OKCoinBasePollingService {
 			sign = null;
 		}
 
+		Number loginMaxRetryTimes = (Number) spec.getExchangeSpecificParametersItem(LOGIN_MAX_RETRY_TIMES_PARAMETER);
+		this.loginMaxRetryTimes = loginMaxRetryTimes == null ? 1 : loginMaxRetryTimes.intValue();
+
 		if (spec.getUserName() != null && spec.getPassword() != null) {
 			String tradePassword = (String) spec.getExchangeSpecificParametersItem(TRADE_PASSWORD_PARAMETER);
+
 			Number socketTimeout = (Number) spec.getExchangeSpecificParametersItem(SOCKET_TIMEOUT_PARAMETER);
 			Number connectTimeout = (Number) spec.getExchangeSpecificParametersItem(CONNECT_TIMEOUT_PARAMETER);
 			Number connectionRequestTimeout = (Number) spec.getExchangeSpecificParametersItem(CONNECTION_REQUEST_TIMEOUT_PARAMETER);
@@ -64,11 +70,13 @@ public class OKCoinBaseTradePollingService extends OKCoinBasePollingService {
 				socketTimeout == null ? 0 : socketTimeout.intValue(),
 				connectTimeout == null ? 0 : connectTimeout.intValue(),
 				connectionRequestTimeout == null ? 0 : connectionRequestTimeout.intValue());
+
 			try {
 				okCoinClient.login();
 			} catch (IOException e) {
 				log.warn(e.getMessage(), e);
 			}
+
 		} else {
 			okCoinClient = null;
 		}

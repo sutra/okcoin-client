@@ -8,6 +8,7 @@ import java.util.TimeZone;
 
 import org.oxerr.okcoin.rest.dto.IcebergOrder;
 import org.oxerr.okcoin.rest.dto.Type;
+import org.oxerr.okcoin.rest.service.web.LoginRequiredException;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.w3c.dom.html.HTMLCollection;
@@ -37,6 +38,10 @@ public class IcebergOrdersReader extends HtmlPageReader<IcebergOrder[]> {
 	@Override
 	public IcebergOrder[] read(HTMLDocument doc) {
 		NodeList tableNodeList = doc.getElementsByTagName("table");
+		if (tableNodeList.getLength() == 0) {
+			throw new LoginRequiredException("No HTML table found.");
+		}
+
 		Node tableNode = tableNodeList.item(0);
 		HTMLTableElement table = (HTMLTableElement) tableNode;
 		HTMLCollection rows = table.getRows();
@@ -44,6 +49,12 @@ public class IcebergOrdersReader extends HtmlPageReader<IcebergOrder[]> {
 		for (int i = 1; i < rows.getLength(); i++) {
 			HTMLTableRowElement row = (HTMLTableRowElement) rows.item(i);
 			HTMLCollection cells = row.getCells();
+
+			if (cells.getLength() == 1) {
+				// no open orders
+				orders = new IcebergOrder[0];
+				break;
+			}
 
 			HTMLTableCellElement dateCell = (HTMLTableCellElement) cells.item(0);
 			HTMLTableCellElement sideCell = (HTMLTableCellElement) cells.item(1);
