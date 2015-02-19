@@ -17,6 +17,9 @@ import com.xeiam.xchange.currency.CurrencyPair;
 import com.xeiam.xchange.dto.Order.OrderType;
 import com.xeiam.xchange.service.polling.trade.PollingTradeService;
 
+/**
+ * Demonstration of iceberg orders management.
+ */
 public class IcebergOrderDemo {
 
 	private final Logger log = LoggerFactory.getLogger(IcebergOrderDemo.class);
@@ -31,11 +34,20 @@ public class IcebergOrderDemo {
 		this.currencyPair = currencyPair;
 	}
 
+	public void demoGetIcebergOrderHistory() throws IOException {
+		IcebergOrder[] icebergOrders = rawTradeService.getIcebergOrderHistory(currencyPair);
+		logOrders(icebergOrders);
+	}
+
 	public void demoGetOpenIcebergOrders() throws IOException {
 		IcebergOrder[] icebergOrders = rawTradeService.getOpenIcebergOrders(currencyPair);
+		logOrders(icebergOrders);
+	}
+
+	private void logOrders(IcebergOrder[] icebergOrders) {
 		Arrays.stream(icebergOrders).forEach(
 			o -> {
-				log.info("ID: {}, Date: {}, Side: {}, Total Order Amount: {}, Average Order Amount: {}, Price Variance: {},  Highest/Lowest Price: {}, Filled: {}.",
+				log.info("ID: {}, Date: {}, Side: {}, Total Order Amount: {}, Average Order Amount: {}, Price Variance: {},  Highest/Lowest Price: {}, Filled: {}, Status: {}.",
 					o.getId(),
 					o.getDate(),
 					o.getSide(),
@@ -43,7 +55,8 @@ public class IcebergOrderDemo {
 					o.getSingleAvg(),
 					o.getDepthRange(),
 					o.getProtectedPrice(),
-					o.getFilled());
+					o.getFilled(),
+					o.getStatus());
 			}
 		);
 	}
@@ -91,6 +104,7 @@ public class IcebergOrderDemo {
 		// icebergOrderDemo.demoSellIcebergOrder();
 
 		icebergOrderDemo.demoGetOpenIcebergOrders();
+		icebergOrderDemo.demoGetIcebergOrderHistory();
 
 		// icebergOrderDemo.demoCancelIcebergOrder(12813L);
 	}

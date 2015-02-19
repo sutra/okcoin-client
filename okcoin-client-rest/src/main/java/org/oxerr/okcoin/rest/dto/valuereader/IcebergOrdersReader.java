@@ -7,10 +7,13 @@ import java.time.Instant;
 import java.util.TimeZone;
 
 import org.oxerr.okcoin.rest.dto.IcebergOrder;
+import org.oxerr.okcoin.rest.dto.Status;
 import org.oxerr.okcoin.rest.dto.Type;
 import org.oxerr.okcoin.rest.service.web.LoginRequiredException;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import org.w3c.dom.Text;
+import org.w3c.dom.html.HTMLAnchorElement;
 import org.w3c.dom.html.HTMLCollection;
 import org.w3c.dom.html.HTMLDocument;
 import org.w3c.dom.html.HTMLTableCellElement;
@@ -90,7 +93,26 @@ public class IcebergOrdersReader extends HtmlPageReader<IcebergOrder[]> {
 			BigDecimal protectedPrice = new BigDecimal(protetedPriceContent.substring(1).replace(",", ""));
 			BigDecimal filled = new BigDecimal(filledContent.substring(1));
 			long id = Long.valueOf(idContent.substring("continuous_".length()));
-			orders[i - 1] = new IcebergOrder(id, date, side, tradeValue, singleAvg, depthRange, protectedPrice, filled);
+
+			NodeList statusChildNodes = statusCell.getChildNodes();
+			Node statusFirstChild = statusChildNodes.item(0);
+			Status status = Status.UNFILLED;
+			if (statusFirstChild instanceof HTMLAnchorElement) {
+				// order is open
+				status = filled.compareTo(BigDecimal.ZERO) == 0 ? Status.UNFILLED : Status.PARTIALLY_FILLED;
+			} else if (statusFirstChild instanceof Text){
+				String statusText = statusFirstChild.getTextContent();
+				switch (statusText) {
+				case "Cancelled":
+					status = Status.CANCELLED;
+					break;
+				default:
+					status = Status.UNFILLED;
+					break;
+				}
+			}
+
+			orders[i - 1] = new IcebergOrder(id, date, side, tradeValue, singleAvg, depthRange, protectedPrice, filled, status);
 		}
 		return orders;
 	}

@@ -322,7 +322,18 @@ public class OKCoinClient implements AutoCloseable {
 		return Integer.parseInt(result) == 0;
 	}
 
-	public IcebergOrder[] getIcebergeOrders(int symbol, int type, int sign,
+	/**
+	 * Returns iceberg orders.
+	 *
+	 * @param symbol 0: BTC, 1: LTC.
+	 * @param type 5: ?
+	 * @param sign 1: Open Orders, 2: Order History
+	 * @param strategyType 2: ?
+	 * @return iceberg orders.
+	 * @throws LoginRequiredException indicates the client is not logged in.
+	 * @throws IOException indicates I/O exception.
+	 */
+	public IcebergOrder[] getIcebergOrders(int symbol, int type, int sign,
 			int strategyType) throws LoginRequiredException, IOException {
 		URI uri;
 		try {

@@ -10,6 +10,8 @@ import java.math.BigDecimal;
 import org.apache.commons.io.IOUtils;
 import org.junit.Test;
 import org.oxerr.okcoin.rest.dto.IcebergOrder;
+import org.oxerr.okcoin.rest.dto.Status;
+import org.oxerr.okcoin.rest.dto.Type;
 import org.oxerr.okcoin.rest.service.web.LoginRequiredException;
 
 public class IcebergOrdersReaderTest {
@@ -43,12 +45,30 @@ public class IcebergOrdersReaderTest {
 			assertEquals(1, orders.length);
 			IcebergOrder order = orders[0];
 			assertEquals("2015-02-15T09:53:28Z", order.getDate().toString());
+			assertEquals(Type.BUY, order.getSide());
 			assertEquals(new BigDecimal("100"), order.getTradeValue());
 			assertEquals(new BigDecimal("1"), order.getSingleAvg());
 			assertEquals(new BigDecimal("0.1"), order.getDepthRange());
 			assertEquals(new BigDecimal("1"), order.getProtectedPrice());
 			assertEquals(new BigDecimal("0"), order.getFilled());
 			assertEquals(12732L, order.getId());
+		}
+	}
+
+	@Test
+	public void testIcebergOrderHistory() throws IOException {
+		try (InputStream inputStream = getClass().getResourceAsStream("order-history-iceberg-orders.html")) {
+			IcebergOrder[] orders = reader.read(inputStream);
+			assertEquals(10, orders.length);
+			assertEquals("2015-02-17T14:23:25Z", orders[0].getDate().toString());
+			assertEquals(Type.BUY, orders[0].getSide());
+			assertEquals(new BigDecimal("100"), orders[0].getTradeValue());
+			assertEquals(new BigDecimal("1"), orders[0].getSingleAvg());
+			assertEquals(new BigDecimal("0.1"), orders[0].getDepthRange());
+			assertEquals(new BigDecimal("1"), orders[0].getProtectedPrice());
+			assertEquals(new BigDecimal("0"), orders[0].getFilled());
+			assertEquals(Status.CANCELLED, orders[0].getStatus());
+			assertEquals(12836L, orders[0].getId());
 		}
 	}
 

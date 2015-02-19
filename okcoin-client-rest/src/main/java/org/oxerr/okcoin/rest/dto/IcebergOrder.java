@@ -35,11 +35,14 @@ public class IcebergOrder extends BaseObject {
 
 	private final BigDecimal filled;
 
+	private final Status status;
+
 	public IcebergOrder(
 			long id,
 			Instant date, Type side, BigDecimal tradeValue,
 			BigDecimal singleAvg, BigDecimal depthRange,
-			BigDecimal protectedPrice, BigDecimal filled) {
+			BigDecimal protectedPrice, BigDecimal filled,
+			Status status) {
 		this.id = id;
 		this.date = date;
 		this.side = side;
@@ -48,6 +51,7 @@ public class IcebergOrder extends BaseObject {
 		this.depthRange = depthRange;
 		this.protectedPrice = protectedPrice;
 		this.filled = filled;
+		this.status = status;
 	}
 
 	public long getId() {
@@ -80,6 +84,10 @@ public class IcebergOrder extends BaseObject {
 
 	public BigDecimal getFilled() {
 		return filled;
+	}
+
+	public Status getStatus() {
+		return status;
 	}
 
 }

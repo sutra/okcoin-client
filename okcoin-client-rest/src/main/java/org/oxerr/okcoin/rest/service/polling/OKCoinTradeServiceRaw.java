@@ -104,12 +104,25 @@ public class OKCoinTradeServiceRaw extends OKCoinBaseTradePollingService {
 	}
 
 	private IcebergOrder[] getOpenIcebergOrders(int symbol) throws IOException {
+		int sign = 1; // open orders;
+		return getIcebergOrders(symbol, sign);
+	}
+
+	public IcebergOrder[] getIcebergOrderHistory(CurrencyPair currencyPair)
+			throws IOException {
+		int symbol = toSymbol(currencyPair);
+		int sign = 2; // order history
+		return getIcebergOrders(symbol, sign);
+	}
+
+	private IcebergOrder[] getIcebergOrders(int symbol, int sign)
+			throws IOException {
 		int retry = 0;
 
 		while (true) {
 			try {
 				log.debug("Trying to get iceberge open orders.");
-				return okCoinClient.getIcebergeOrders(symbol, 5, 1, 2);
+				return okCoinClient.getIcebergOrders(symbol, 5, sign, 2);
 			} catch (LoginRequiredException e) {
 				if (++retry <= this.loginMaxRetryTimes) {
 					log.debug("Not logged in. Try to login. Retry: {}.", retry);

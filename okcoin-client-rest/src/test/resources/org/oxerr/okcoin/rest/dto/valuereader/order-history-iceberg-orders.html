@@ -1,0 +1,163 @@
+
+
+
+
+
+
+    <table width="100%">
+        <tr>
+            <th width="180">Date</th>
+            <th width="100">Side</th>
+            <th width="100">Total Order Amount</th>
+            <th width="110">Average Order Amount</th>
+            <th width="100">Price Variance</th>
+            <th width="100">Highest/Lowest Price</th>
+            <th width="100">Filled</th>
+            <th width="140">Status</th>
+        </tr>
+        
+        <tr>
+            <td>2015-02-17 22:23:25</td>
+            <td class="green">Bid</td>
+            <td>￥100</td>
+            <td>￥1</td>
+            <td>0.1%</td>
+            <td>￥1</td>
+            <td>￥0</td>
+            <td id="continuous_12836" name="continuous_12836" class="">Cancelled</td>
+        </tr>
+        
+        <tr>
+            <td>2015-02-16 23:33:43</td>
+            <td class="red">Ask</td>
+            <td>฿0.01</td>
+            <td>฿0.01</td>
+            <td>0.1%</td>
+            <td>￥99,999,999</td>
+            <td>฿0</td>
+            <td id="continuous_12821" name="continuous_12821" class="">Cancelled</td>
+        </tr>
+        
+        <tr>
+            <td>2015-02-16 23:33:02</td>
+            <td class="red">Ask</td>
+            <td>฿0.01</td>
+            <td>฿0.01</td>
+            <td>0.1%</td>
+            <td>￥99,999,999</td>
+            <td>฿0</td>
+            <td id="continuous_12820" name="continuous_12820" class="">Cancelled</td>
+        </tr>
+        
+        <tr>
+            <td>2015-02-16 23:32:24</td>
+            <td class="red">Ask</td>
+            <td>฿0.01</td>
+            <td>฿0.01</td>
+            <td>0.1%</td>
+            <td>￥99,999,999</td>
+            <td>฿0</td>
+            <td id="continuous_12819" name="continuous_12819" class="">Cancelled</td>
+        </tr>
+        
+        <tr>
+            <td>2015-02-16 23:31:33</td>
+            <td class="red">Ask</td>
+            <td>฿0.01</td>
+            <td>฿0.01</td>
+            <td>0.1%</td>
+            <td>￥99,999</td>
+            <td>฿0</td>
+            <td id="continuous_12818" name="continuous_12818" class="">Cancelled</td>
+        </tr>
+        
+        <tr>
+            <td>2015-02-16 23:06:26</td>
+            <td class="green">Bid</td>
+            <td>￥100</td>
+            <td>￥1</td>
+            <td>0.1%</td>
+            <td>￥1</td>
+            <td>￥0</td>
+            <td id="continuous_12817" name="continuous_12817" class="">Cancelled</td>
+        </tr>
+        
+        <tr>
+            <td>2015-02-16 22:56:43</td>
+            <td class="green">Bid</td>
+            <td>￥100</td>
+            <td>￥1</td>
+            <td>0.1%</td>
+            <td>￥1</td>
+            <td>￥0</td>
+            <td id="continuous_12815" name="continuous_12815" class="">Cancelled</td>
+        </tr>
+        
+        <tr>
+            <td>2015-02-16 22:38:13</td>
+            <td class="green">Bid</td>
+            <td>￥100</td>
+            <td>￥1</td>
+            <td>0.1%</td>
+            <td>￥1</td>
+            <td>￥0</td>
+            <td id="continuous_12813" name="continuous_12813" class="">Cancelled</td>
+        </tr>
+        
+        <tr>
+            <td>2015-02-15 17:53:28</td>
+            <td class="green">Bid</td>
+            <td>￥100</td>
+            <td>￥1</td>
+            <td>0.1%</td>
+            <td>￥1</td>
+            <td>￥0</td>
+            <td id="continuous_12732" name="continuous_12732" class="">Cancelled</td>
+        </tr>
+        
+        <tr>
+            <td>2015-02-15 17:44:16</td>
+            <td class="green">Bid</td>
+            <td>￥100</td>
+            <td>￥1</td>
+            <td>0.1%</td>
+            <td>￥1</td>
+            <td>￥0</td>
+            <td id="continuous_12731" name="continuous_12731" class="">Cancelled</td>
+        </tr>
+        
+    </table>
+    
+    
+<div class="page">
+   <ul><!-- 上一页 -->
+   
+	
+		<li><a href="javascript:void(0)"  class="current_ss" style="color:#FFFFFF;">1</a></li>
+	
+		<li><a href="javascript:void(0);" onclick="javascript:forwardUrl('&#47;strategy&#47;refrushRecordNew.do?symbol=0&type=5&sign=2&strategyType=2&_data_ice&currentPage=2','_data_ice');" >2</a></li>
+  	<!-- 下一页 -->
+	
+		<li><a href="javascript:void(0);" onclick="javascript:forwardUrl('&#47;strategy&#47;refrushRecordNew.do?symbol=0&type=5&sign=2&strategyType=2&_data_ice&currentPage=2','_data_ice');"  >&gt;</a></li>
+		
+	</ul>
+</div>
+
+<script type="text/javascript">
+function forwardUrl(url,divId) {
+	jQuery("#"+divId).load(url,null,function (data){
+        var obj1 = document.getElementById("myindex");
+        var obj2 = document.getElementById("mytype");
+        var obj3 = document.getElementById("indexId");
+        var obj4 = document.getElementById("lendType");
+        if(null!=obj1 && null!=obj2 && null!=obj3 && null!=obj4){
+            jQuery(".detail_btn").click(detailFunc);
+            jQuery(".lightblue4.detaila").click(detailFunc);
+        }
+	});
+	
+	
+}
+</script>
+    
+
