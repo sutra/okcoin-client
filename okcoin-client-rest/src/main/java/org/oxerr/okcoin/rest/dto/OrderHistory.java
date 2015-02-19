@@ -6,7 +6,11 @@ public class OrderHistory extends ErrorResult {
 
 	private static final long serialVersionUID = 2015020701L;
 
+	/**
+	 * 1 based.
+	 */
 	private final int currentPage;
+
 	private final int pageLength;
 	private final int total;
 	private final Order[] orders;

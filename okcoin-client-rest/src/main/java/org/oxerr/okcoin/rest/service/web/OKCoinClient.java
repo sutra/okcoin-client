@@ -17,7 +17,7 @@ import org.apache.http.entity.ContentType;
 import org.apache.http.message.BasicNameValuePair;
 import org.oxerr.okcoin.rest.dto.Depth;
 import org.oxerr.okcoin.rest.dto.Funds;
-import org.oxerr.okcoin.rest.dto.IcebergOrder;
+import org.oxerr.okcoin.rest.dto.IcebergOrderHistory;
 import org.oxerr.okcoin.rest.dto.Result;
 import org.oxerr.okcoin.rest.dto.Ticker;
 import org.oxerr.okcoin.rest.dto.TickerResponse;
@@ -149,12 +149,7 @@ public class OKCoinClient implements AutoCloseable {
 		URIBuilder builder = new URIBuilder(TRADES_URI);
 		builder.addParameter("since", Integer.toString(since));
 
-		final URI uri;
-		try {
-			uri = builder.build();
-		} catch (URISyntaxException e) {
-			throw new IllegalArgumentException(e.getMessage(), e);
-		}
+		final URI uri = toURI(builder);
 
 		return httpClient.get(uri, new TypeReference<List<Trade>>() {
 		});
@@ -165,12 +160,7 @@ public class OKCoinClient implements AutoCloseable {
 
 		URIBuilder builder = new URIBuilder(LOGIN_URI);
 		builder.setParameter("random", randomInString());
-		URI uri;
-		try {
-			uri = builder.build();
-		} catch (URISyntaxException e) {
-			throw new IllegalArgumentException(e.getMessage(), e);
-		}
+		URI uri = toURI(builder);
 
 		Result result = httpClient.post(
 				uri,
@@ -333,19 +323,20 @@ public class OKCoinClient implements AutoCloseable {
 	 * @throws LoginRequiredException indicates the client is not logged in.
 	 * @throws IOException indicates I/O exception.
 	 */
-	public IcebergOrder[] getIcebergOrders(int symbol, int type, int sign,
-			int strategyType) throws LoginRequiredException, IOException {
-		URI uri;
-		try {
-			uri = new URIBuilder(URIUtils.resolve(HTTPS_BASE, "strategy/refrushRecordNew.do"))
-				.setParameter("symbol", String.valueOf(symbol))
-				.setParameter("type", String.valueOf(type))
-				.setParameter("sign", String.valueOf(sign))
-				.setParameter("strategyType", String.valueOf(strategyType))
-				.build();
-		} catch (URISyntaxException e) {
-			throw new IOException(e);
+	public IcebergOrderHistory getIcebergOrders(int symbol, int type, int sign,
+			int strategyType, Integer page) throws LoginRequiredException, IOException {
+		URIBuilder builder = new URIBuilder(URIUtils.resolve(HTTPS_BASE, "strategy/refrushRecordNew.do"))
+			.setParameter("symbol", String.valueOf(symbol))
+			.setParameter("type", String.valueOf(type))
+			.setParameter("sign", String.valueOf(sign))
+			.setParameter("strategyType", String.valueOf(strategyType));
+		if (page != null) {
+			builder.setParameter("_data_ice", null);
+			builder.setParameter("currentPage", page.toString());
+			builder.setParameter("_", String.valueOf(System.currentTimeMillis()));
 		}
+		URI uri = toURI(builder);
+		log.debug("uri: {}", uri);
 		return httpClient.get(uri, IcebergOrdersReader.getInstance());
 	}
 
@@ -477,14 +468,17 @@ public class OKCoinClient implements AutoCloseable {
 	 * @throws IOException
 	 */
 	private URI randomUri(URI uri) throws IOException {
-		final URI ret;
-		try {
-			ret = new URIBuilder(uri).setParameter("random",
-					randomInString()).build();
-		} catch (URISyntaxException e) {
-			throw new IOException(e);
-		}
+		final URI ret = toURI(new URIBuilder(uri)
+			.setParameter("random", randomInString()));
 		return ret;
+	}
+
+	private URI toURI(URIBuilder builder) {
+		try {
+			return builder.build();
+		} catch (URISyntaxException e) {
+			throw new IllegalArgumentException(e);
+		}
 	}
 
 }

@@ -9,6 +9,7 @@ import org.oxerr.okcoin.rest.OKCoinException;
 import org.oxerr.okcoin.rest.dto.BatchTradeResult;
 import org.oxerr.okcoin.rest.dto.CancelOrderResult;
 import org.oxerr.okcoin.rest.dto.IcebergOrder;
+import org.oxerr.okcoin.rest.dto.IcebergOrderHistory;
 import org.oxerr.okcoin.rest.dto.OrderData;
 import org.oxerr.okcoin.rest.dto.OrderHistory;
 import org.oxerr.okcoin.rest.dto.OrderResult;
@@ -97,32 +98,32 @@ public class OKCoinTradeServiceRaw extends OKCoinBaseTradePollingService {
 				pageLength, sign);
 	}
 
-	public IcebergOrder[] getOpenIcebergOrders(CurrencyPair currencyPair)
+	public IcebergOrderHistory getOpenIcebergOrders(CurrencyPair currencyPair)
 			throws IOException {
 		int symbol = toSymbol(currencyPair);
 		return getOpenIcebergOrders(symbol);
 	}
 
-	private IcebergOrder[] getOpenIcebergOrders(int symbol) throws IOException {
+	private IcebergOrderHistory getOpenIcebergOrders(int symbol) throws IOException {
 		int sign = 1; // open orders;
-		return getIcebergOrders(symbol, sign);
+		return getIcebergOrders(symbol, sign, null);
 	}
 
-	public IcebergOrder[] getIcebergOrderHistory(CurrencyPair currencyPair)
+	public IcebergOrderHistory getIcebergOrderHistory(CurrencyPair currencyPair, Integer page)
 			throws IOException {
 		int symbol = toSymbol(currencyPair);
 		int sign = 2; // order history
-		return getIcebergOrders(symbol, sign);
+		return getIcebergOrders(symbol, sign, page);
 	}
 
-	private IcebergOrder[] getIcebergOrders(int symbol, int sign)
+	private IcebergOrderHistory getIcebergOrders(int symbol, int sign, Integer page)
 			throws IOException {
 		int retry = 0;
 
 		while (true) {
 			try {
 				log.debug("Trying to get iceberge open orders.");
-				return okCoinClient.getIcebergOrders(symbol, 5, sign, 2);
+				return okCoinClient.getIcebergOrders(symbol, 5, sign, 2, page);
 			} catch (LoginRequiredException e) {
 				if (++retry <= this.loginMaxRetryTimes) {
 					log.debug("Not logged in. Try to login. Retry: {}.", retry);
@@ -151,7 +152,7 @@ public class OKCoinTradeServiceRaw extends OKCoinBaseTradePollingService {
 		if (result.getResultCode() != 0) {
 			throw new OKCoinClientException(result);
 		}
-		IcebergOrder[] icebergOrders = getOpenIcebergOrders(symbol);
+		IcebergOrder[] icebergOrders = getOpenIcebergOrders(symbol).getOrders();
 		return icebergOrders[0].getId();
 	}
 

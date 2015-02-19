@@ -6,6 +6,7 @@ import java.util.Arrays;
 
 import org.oxerr.okcoin.rest.OKCoinExchange;
 import org.oxerr.okcoin.rest.dto.IcebergOrder;
+import org.oxerr.okcoin.rest.dto.IcebergOrderHistory;
 import org.oxerr.okcoin.rest.service.polling.OKCoinTradeServiceRaw;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,12 +36,18 @@ public class IcebergOrderDemo {
 	}
 
 	public void demoGetIcebergOrderHistory() throws IOException {
-		IcebergOrder[] icebergOrders = rawTradeService.getIcebergOrderHistory(currencyPair);
-		logOrders(icebergOrders);
+		int page = 1;
+		IcebergOrderHistory icebergOrderHistory;
+		do {
+			log.info("page: {}", page);
+			icebergOrderHistory = rawTradeService.getIcebergOrderHistory(currencyPair, page);
+			logOrders(icebergOrderHistory.getOrders());
+			page++;
+		} while(icebergOrderHistory.hasNextPage() && page < 10);
 	}
 
 	public void demoGetOpenIcebergOrders() throws IOException {
-		IcebergOrder[] icebergOrders = rawTradeService.getOpenIcebergOrders(currencyPair);
+		IcebergOrder[] icebergOrders = rawTradeService.getOpenIcebergOrders(currencyPair).getOrders();
 		logOrders(icebergOrders);
 	}
 

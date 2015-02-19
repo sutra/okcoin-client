@@ -1,6 +1,7 @@
 package org.oxerr.okcoin.rest.dto.valuereader;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import java.io.IOException;
@@ -10,6 +11,7 @@ import java.math.BigDecimal;
 import org.apache.commons.io.IOUtils;
 import org.junit.Test;
 import org.oxerr.okcoin.rest.dto.IcebergOrder;
+import org.oxerr.okcoin.rest.dto.IcebergOrderHistory;
 import org.oxerr.okcoin.rest.dto.Status;
 import org.oxerr.okcoin.rest.dto.Type;
 import org.oxerr.okcoin.rest.service.web.LoginRequiredException;
@@ -32,7 +34,7 @@ public class IcebergOrdersReaderTest {
 	public void testIcebergOrders0() throws IOException {
 		try (InputStream inputStream = getClass().getResourceAsStream(
 				"open-iceberg-orders-0.html")) {
-			IcebergOrder[] orders = reader.read(inputStream);
+			IcebergOrder[] orders = reader.read(inputStream).getOrders();
 			assertEquals(0, orders.length);
 		}
 	}
@@ -41,7 +43,7 @@ public class IcebergOrdersReaderTest {
 	public void testIcebergOrders1() throws IOException {
 		try (InputStream inputStream = getClass().getResourceAsStream(
 				"open-iceberg-orders-1.html")) {
-			IcebergOrder[] orders = reader.read(inputStream);
+			IcebergOrder[] orders = reader.read(inputStream).getOrders();
 			assertEquals(1, orders.length);
 			IcebergOrder order = orders[0];
 			assertEquals("2015-02-15T09:53:28Z", order.getDate().toString());
@@ -58,7 +60,8 @@ public class IcebergOrdersReaderTest {
 	@Test
 	public void testIcebergOrderHistory() throws IOException {
 		try (InputStream inputStream = getClass().getResourceAsStream("order-history-iceberg-orders.html")) {
-			IcebergOrder[] orders = reader.read(inputStream);
+			IcebergOrderHistory history = reader.read(inputStream);
+			IcebergOrder[] orders = history.getOrders();
 			assertEquals(10, orders.length);
 			assertEquals("2015-02-17T14:23:25Z", orders[0].getDate().toString());
 			assertEquals(Type.BUY, orders[0].getSide());
@@ -69,6 +72,9 @@ public class IcebergOrdersReaderTest {
 			assertEquals(new BigDecimal("0"), orders[0].getFilled());
 			assertEquals(Status.CANCELLED, orders[0].getStatus());
 			assertEquals(12836L, orders[0].getId());
+
+			assertEquals(1, history.getCurrentPage());
+			assertTrue(history.hasNextPage());
 		}
 	}
 

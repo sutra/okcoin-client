@@ -7,6 +7,7 @@ import java.time.Instant;
 import java.util.TimeZone;
 
 import org.oxerr.okcoin.rest.dto.IcebergOrder;
+import org.oxerr.okcoin.rest.dto.IcebergOrderHistory;
 import org.oxerr.okcoin.rest.dto.Status;
 import org.oxerr.okcoin.rest.dto.Type;
 import org.oxerr.okcoin.rest.service.web.LoginRequiredException;
@@ -15,12 +16,13 @@ import org.w3c.dom.NodeList;
 import org.w3c.dom.Text;
 import org.w3c.dom.html.HTMLAnchorElement;
 import org.w3c.dom.html.HTMLCollection;
+import org.w3c.dom.html.HTMLDivElement;
 import org.w3c.dom.html.HTMLDocument;
 import org.w3c.dom.html.HTMLTableCellElement;
 import org.w3c.dom.html.HTMLTableElement;
 import org.w3c.dom.html.HTMLTableRowElement;
 
-public class IcebergOrdersReader extends HtmlPageReader<IcebergOrder[]> {
+public class IcebergOrdersReader extends HtmlPageReader<IcebergOrderHistory> {
 
 	private static final IcebergOrdersReader INSTANCE = new IcebergOrdersReader();
 
@@ -39,7 +41,7 @@ public class IcebergOrdersReader extends HtmlPageReader<IcebergOrder[]> {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public IcebergOrder[] read(HTMLDocument doc) {
+	public IcebergOrderHistory read(HTMLDocument doc) {
 		NodeList tableNodeList = doc.getElementsByTagName("table");
 		if (tableNodeList.getLength() == 0) {
 			throw new LoginRequiredException("No HTML table found.");
@@ -114,7 +116,26 @@ public class IcebergOrdersReader extends HtmlPageReader<IcebergOrder[]> {
 
 			orders[i - 1] = new IcebergOrder(id, date, side, tradeValue, singleAvg, depthRange, protectedPrice, filled, status);
 		}
-		return orders;
+
+		// page
+		int currentPage = 1;
+		boolean hasNextPage = false;
+		NodeList divNodeList = doc.getElementsByTagName("div");
+		if (divNodeList.getLength() > 0) {
+			HTMLDivElement div = (HTMLDivElement) divNodeList.item(0);
+			NodeList anchorNodeList = div.getElementsByTagName("a");
+			for (int i = 0; i < anchorNodeList.getLength(); i++) {
+				HTMLAnchorElement anchor = (HTMLAnchorElement) anchorNodeList.item(i);
+				if ("current_ss".equals(anchor.getClassName())) {
+					currentPage = Integer.parseInt(anchor.getTextContent());
+				}
+				if (">".equals(anchor.getTextContent())) {
+					hasNextPage = true;
+				}
+			}
+		}
+
+		return new IcebergOrderHistory(currentPage, hasNextPage, orders);
 	}
 
 }

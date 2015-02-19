@@ -30,14 +30,15 @@ public class TradeHistoryDemo {
 	public void demoGetTradeHistory() throws IOException {
 		OKCoinTradeHistoryParams params = (OKCoinTradeHistoryParams) tradeService.createTradeHistoryParams();
 		params.setCurrencyPair(CurrencyPair.BTC_CNY);
-		params.setPageNumber(0);
+		params.setPageNumber(1);
 		params.setPageLength(10);
 
 		UserTrades userTrades = tradeService.getTradeHistory(params);
 		userTrades.getUserTrades().forEach(
-			userTrade -> log.info("ID: {}, OrderID: {}, {} {}@{}",
+			userTrade -> log.info("ID: {}, OrderID: {}, {} {} {}@{}",
 				userTrade.getId(),
 				userTrade.getOrderId(),
+				userTrade.getTimestamp(),
 				userTrade.getType(),
 				userTrade.getTradableAmount(),
 				userTrade.getPrice()));
