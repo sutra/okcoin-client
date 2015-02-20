@@ -7,6 +7,9 @@ import java.util.stream.Collectors;
 
 import org.oxerr.okcoin.rest.OKCoinException;
 import org.oxerr.okcoin.rest.dto.BatchTradeResult;
+import org.oxerr.okcoin.rest.dto.BorrowOrderInfo;
+import org.oxerr.okcoin.rest.dto.BorrowResult;
+import org.oxerr.okcoin.rest.dto.BorrowsInfo;
 import org.oxerr.okcoin.rest.dto.CancelOrderResult;
 import org.oxerr.okcoin.rest.dto.IcebergOrder;
 import org.oxerr.okcoin.rest.dto.IcebergOrderHistory;
@@ -16,6 +19,7 @@ import org.oxerr.okcoin.rest.dto.OrderResult;
 import org.oxerr.okcoin.rest.dto.Result;
 import org.oxerr.okcoin.rest.dto.TradeResult;
 import org.oxerr.okcoin.rest.dto.Type;
+import org.oxerr.okcoin.rest.dto.UnrepaymentsInfo;
 import org.oxerr.okcoin.rest.service.web.LoginRequiredException;
 import org.oxerr.okcoin.rest.service.web.OKCoinClientException;
 import org.slf4j.Logger;
@@ -198,6 +202,36 @@ public class OKCoinTradeServiceRaw extends OKCoinBaseTradePollingService {
 
 	private int toSymbol(CurrencyPair currencyPair) {
 		return currencyPair.baseSymbol.equals("BTC") ? 0 : 1;
+	}
+
+	public BorrowsInfo getBorrowsInfo(String symbol) throws OKCoinException,
+			IOException {
+		return okCoin.getBorrowsInfo(apiKey, symbol, sign);
+	}
+
+	public BorrowResult borrowMoney(String symbol, String days, BigDecimal amount,
+			BigDecimal rate) throws OKCoinException, IOException {
+		return okCoin.borrowMoney(apiKey, symbol, days, amount, rate, sign);
+	}
+
+	public BorrowResult cancelBorrow(String symbol, long borrowId)
+			throws OKCoinException, IOException {
+		return okCoin.cancelBorrow(apiKey, symbol, borrowId, sign);
+	}
+
+	public BorrowOrderInfo getBorrowOrderInfo(long borrowId)
+			throws OKCoinException, IOException {
+		return okCoin.getBorrowOrderInfo(apiKey, borrowId, sign);
+	}
+
+	public BorrowResult repay(long borrowId) throws OKCoinException,
+			IOException {
+		return okCoin.repay(apiKey, borrowId, sign);
+	}
+
+	public UnrepaymentsInfo getUnrepaymentsInfo(String symbol, int currentPage,
+			int pageLength) throws OKCoinException, IOException {
+		return okCoin.getUnrepaymentsInfo(apiKey, symbol, currentPage, pageLength, sign);
 	}
 
 }

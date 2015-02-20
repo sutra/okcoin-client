@@ -5,6 +5,7 @@ import java.io.IOException;
 import org.oxerr.okcoin.rest.OKCoin;
 import org.oxerr.okcoin.rest.dto.CandlestickChart;
 import org.oxerr.okcoin.rest.dto.Depth;
+import org.oxerr.okcoin.rest.dto.LendDepth;
 import org.oxerr.okcoin.rest.dto.TickerResponse;
 import org.oxerr.okcoin.rest.dto.Trade;
 
@@ -53,6 +54,10 @@ public class OKCoinMarketDataServiceRaw extends OKCoinBasePollingService {
 	public CandlestickChart getCandlestickChart(String symbol, String type,
 			Integer size, Long since) throws IOException {
 		return okCoin.getCandlestickChart(symbol, type, size, since);
+	}
+
+	public LendDepth getLendDepth(String symbol) throws IOException {
+		return okCoin.getLendDepth(symbol);
 	}
 
 }

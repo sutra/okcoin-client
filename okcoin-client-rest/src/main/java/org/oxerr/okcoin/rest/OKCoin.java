@@ -12,15 +12,20 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
 import org.oxerr.okcoin.rest.dto.BatchTradeResult;
+import org.oxerr.okcoin.rest.dto.BorrowOrderInfo;
+import org.oxerr.okcoin.rest.dto.BorrowResult;
+import org.oxerr.okcoin.rest.dto.BorrowsInfo;
 import org.oxerr.okcoin.rest.dto.CancelOrderResult;
 import org.oxerr.okcoin.rest.dto.CandlestickChart;
 import org.oxerr.okcoin.rest.dto.Depth;
+import org.oxerr.okcoin.rest.dto.LendDepth;
 import org.oxerr.okcoin.rest.dto.OrderHistory;
 import org.oxerr.okcoin.rest.dto.OrderResult;
 import org.oxerr.okcoin.rest.dto.TickerResponse;
 import org.oxerr.okcoin.rest.dto.Trade;
 import org.oxerr.okcoin.rest.dto.TradeResult;
 import org.oxerr.okcoin.rest.dto.Type;
+import org.oxerr.okcoin.rest.dto.UnrepaymentsInfo;
 import org.oxerr.okcoin.rest.dto.UserInfo;
 import org.oxerr.okcoin.rest.dto.Withdrawal;
 
@@ -334,6 +339,139 @@ public interface OKCoin {
 		@FormParam("api_key") String apiKey,
 		@FormParam("symbol") String symbol,
 		@FormParam("withdraw_id") long withdrawId,
+		@FormParam("sign") ParamsDigest sign)
+			throws OKCoinException, IOException;
+
+	/**
+	 * Get user borrow information.
+	 *
+	 * @param apiKey the API key of the user.
+	 * @param symbol the symbol, such as btc_cny, ltc_cny, cny.
+	 * @param sign signature of request parameters.
+	 * @return the borrow information of the user.
+	 * @throws OKCoinException indicates request failed.
+	 * @throws IOException indicates I/O exception.
+	 */
+	@POST
+	@Path("borrows_info.do")
+	BorrowsInfo getBorrowsInfo(
+		@FormParam("api_key") String apiKey,
+		@FormParam("symbol") String symbol,
+		@FormParam("sign") ParamsDigest sign)
+			throws OKCoinException, IOException;
+
+	/**
+	 * Request borrow.
+	 *
+	 * @param apiKey the API key of the user.
+	 * @param symbol the symbol, such as btc_cny, ltc_cny, cny.
+	 * @param days days of borrow: three, seven, fifteen, thirty, sixty, ninety.
+	 * @param amount borrow amount.
+	 * @param rate borrow rate [0.0001, 0.01].
+	 * @param sign signature of request parameters.
+	 * @return the borrow.
+	 * @throws OKCoinException indicates request failed.
+	 * @throws IOException indicates I/O exception.
+	 */
+	@POST
+	@Path("borrow_money.do")
+	BorrowResult borrowMoney(
+		@FormParam("api_key") String apiKey,
+		@FormParam("symbol") String symbol,
+		@FormParam("days") String days,
+		@FormParam("amount") BigDecimal amount,
+		@FormParam("rate") BigDecimal rate,
+		@FormParam("sign") ParamsDigest sign)
+			throws OKCoinException, IOException;
+
+	/**
+	 * Cancel borrow order.
+	 *
+	 * @param apiKey the API key of the user.
+	 * @param symbol the symbol, such as btc_cny, ltc_cny, cny.
+	 * @param borrowId the borrow order ID.
+	 * @param sign signature of request parameters.
+	 * @return the cancelled borrow order.
+	 * @throws OKCoinException indicates request failed.
+	 * @throws IOException indicates I/O exception.
+	 */
+	@POST
+	@Path("cancel_borrow.do")
+	BorrowResult cancelBorrow(
+		@FormParam("api_key") String apiKey,
+		@FormParam("symbol") String symbol,
+		@FormParam("borrow_id") long borrowId,
+		@FormParam("sign") ParamsDigest sign)
+			throws OKCoinException, IOException;
+
+	/**
+	 * Get top 10 lending entries.
+	 *
+	 * @param symbol the symbol, such as btc_cny, ltc_cny, cny.
+	 * @return the top 10 lending entries.
+	 * @throws IOException indicates I/O exception.
+	 */
+	@GET
+	@Path("lend_depth.do")
+	LendDepth getLendDepth(
+		@QueryParam("symbol") String symbol)
+			throws OKCoinException, IOException;
+
+	/**
+	 * Get borrowing order info.
+	 *
+	 * @param apiKey the API key of the user.
+	 * @param borrowId the borrow order ID.
+	 * @param sign signature of request parameters.
+	 * @return the borrowing order info.
+	 * @throws OKCoinException indicates request failed.
+	 * @throws IOException indicates I/O exception.
+	 */
+	@POST
+	@Path("borrow_order_info.do")
+	BorrowOrderInfo getBorrowOrderInfo(
+		@FormParam("api_key") String apiKey,
+		@FormParam("borrow_id") long borrowId,
+		@FormParam("sign") ParamsDigest sign)
+			throws OKCoinException, IOException;
+
+	/**
+	 * Pay off debt.
+	 *
+	 * @param apiKey the API key of the user.
+	 * @param borrowId the borrow order ID.
+	 * @param sign signature of request parameters.
+	 * @return the borrowing order info.
+	 * @throws OKCoinException indicates request failed.
+	 * @throws IOException indicates I/O exception.
+	 */
+	@POST
+	@Path("repayment.do")
+	BorrowResult repay(
+		@FormParam("api_key") String apiKey,
+		@FormParam("borrow_id") long borrowId,
+		@FormParam("sign") ParamsDigest sign)
+			throws OKCoinException, IOException;
+
+	/**
+	 * Get debt list.
+	 *
+	 * @param apiKey the API key of the user.
+	 * @param symbol the symbol, such as btc_cny, ltc_cny, cny.
+	 * @param currentPage the current page number.
+	 * @param pageLength data entries number per page, maximum 50.
+	 * @param sign signature of request parameters
+	 * @return the debt list.
+	 * @throws OKCoinException indicates request failed.
+	 * @throws IOException indicates I/O exception.
+	 */
+	@POST
+	@Path("unrepayments_info.do")
+	UnrepaymentsInfo getUnrepaymentsInfo(
+		@FormParam("api_key") String apiKey,
+		@FormParam("symbol") String symbol,
+		@FormParam("current_page") int currentPage,
+		@FormParam("page_length") int pageLength,
 		@FormParam("sign") ParamsDigest sign)
 			throws OKCoinException, IOException;
 

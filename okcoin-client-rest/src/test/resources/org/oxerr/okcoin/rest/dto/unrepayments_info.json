@@ -1,0 +1,15 @@
+{
+	"unrepayments": [
+		{
+			"amount": 0.1,
+			"borrow_date": 1423475249000,
+			"borrow_id": 613388,
+			"days": 15,
+			"deal_amount": 0.1,
+			"rate": 0.001,
+			"status": 2,
+			"symbol": "btc_cny"
+		}
+	],
+	"result": true
+}
