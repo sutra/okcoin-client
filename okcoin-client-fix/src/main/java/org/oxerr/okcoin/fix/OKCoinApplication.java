@@ -41,14 +41,14 @@ public class OKCoinApplication extends MessageCracker implements Application {
 	private final ExecutorService executorService;
 	private final MarketDataRequestCreator marketDataRequestCreator;
 	private final TradeRequestCreator tradeRequestCreator;
-	private final String partner;
+	private final String apiKey;
 	private final String secretKey;
 
-	public OKCoinApplication(String partner, String secretKey) {
-		this.partner = partner;
+	public OKCoinApplication(String apiKey, String secretKey) {
+		this.apiKey = apiKey;
 		this.secretKey = secretKey;
 		this.marketDataRequestCreator = new MarketDataRequestCreator();
-		this.tradeRequestCreator = new TradeRequestCreator(partner, secretKey);
+		this.tradeRequestCreator = new TradeRequestCreator(apiKey, secretKey);
 		executorService = Executors.newFixedThreadPool(Runtime.getRuntime()
 				.availableProcessors() * 2 + 1);
 
@@ -93,7 +93,7 @@ public class OKCoinApplication extends MessageCracker implements Application {
 		}
 
 		if (MsgType.LOGON.equals(msgType) || MsgType.HEARTBEAT.equals(msgType)) {
-			message.setField(new Username(partner));
+			message.setField(new Username(apiKey));
 			message.setField(new Password(secretKey));
 		}
 

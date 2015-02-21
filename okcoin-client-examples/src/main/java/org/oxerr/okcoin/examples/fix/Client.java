@@ -138,8 +138,8 @@ public class Client {
 
 	public static void main(String[] args) throws IOException, ConfigError,
 			InterruptedException {
-		String partner = args[0], secretKey = args[1];
-		Client client = new Client(partner, secretKey);
+		String apiKey = args[0], secretKey = args[1];
+		Client client = new Client(apiKey, secretKey);
 		client.demo();
 
 		log.info("Waiting a moment and exiting.");

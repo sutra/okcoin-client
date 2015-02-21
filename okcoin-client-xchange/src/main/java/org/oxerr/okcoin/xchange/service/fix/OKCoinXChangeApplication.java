@@ -40,8 +40,8 @@ public class OKCoinXChangeApplication extends OKCoinApplication {
 
 	private final Logger log = LoggerFactory.getLogger(OKCoinXChangeApplication.class);
 
-	public OKCoinXChangeApplication(String partner, String secretKey) {
-		super(partner, secretKey);
+	public OKCoinXChangeApplication(String apiKey, String secretKey) {
+		super(apiKey, secretKey);
 	}
 
 	@Override
