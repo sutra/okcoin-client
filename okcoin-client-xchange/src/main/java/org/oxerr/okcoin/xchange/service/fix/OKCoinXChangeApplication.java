@@ -55,11 +55,6 @@ public class OKCoinXChangeApplication extends OKCoinApplication {
 	public synchronized void subscribeOrderBook(
 			String symbol,
 			SessionID sessionId) {
-		if (mdReqIds.containsKey(symbol)) {
-			log.warn("{} has already been subscribed.", symbol);
-			return;
-		}
-
 		String mdReqId = UUID.randomUUID().toString();
 		log.trace("Subscribing {}...", symbol);
 		requestOrderBook(
@@ -77,7 +72,6 @@ public class OKCoinXChangeApplication extends OKCoinApplication {
 			SessionID sessionId) {
 		String mdReqId = mdReqIds.get(symbol);
 		if (mdReqId == null) {
-			log.warn("{} has not been subscribed.", symbol);
 			return;
 		}
 

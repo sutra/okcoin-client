@@ -5,6 +5,7 @@ import java.io.InputStream;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 
+import org.apache.commons.lang3.StringUtils;
 import org.oxerr.okcoin.fix.fix44.OKCoinMessageFactory;
 import org.oxerr.okcoin.xchange.service.fix.OKCoinXChangeApplication;
 import org.slf4j.Logger;
@@ -34,8 +35,9 @@ public class DepthDemo {
 			ConfigError {
 		app = new OKCoinXChangeApplication(apiKey, secretKey) {
 
-			private final NumberFormat qFmt = new DecimalFormat("0.0000");
-			private final NumberFormat pFmt = new DecimalFormat("0.00");
+			private final NumberFormat mFmt = new DecimalFormat("#,###");
+			private final NumberFormat qFmt = new DecimalFormat("#,##0.0000");
+			private final NumberFormat pFmt = new DecimalFormat("#,##0.00");
 
 			@Override
 			public void onLogon(SessionID sessionId) {
@@ -45,13 +47,15 @@ public class DepthDemo {
 
 			@Override
 			public void onOrderBook(OrderBook orderBook, SessionID sessionId) {
-				log.info("order book time: {}, bid size: {}, ask size: {}. best bid: {}@{}, best ask: {}@{}.",
+				long now = System.currentTimeMillis();
+				log.info("order book time: {}, lagging: {} ms. bids size: {}, asks size: {}. best bid: {}@{}, best ask: {}@{}.",
 					orderBook.getTimeStamp().toInstant(),
-					orderBook.getBids().size(),
-					orderBook.getAsks().size(),
-					qFmt.format(orderBook.getBids().get(0).getTradableAmount()),
+					mFmt.format(now - orderBook.getTimeStamp().getTime()),
+					StringUtils.leftPad(String.valueOf(orderBook.getBids().size()), 3),
+					StringUtils.leftPad(String.valueOf(orderBook.getAsks().size()), 3),
+					StringUtils.leftPad(qFmt.format(orderBook.getBids().get(0).getTradableAmount()), 7),
 					pFmt.format(orderBook.getBids().get(0).getLimitPrice()),
-					qFmt.format(orderBook.getAsks().get(0).getTradableAmount()),
+					StringUtils.leftPad(qFmt.format(orderBook.getAsks().get(0).getTradableAmount()), 7),
 					pFmt.format(orderBook.getAsks().get(0).getLimitPrice())
 				);
 			}
