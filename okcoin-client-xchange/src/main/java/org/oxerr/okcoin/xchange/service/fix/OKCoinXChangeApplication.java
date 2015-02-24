@@ -46,12 +46,20 @@ public class OKCoinXChangeApplication extends OKCoinApplication {
 	private final Logger log = LoggerFactory.getLogger(OKCoinXChangeApplication.class);
 
 	private final Map<String, String> mdReqIds = new HashMap<>();
-	private volatile OrderBook orderBook;
 
 	public OKCoinXChangeApplication(String apiKey, String secretKey) {
 		super(apiKey, secretKey);
 	}
 
+	/**
+	 * Subscribes the order book of the specified symbol.
+	 * When the order book refreshed,
+	 * the {@link #onOrderBook(Date, List, List, SessionID)}
+	 * and {@link #onOrderBook(OrderBook, SessionID)} will be invoked.
+	 *
+	 * @param symbol the symbol, such as "BTC/CNY", "LTC/CNY".
+	 * @param sessionId the FIX session ID.
+	 */
 	public synchronized void subscribeOrderBook(
 			String symbol,
 			SessionID sessionId) {
@@ -67,11 +75,18 @@ public class OKCoinXChangeApplication extends OKCoinApplication {
 		mdReqIds.put(symbol, mdReqId);
 	}
 
+	/**
+	 * Unsubscribes the order book of the specified symbol.
+	 *
+	 * @param symbol the symbol, such as "BTC/CNY", "LTC/CNY".
+	 * @param sessionId the FIX session ID.
+	 */
 	public synchronized void unsubscribeOrderBook(
 			String symbol,
 			SessionID sessionId) {
 		String mdReqId = mdReqIds.get(symbol);
 		if (mdReqId == null) {
+			log.trace("{} is not subscribed, skip unsubscribing.", symbol);
 			return;
 		}
 
@@ -216,8 +231,6 @@ public class OKCoinXChangeApplication extends OKCoinApplication {
 		Collections.sort(asks);
 
 		OrderBook orderBook = new OrderBook(origTime, asks, bids);;
-		this.orderBook = orderBook;
-
 		onOrderBook(orderBook, sessionId);
 	}
 
@@ -228,15 +241,6 @@ public class OKCoinXChangeApplication extends OKCoinApplication {
 	 * @param sessionId the FIX session ID.
 	 */
 	public void onOrderBook(OrderBook orderBook, SessionID sessionId) {
-	}
-
-	/**
-	 * Returns the order book which have cached in the client.
-	 *
-	 * @return the order book.
-	 */
-	public OrderBook getOrderBook() {
-		return orderBook;
 	}
 
 	public void onTrades(List<Trade> trade, SessionID sessionId) {
