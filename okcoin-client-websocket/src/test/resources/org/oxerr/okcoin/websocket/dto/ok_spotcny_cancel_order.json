@@ -1,0 +1,9 @@
+[
+	{
+		"channel":"ok_spotcny_cancel_order",
+		"data":{
+			"order_id":"125433027",
+			"result":"true"
+		}
+	}
+]

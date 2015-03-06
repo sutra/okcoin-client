@@ -1,0 +1,35 @@
+[
+	{
+		"channel":"ok_spotcny_userinfo",
+		"data":{
+			"info":{
+				"funds":{
+					"asset":{
+						"net":"0",
+						"total":"0"
+					},
+					"borrow":{
+						"btc":"0",
+						"cny":"0",
+						"ltc":"0"
+					},
+					"free":{
+						"btc":"0",
+						"cny":"0",
+						"ltc":"0"
+					},
+					"freezed":{
+						"btc":"0",
+						"cny":"0",
+						"ltc":"0"
+					},
+					"union_fund":{
+						"btc":"0",
+						"ltc":"0"
+					}
+				}
+			},
+			"result":true
+		}
+	}
+]

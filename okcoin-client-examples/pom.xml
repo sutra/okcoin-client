@@ -17,6 +17,14 @@
 
 	<dependencies>
 		<dependency>
+			<groupId>org.glassfish</groupId>
+			<artifactId>javax.json</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.glassfish.tyrus</groupId>
+			<artifactId>tyrus-container-grizzly-client</artifactId>
+		</dependency>
+		<dependency>
 			<groupId>ch.qos.logback</groupId>
 			<artifactId>logback-classic</artifactId>
 			<optional>true</optional>
@@ -24,6 +32,11 @@
 		<dependency>
 			<groupId>${project.groupId}</groupId>
 			<artifactId>okcoin-client-rest</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>okcoin-client-websocket</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>

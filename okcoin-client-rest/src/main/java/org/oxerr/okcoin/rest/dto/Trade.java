@@ -21,7 +21,7 @@ public class Trade extends BaseObject {
 
 	private final BigDecimal amount;
 
-	private final String tid;
+	private final long tid;
 
 	private final Type type;
 
@@ -31,7 +31,7 @@ public class Trade extends BaseObject {
 		final Instant date,
 		@JsonProperty("price") final BigDecimal price,
 		@JsonProperty("amount") final BigDecimal amount,
-		@JsonProperty("tid") final String tid,
+		@JsonProperty("tid") final long tid,
 		@JsonProperty("type")
 		@JsonDeserialize(using = TypeDeserializer.class)
 		final Type type) {
@@ -74,7 +74,7 @@ public class Trade extends BaseObject {
 	 *
 	 * @return the transaction ID.
 	 */
-	public String getTid() {
+	public long getTid() {
 		return tid;
 	}
 

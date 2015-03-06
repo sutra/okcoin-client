@@ -55,6 +55,7 @@
 
 	<modules>
 		<module>okcoin-client-rest</module>
+		<module>okcoin-client-websocket</module>
 		<module>okcoin-client-fix</module>
 		<module>okcoin-client-xchange</module>
 		<module>okcoin-client-examples</module>
@@ -190,6 +191,21 @@
 
 	<dependencyManagement>
 		<dependencies>
+
+			<!-- JSR 353: Java API for JSON Processing -->
+			<dependency>
+				<groupId>javax.json</groupId>
+				<artifactId>javax.json-api</artifactId>
+				<version>1.0</version>
+			</dependency>
+
+			<!-- JSR 356: Java API for WebSocket -->
+			<dependency>
+				<groupId>javax.websocket</groupId>
+				<artifactId>javax.websocket-client-api</artifactId>
+				<version>1.1</version>
+			</dependency>
+
 			<dependency>
 				<groupId>org.apache.commons</groupId>
 				<artifactId>commons-lang3</artifactId>
@@ -210,6 +226,21 @@
 				<artifactId>mina-filter-ssl</artifactId>
 				<version>${mina.version}</version>
 			</dependency>
+
+			<!-- JSR 353: Java API for JSON Processing - Reference Implementation -->
+			<dependency>
+				<groupId>org.glassfish</groupId>
+				<artifactId>javax.json</artifactId>
+				<version>1.0.4</version>
+			</dependency>
+
+			<!-- JSR 356: Java API for WebSocket - Reference Implementation -->
+			<dependency>
+				<groupId>org.glassfish.tyrus</groupId>
+				<artifactId>tyrus-container-grizzly-client</artifactId>
+				<version>1.10</version>
+			</dependency>
+
 			<dependency>
 				<groupId>org.slf4j</groupId>
 				<artifactId>slf4j-api</artifactId>

@@ -12,7 +12,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.lang3.math.NumberUtils;
 import org.oxerr.okcoin.rest.dto.Depth;
 import org.oxerr.okcoin.rest.dto.Funds;
 import org.oxerr.okcoin.rest.dto.Order;
@@ -89,7 +88,7 @@ public final class OKCoinAdapters {
 			tradeList.add(adaptTrade(trade, currencyPair));
 		}
 		long lastTid = trades.length > 0
-				? NumberUtils.toLong(trades[trades.length - 1].getTid())
+				? trades[trades.length - 1].getTid()
 				: 0L;
 		return new Trades(tradeList, lastTid, TradeSortType.SortByTimestamp);
 	}
@@ -166,7 +165,7 @@ public final class OKCoinAdapters {
 	private static com.xeiam.xchange.dto.marketdata.Trade adaptTrade(
 			Trade trade, CurrencyPair currencyPair) {
 		return new com.xeiam.xchange.dto.marketdata.Trade.Builder()
-			.id(trade.getTid())
+			.id(String.valueOf(trade.getTid()))
 			.timestamp(Date.from(trade.getDate()))
 			.currencyPair(currencyPair)
 			.type(trade.getType() == Type.BUY ? OrderType.BID : OrderType.ASK)
