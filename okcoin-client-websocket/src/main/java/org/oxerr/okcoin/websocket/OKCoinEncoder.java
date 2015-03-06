@@ -3,6 +3,8 @@ package org.oxerr.okcoin.websocket;
 import java.io.IOException;
 import java.io.Writer;
 
+import javax.json.Json;
+import javax.json.stream.JsonGenerator;
 import javax.websocket.EncodeException;
 import javax.websocket.Encoder;
 import javax.websocket.EndpointConfig;
@@ -31,8 +33,19 @@ public class OKCoinEncoder implements Encoder.TextStream<Event> {
 	@Override
 	public void encode(Event message, Writer writer) throws EncodeException,
 			IOException {
-		writer.write(String.format("{'event':'%s','channel':'%s'}",
-				message.getEvent(), message.getChannel()));
+		JsonGenerator g = Json.createGenerator(writer);
+		g.writeStartObject()
+			.write("event", message.getEvent())
+			.write("channel", message.getChannel());
+
+		if (!message.getParameters().isEmpty()) {
+			g.writeStartObject("parameters");
+			message.getParameters().forEach((k, v) -> g.write(k, v));
+			g.writeEnd();
+		}
+
+		g.writeEnd();
+		g.flush();
 	}
 
 }

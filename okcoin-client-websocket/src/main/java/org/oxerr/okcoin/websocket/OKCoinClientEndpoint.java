@@ -2,6 +2,7 @@ package org.oxerr.okcoin.websocket;
 
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -51,7 +52,8 @@ public final class OKCoinClientEndpoint {
 		}
 
 		Arrays.stream(data).forEach(e -> {
-			this.listeners.get(e.getChannel()).forEach(listener -> {
+			Set<OKCoinDataListener> listeners = this.listeners.get(e.getChannel());
+			(listeners == null ? Collections.<OKCoinDataListener>emptySet() : listeners).forEach(listener -> {
 				listener.onMessage(session, e.getData());
 			});
 		});
@@ -78,6 +80,12 @@ public final class OKCoinClientEndpoint {
 
 	public void addChannel(Session session, String channel) {
 		Event event = new Event("addChannel", channel);
+		session.getAsyncRemote().sendObject(event);
+	}
+
+	public void addChannel(Session session, String channel,
+			Map<String, String> parameters) {
+		Event event = new Event("addChannel", channel, parameters);
 		session.getAsyncRemote().sendObject(event);
 	}
 

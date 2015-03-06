@@ -1,6 +1,7 @@
 package org.oxerr.okcoin.websocket;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -15,11 +16,17 @@ import javax.websocket.DecodeException;
 
 import org.junit.Test;
 import org.oxerr.okcoin.rest.dto.Candlestick;
+import org.oxerr.okcoin.rest.dto.Funds;
+import org.oxerr.okcoin.rest.dto.Order;
+import org.oxerr.okcoin.rest.dto.Status;
 import org.oxerr.okcoin.rest.dto.Trade;
 import org.oxerr.okcoin.rest.dto.Type;
 import org.oxerr.okcoin.websocket.dto.CandlestickChart;
 import org.oxerr.okcoin.websocket.dto.Depth;
+import org.oxerr.okcoin.websocket.dto.Info;
+import org.oxerr.okcoin.websocket.dto.OrderResult;
 import org.oxerr.okcoin.websocket.dto.Ticker;
+import org.oxerr.okcoin.websocket.dto.TradeResult;
 import org.oxerr.okcoin.websocket.dto.TradesV1;
 
 public class OKCoinDecoderTest {
@@ -133,6 +140,97 @@ public class OKCoinDecoderTest {
 		assertEquals(new BigDecimal("1694.44"), stick.getLow());
 		assertEquals(new BigDecimal("1695.2"), stick.getClose());
 		assertEquals(new BigDecimal("34.24"), stick.getVolume());
+	}
+
+	@Test
+	public void testDecodeRealTrades() throws DecodeException, IOException {
+		OKCoinData[] data = decode("dto/ok_cny_realtrades.json");
+		assertEquals(1, data.length);
+		assertEquals("ok_cny_realtrades", data[0].getChannel());
+
+		org.oxerr.okcoin.websocket.dto.Trade realTrade = (org.oxerr.okcoin.websocket.dto.Trade) data[0].getData();
+		assertEquals(new BigDecimal("0"), realTrade.getAveragePrice());
+		assertEquals(new BigDecimal("0"), realTrade.getCompletedTradeAmount());
+		assertEquals(1422258604000L, realTrade.getCreatedDate().toEpochMilli());
+		assertEquals(268013884L, realTrade.getId());
+		assertEquals(268013884L, realTrade.getOrderId());
+		assertEquals(new BigDecimal("0"), realTrade.getSigTradeAmount());
+		assertEquals(new BigDecimal("0"), realTrade.getSigTradePrice());
+		assertEquals(Status.CANCELLED, realTrade.getStatus());
+		assertEquals("btc_cny", realTrade.getSymbol());
+		assertEquals(new BigDecimal("1.105"), realTrade.getTradeAmount());
+		assertEquals(new BigDecimal("0"), realTrade.getTradePrice());
+		assertEquals(Type.BUY, realTrade.getTradeType());
+		assertEquals(new BigDecimal("1853.74"), realTrade.getTradeUnitPrice());
+		assertEquals(new BigDecimal("0"), realTrade.getUnTrade());
+	}
+
+	@Test
+	public void testDecodeTradeResult() throws DecodeException, IOException {
+		OKCoinData[] data = decode("dto/ok_spotcny_trade.json");
+		assertEquals(1, data.length);
+		assertEquals("ok_spotcny_trade", data[0].getChannel());
+
+		TradeResult tradeResult = (TradeResult) data[0].getData();
+		assertEquals(125433029L, tradeResult.getOrderId());
+		assertTrue(tradeResult.getResult());
+	}
+
+	@Test
+	public void testDecodeCancelOrderResult() throws DecodeException, IOException {
+		OKCoinData[] data = decode("dto/ok_spotcny_cancel_order.json");
+		assertEquals(1, data.length);
+		assertEquals("ok_spotcny_cancel_order", data[0].getChannel());
+
+		TradeResult tradeResult = (TradeResult) data[0].getData();
+		assertEquals(125433027L, tradeResult.getOrderId());
+		assertTrue(tradeResult.getResult());
+	}
+
+	@Test
+	public void testDecodeUserInfo() throws DecodeException, IOException {
+		OKCoinData[] data = decode("dto/ok_spotcny_userinfo.json");
+		assertEquals(1, data.length);
+		assertEquals("ok_spotcny_userinfo", data[0].getChannel());
+
+		Info info = (Info) data[0].getData();
+		Funds funds = info.getFunds();
+		assertEquals(new BigDecimal("0"), funds.getAsset().get("net"));
+		assertEquals(new BigDecimal("0"), funds.getAsset().get("total"));
+
+		assertEquals(new BigDecimal("0"), funds.getBorrow().get("btc"));
+		assertEquals(new BigDecimal("0"), funds.getBorrow().get("cny"));
+		assertEquals(new BigDecimal("0"), funds.getBorrow().get("ltc"));
+
+		assertEquals(new BigDecimal("0"), funds.getFree().get("btc"));
+		assertEquals(new BigDecimal("0"), funds.getFree().get("cny"));
+		assertEquals(new BigDecimal("0"), funds.getFree().get("ltc"));
+
+		assertEquals(new BigDecimal("0"), funds.getFrozen().get("btc"));
+		assertEquals(new BigDecimal("0"), funds.getFrozen().get("cny"));
+		assertEquals(new BigDecimal("0"), funds.getFrozen().get("ltc"));
+
+		assertEquals(new BigDecimal("0"), funds.getUnionFund().get("btc"));
+		assertEquals(new BigDecimal("0"), funds.getUnionFund().get("ltc"));
+	}
+
+	@Test
+	public void testDecodeOrderResult() throws DecodeException, IOException {
+		OKCoinData[] data = decode("dto/ok_spotcny_order_info.json");
+		assertEquals(1, data.length);
+		assertEquals("ok_spotcny_order_info", data[0].getChannel());
+
+		OrderResult result = (OrderResult) data[0].getData();
+		Order order = result.getOrders()[0];
+		assertEquals(new BigDecimal("0.1"), order.getAmount());
+		assertEquals(new BigDecimal("1.961"), order.getAvgPrice());
+		assertEquals(1422502117000L, order.getCreateDate().toEpochMilli());
+		assertEquals(new BigDecimal("0.1"), order.getDealAmount());
+		assertEquals(20914907L, order.getOrderId());
+		assertEquals(new BigDecimal("0"), order.getPrice());
+		assertEquals(Status.FULLY_FILLED, order.getStatus());
+		assertEquals("ltc_cny", order.getSymbol());
+		assertEquals(Type.SELL_MARKET, order.getType());
 	}
 
 	private OKCoinData[] decode(String resource) throws DecodeException, IOException {

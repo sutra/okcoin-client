@@ -1,0 +1,22 @@
+[
+	{
+		"channel":"ok_spotcny_order_info",
+		"data":{
+			"orders":[
+				{
+					"amount":0.1,
+					"avg_price":1.961,
+					"create_date":1422502117000,
+					"deal_amount":0.1,
+					"order_id":20914907,
+					"orders_id":20914907,
+					"price":0,
+					"status":2,
+					"symbol":"ltc_cny",
+					"type":"sell_market"
+				}
+			],
+			"result":true
+		}
+	}
+]
