@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
-import org.oxerr.okcoin.fix.OKCoinApplication;
 import org.oxerr.okcoin.fix.fix44.OKCoinMessageFactory;
 import org.oxerr.okcoin.xchange.service.fix.OKCoinXChangeApplication;
 import org.slf4j.Logger;
@@ -22,9 +21,8 @@ import quickfix.MessageStoreFactory;
 import quickfix.SessionID;
 import quickfix.SessionSettings;
 import quickfix.SocketInitiator;
-import quickfix.field.MDUpdateType;
-import quickfix.field.SubscriptionRequestType;
 
+import com.xeiam.xchange.currency.CurrencyPair;
 import com.xeiam.xchange.dto.account.AccountInfo;
 import com.xeiam.xchange.dto.marketdata.OrderBook;
 import com.xeiam.xchange.dto.marketdata.Trade;
@@ -37,7 +35,7 @@ public class Client {
 
 	private static final Logger log = LoggerFactory.getLogger(Client.class);
 
-	private final OKCoinApplication app;
+	private final OKCoinXChangeApplication app;
 	private final SessionID sessionId;
 	private final Initiator initiator;
 
@@ -120,11 +118,7 @@ public class Client {
 	public void demo() {
 		String mdReqId = UUID.randomUUID().toString();
 		String symbol = "BTC/CNY";
-		char subscriptionRequestType = SubscriptionRequestType.SNAPSHOT;
-		int marketDepth = 0;
-		int mdUpdateType = MDUpdateType.FULL_REFRESH;
-		app.requestOrderBook(mdReqId, symbol, subscriptionRequestType,
-				marketDepth, mdUpdateType, sessionId);
+		app.subscribeOrderBook(CurrencyPair.BTC_CNY, sessionId);
 
 		mdReqId = UUID.randomUUID().toString();
 		app.requestLiveTrades(mdReqId, symbol, sessionId);
