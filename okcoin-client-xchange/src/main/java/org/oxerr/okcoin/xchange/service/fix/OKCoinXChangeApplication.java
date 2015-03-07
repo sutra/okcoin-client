@@ -75,6 +75,10 @@ public class OKCoinXChangeApplication extends OKCoinApplication {
 		mdReqIds.put(symbol, mdReqId);
 	}
 
+	public void subscribeOrderBook(CurrencyPair currencyPair, SessionID sessionId) {
+		subscribeOrderBook(OKCoinFIXAdapters.adaptSymbol(currencyPair), sessionId);
+	}
+
 	/**
 	 * Unsubscribes the order book of the specified symbol.
 	 *
@@ -99,6 +103,10 @@ public class OKCoinXChangeApplication extends OKCoinApplication {
 			MDUpdateType.FULL_REFRESH,
 			sessionId);
 		mdReqIds.remove(symbol);
+	}
+
+	public void unsubscribeOrderBook(CurrencyPair currencyPair, SessionID sessionId) {
+		unsubscribeOrderBook(OKCoinFIXAdapters.adaptSymbol(currencyPair), sessionId);
 	}
 
 	@Override

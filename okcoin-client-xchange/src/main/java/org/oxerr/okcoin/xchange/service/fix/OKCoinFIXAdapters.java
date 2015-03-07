@@ -9,6 +9,7 @@ import org.oxerr.okcoin.fix.fix44.AccountInfoResponse;
 import quickfix.FieldNotFound;
 import quickfix.Message;
 
+import com.xeiam.xchange.currency.CurrencyPair;
 import com.xeiam.xchange.dto.account.AccountInfo;
 import com.xeiam.xchange.dto.trade.Wallet;
 
@@ -18,6 +19,10 @@ import com.xeiam.xchange.dto.trade.Wallet;
 public final class OKCoinFIXAdapters {
 
 	private OKCoinFIXAdapters() {
+	}
+
+	public static String adaptSymbol(CurrencyPair currencyPair) {
+		return String.format("%s/%s", currencyPair.baseSymbol, currencyPair.counterSymbol);
 	}
 
 	public static AccountInfo adaptAccountInfo(AccountInfoResponse message)
