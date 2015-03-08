@@ -32,11 +32,7 @@ public final class OKCoinClientEndpoint {
 	private final Logger log = LoggerFactory
 			.getLogger(OKCoinClientEndpoint.class);
 
-	private final Map<String, Set<OKCoinDataListener>> listeners;
-
-	public OKCoinClientEndpoint() {
-		this.listeners = new HashMap<String, Set<OKCoinDataListener>>();
-	}
+	private final Map<String, Set<OKCoinDataListener>> listeners = new HashMap<>();
 
 	@OnOpen
 	public void onOpen(Session session, EndpointConfig config) {
