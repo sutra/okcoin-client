@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 import org.oxerr.okcoin.rest.OKCoinException;
 import org.oxerr.okcoin.rest.dto.BatchTradeResult;
@@ -91,6 +92,22 @@ public class OKCoinTradeServiceRaw extends OKCoinBaseTradePollingService {
 			throws OKCoinException, IOException {
 		String orderId = Arrays.stream(orderIds)
 				.mapToObj(id -> String.valueOf(id))
+				.collect(Collectors.joining(","));
+		return okCoin.getOrders(apiKey, symbol, type, orderId, sign);
+	}
+
+	public OrderResult getOrders(String symbol, int type, Long[] orderIds)
+			throws OKCoinException, IOException {
+		String orderId = Arrays.stream(orderIds)
+				.map(id -> id.toString())
+				.collect(Collectors.joining(","));
+		return okCoin.getOrders(apiKey, symbol, type, orderId, sign);
+	}
+
+	public OrderResult getOrders(String symbol, int type,
+			Iterable<Long> orderIds) throws OKCoinException, IOException {
+		String orderId = StreamSupport.stream(orderIds.spliterator(), false)
+				.map(id -> id.toString())
 				.collect(Collectors.joining(","));
 		return okCoin.getOrders(apiKey, symbol, type, orderId, sign);
 	}
