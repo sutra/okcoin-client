@@ -18,10 +18,14 @@ public enum Status {
 			.get();
 	}
 
-	private int code;
+	private final int code;
 
 	Status(int code) {
 		this.code = code;
+	}
+
+	public int getCode() {
+		return code;
 	}
 
 }
