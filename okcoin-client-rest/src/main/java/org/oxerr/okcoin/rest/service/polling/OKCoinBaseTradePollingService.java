@@ -26,7 +26,7 @@ import com.xeiam.xchange.ExchangeSpecification;
  */
 public class OKCoinBaseTradePollingService extends OKCoinBasePollingService {
 
-	private static final long INTERVAL = 2_000;
+	private final long interval;
 
 	private final Logger log = LoggerFactory.getLogger(OKCoinBaseTradePollingService.class);
 
@@ -43,6 +43,15 @@ public class OKCoinBaseTradePollingService extends OKCoinBasePollingService {
 
 	protected OKCoinBaseTradePollingService(Exchange exchange) {
 		super(exchange);
+
+		final Integer maxPrivatePollRatePerSecond = exchange.getMetaData().getMaxPrivatePollRatePerSecond();
+		if (maxPrivatePollRatePerSecond == null || maxPrivatePollRatePerSecond.intValue() == 0) {
+			interval = 0;
+		} else {
+			interval = (long) ((float) 1_000 / (float) maxPrivatePollRatePerSecond);
+		}
+		log.debug("interval: {}", interval);
+
 		ExchangeSpecification spec = exchange.getExchangeSpecification();
 
 		if (spec.getApiKey() != null && spec.getSecretKey() != null) {
@@ -96,15 +105,15 @@ public class OKCoinBaseTradePollingService extends OKCoinBasePollingService {
 	}
 
 	protected void sleep(String method) {
-		if (System.currentTimeMillis() - getLast(method) < INTERVAL) {
+		if (System.currentTimeMillis() - getLast(method) < interval) {
 			sleep();
 		}
 	}
 
 	private void sleep() {
 		try {
-			log.trace("Sleeping for {} ms.", INTERVAL);
-			Thread.sleep(INTERVAL);
+			log.trace("Sleeping for {} ms.", interval);
+			Thread.sleep(interval);
 		} catch (InterruptedException e) {
 			Thread.currentThread().interrupt();
 		}
