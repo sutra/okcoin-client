@@ -106,7 +106,7 @@ public class OKCoinBaseTradePollingService extends OKCoinBasePollingService {
 			log.trace("Sleeping for {} ms.", INTERVAL);
 			Thread.sleep(INTERVAL);
 		} catch (InterruptedException e) {
-			throw new RuntimeException(e);
+			Thread.currentThread().interrupt();
 		}
 	}
 
