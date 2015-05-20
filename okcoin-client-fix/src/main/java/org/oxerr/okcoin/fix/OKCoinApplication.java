@@ -24,6 +24,7 @@ import quickfix.UnsupportedMessageType;
 import quickfix.field.MsgType;
 import quickfix.field.Password;
 import quickfix.field.Username;
+import quickfix.fix44.ExecutionReport;
 import quickfix.fix44.MarketDataRequest;
 import quickfix.fix44.MessageCracker;
 import quickfix.fix44.NewOrderSingle;
@@ -149,6 +150,11 @@ public class OKCoinApplication extends MessageCracker implements Application {
 		} else {
 			super.crack(message, sessionId);
 		}
+	}
+
+	@Override
+	public void onMessage(ExecutionReport message, SessionID sessionId)
+			throws FieldNotFound, UnsupportedMessageType, IncorrectTagValue {
 	}
 
 	public void onMessage(AccountInfoResponse message, SessionID sessionId)
