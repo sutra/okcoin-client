@@ -1,8 +1,11 @@
 package org.oxerr.okcoin.examples.rest;
 
 import java.io.IOException;
+import java.util.Arrays;
 
+import org.oxerr.okcoin.rest.OKCoinException;
 import org.oxerr.okcoin.rest.OKCoinExchange;
+import org.oxerr.okcoin.rest.dto.AccountRecords;
 import org.oxerr.okcoin.rest.dto.UserInfo;
 import org.oxerr.okcoin.rest.service.polling.OKCoinAccountServiceRaw;
 import org.slf4j.Logger;
@@ -40,6 +43,23 @@ public class AccountServiceDemo {
 		log.info("account info: {}", accountInfo);
 	}
 
+	public void demoGetAccountRecords() throws OKCoinException, IOException {
+		AccountRecords accountRecords = rawAccountService.getAccountRecords(
+				"btc_cny", 0, 1, 50);
+		Arrays.stream(accountRecords.getRecords()).forEach(
+				record -> log.info("{}", record));
+
+		accountRecords = rawAccountService.getAccountRecords(
+				"ltc_cny", 0, 1, 50);
+		Arrays.stream(accountRecords.getRecords()).forEach(
+				record -> log.info("{}", record));
+
+		accountRecords = rawAccountService.getAccountRecords(
+				"cny", 0, 1, 50);
+		Arrays.stream(accountRecords.getRecords()).forEach(
+				record -> log.info("{}", record));
+	}
+
 	public static void main(String[] args) throws IOException {
 		String apiKey = args[0], secretKey = args[1];
 
@@ -50,6 +70,7 @@ public class AccountServiceDemo {
 		Exchange domesticExchange = ExchangeFactory.INSTANCE.createExchange(spec);
 		AccountServiceDemo domesticDemo = new AccountServiceDemo(domesticExchange);
 		domesticDemo.demoUserInfo();
+		domesticDemo.demoGetAccountRecords();
 	}
 
 }

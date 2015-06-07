@@ -11,6 +11,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
+import org.oxerr.okcoin.rest.dto.AccountRecords;
 import org.oxerr.okcoin.rest.dto.BatchTradeResult;
 import org.oxerr.okcoin.rest.dto.BorrowOrderInfo;
 import org.oxerr.okcoin.rest.dto.BorrowResult;
@@ -491,6 +492,30 @@ public interface OKCoin {
 	UnrepaymentsInfo getUnrepaymentsInfo(
 		@FormParam("api_key") String apiKey,
 		@FormParam("symbol") String symbol,
+		@FormParam("current_page") int currentPage,
+		@FormParam("page_length") int pageLength,
+		@FormParam("sign") ParamsDigest sign)
+			throws OKCoinException, IOException;
+
+	/**
+	 * Get user deposits or withdraw Records.
+	 *
+	 * @param apiKey the API key of the user.
+	 * @param symbol the symbol: btc_cny, ltc_cny, cny
+	 * @param type 0: deposits, 1: withdraw.
+	 * @param currentPage the current page number. 1 based.
+	 * @param pageLength the data entries number per page, maximum 50.
+	 * @param sign the signature of request parameters.
+	 * @return user deposits or withdraw records.
+	 * @throws OKCoinException indicates request failed.
+	 * @throws IOException indicates I/O exception.
+	 */
+	@POST
+	@Path("account_records.do")
+	AccountRecords getAccountRecords(
+		@FormParam("api_key") String apiKey,
+		@FormParam("symbol") String symbol,
+		@FormParam("type") int type,
 		@FormParam("current_page") int currentPage,
 		@FormParam("page_length") int pageLength,
 		@FormParam("sign") ParamsDigest sign)
