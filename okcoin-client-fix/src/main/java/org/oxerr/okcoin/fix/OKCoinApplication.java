@@ -1,8 +1,6 @@
 package org.oxerr.okcoin.fix;
 
 import java.math.BigDecimal;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 import org.oxerr.okcoin.fix.fix44.AccountInfoRequest;
 import org.oxerr.okcoin.fix.fix44.AccountInfoResponse;
@@ -39,7 +37,6 @@ public class OKCoinApplication extends MessageCracker implements Application {
 
 	private final Logger log = LoggerFactory.getLogger(OKCoinApplication.class);
 	private final DataDictionary dataDictionary;
-	private final ExecutorService executorService;
 	private final MarketDataRequestCreator marketDataRequestCreator;
 	private final TradeRequestCreator tradeRequestCreator;
 	private final String apiKey;
@@ -50,8 +47,6 @@ public class OKCoinApplication extends MessageCracker implements Application {
 		this.secretKey = secretKey;
 		this.marketDataRequestCreator = new MarketDataRequestCreator();
 		this.tradeRequestCreator = new TradeRequestCreator(apiKey, secretKey);
-		executorService = Executors.newFixedThreadPool(Runtime.getRuntime()
-				.availableProcessors() * 2 + 1);
 
 		try {
 			dataDictionary = new DataDictionary("org/oxerr/okcoin/fix/FIX44.xml");
@@ -163,15 +158,7 @@ public class OKCoinApplication extends MessageCracker implements Application {
 
 	public void sendMessage(final Message message, final SessionID sessionId) {
 		log.trace("sending message: {}", message);
-
-		executorService.execute(new Runnable() {
-
-			@Override
-			public void run() {
-				Session.lookupSession(sessionId).send(message);
-			}
-
-		});
+		Session.lookupSession(sessionId).send(message);
 	}
 
 	public void requestMarketData(
