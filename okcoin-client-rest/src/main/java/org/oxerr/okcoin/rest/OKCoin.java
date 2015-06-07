@@ -19,6 +19,7 @@ import org.oxerr.okcoin.rest.dto.CancelOrderResult;
 import org.oxerr.okcoin.rest.dto.CandlestickChart;
 import org.oxerr.okcoin.rest.dto.Depth;
 import org.oxerr.okcoin.rest.dto.LendDepth;
+import org.oxerr.okcoin.rest.dto.OrderFee;
 import org.oxerr.okcoin.rest.dto.OrderHistory;
 import org.oxerr.okcoin.rest.dto.OrderResult;
 import org.oxerr.okcoin.rest.dto.TickerResponse;
@@ -354,6 +355,23 @@ public interface OKCoin {
 		@FormParam("withdraw_id") long withdrawId,
 		@FormParam("sign") ParamsDigest sign)
 			throws OKCoinException, IOException;
+
+	/**
+	 * Query fee.
+	 *
+	 * @param apiKey the API key of the user.
+	 * @param symbol the symbol: btc_cny, ltc_cny.
+	 * @param orderId the order ID.
+	 * @param sign the signature of request parameters.
+	 * @return the order fee.
+	 */
+	@POST
+	@Path("order_fee.do")
+	OrderFee getOrderFee(
+		@FormParam("api_key") String apiKey,
+		@FormParam("symbol") String symbol,
+		@FormParam("order_id") long orderId,
+		@FormParam("sign") ParamsDigest sign);
 
 	/**
 	 * Get user borrow information.

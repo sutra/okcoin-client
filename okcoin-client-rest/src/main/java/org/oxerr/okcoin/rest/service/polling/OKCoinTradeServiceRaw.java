@@ -15,6 +15,7 @@ import org.oxerr.okcoin.rest.dto.CancelOrderResult;
 import org.oxerr.okcoin.rest.dto.IcebergOrder;
 import org.oxerr.okcoin.rest.dto.IcebergOrderHistory;
 import org.oxerr.okcoin.rest.dto.OrderData;
+import org.oxerr.okcoin.rest.dto.OrderFee;
 import org.oxerr.okcoin.rest.dto.OrderHistory;
 import org.oxerr.okcoin.rest.dto.OrderResult;
 import org.oxerr.okcoin.rest.dto.Result;
@@ -219,6 +220,10 @@ public class OKCoinTradeServiceRaw extends OKCoinBaseTradePollingService {
 
 	private int toSymbol(CurrencyPair currencyPair) {
 		return currencyPair.baseSymbol.equals("BTC") ? 0 : 1;
+	}
+
+	public OrderFee getOrderFee(String symbol, long orderId) {
+		return okCoin.getOrderFee(apiKey, symbol, orderId, sign);
 	}
 
 	public BorrowsInfo getBorrowsInfo(String symbol) throws OKCoinException,

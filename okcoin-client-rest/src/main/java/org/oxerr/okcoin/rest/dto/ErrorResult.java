@@ -17,4 +17,5 @@ abstract class ErrorResult extends BaseObject {
 			throw new OKCoinException(errorCode);
 		}
 	}
+
 }
