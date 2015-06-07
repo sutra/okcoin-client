@@ -36,7 +36,7 @@ public class OKCoinAccountServiceRaw extends OKCoinBaseTradePollingService {
 
 	public Withdrawal cancelWithdraw(String symbol, long withdrawId)
 			throws OKCoinException, IOException {
-		return okCoin.cancelWithdraw(symbol, symbol, withdrawId, sign);
+		return okCoin.cancelWithdraw(apiKey, symbol, withdrawId, sign);
 	}
 
 }
