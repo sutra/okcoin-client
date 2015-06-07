@@ -222,7 +222,8 @@ public class OKCoinTradeServiceRaw extends OKCoinBaseTradePollingService {
 		return currencyPair.baseSymbol.equals("BTC") ? 0 : 1;
 	}
 
-	public OrderFee getOrderFee(String symbol, long orderId) {
+	public OrderFee getOrderFee(String symbol, long orderId)
+			throws OKCoinException, IOException {
 		return okCoin.getOrderFee(apiKey, symbol, orderId, sign);
 	}
 

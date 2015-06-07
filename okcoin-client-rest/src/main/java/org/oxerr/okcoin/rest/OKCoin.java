@@ -364,6 +364,8 @@ public interface OKCoin {
 	 * @param orderId the order ID.
 	 * @param sign the signature of request parameters.
 	 * @return the order fee.
+	 * @throws OKCoinException indicates request failed.
+	 * @throws IOException indicates I/O exception.
 	 */
 	@POST
 	@Path("order_fee.do")
@@ -371,7 +373,8 @@ public interface OKCoin {
 		@FormParam("api_key") String apiKey,
 		@FormParam("symbol") String symbol,
 		@FormParam("order_id") long orderId,
-		@FormParam("sign") ParamsDigest sign);
+		@FormParam("sign") ParamsDigest sign)
+			throws OKCoinException, IOException;
 
 	/**
 	 * Get user borrow information.
