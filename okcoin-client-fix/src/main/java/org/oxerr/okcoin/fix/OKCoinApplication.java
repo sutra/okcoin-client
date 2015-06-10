@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 
 import org.oxerr.okcoin.fix.fix44.AccountInfoRequest;
 import org.oxerr.okcoin.fix.fix44.AccountInfoResponse;
+import org.oxerr.okcoin.fix.fix44.OrdersInfoAfterSomeIDRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -53,6 +54,10 @@ public class OKCoinApplication extends MessageCracker implements Application {
 		} catch (ConfigError e) {
 			throw new RuntimeException(e);
 		}
+	}
+
+	public DataDictionary getDataDictionary() {
+		return dataDictionary;
 	}
 
 	/**
@@ -277,6 +282,27 @@ public class OKCoinApplication extends MessageCracker implements Application {
 	public void requestAccountInfo(String accReqId, SessionID sessionId) {
 		AccountInfoRequest message = tradeRequestCreator.createAccountInfoRequest(
 				accReqId);
+		sendMessage(message, sessionId);
+	}
+
+	/**
+	 * Request history order information which order ID is after the specified
+	 * {@code orderId}.
+	 *
+	 * @param massStatusReqId Client-assigned unique ID of this request.
+	 * @param symbol Symbol. BTC/CNY or LTC/CNY.
+	 * @param orderId Order ID. Return 10 records after this id.
+	 * @param ordStatus Order status. 0 = Not filled 1 = Fully filled.
+	 * @param sessionId the FIX session ID.
+	 */
+	public void requestOrdersInfoAfterSomeID(
+			String massStatusReqId,
+			String symbol,
+			long orderId,
+			char ordStatus,
+			SessionID sessionId) {
+		OrdersInfoAfterSomeIDRequest message = tradeRequestCreator.createOrdersInfoAfterSomeIDRequest(
+				massStatusReqId, symbol, orderId, ordStatus);
 		sendMessage(message, sessionId);
 	}
 

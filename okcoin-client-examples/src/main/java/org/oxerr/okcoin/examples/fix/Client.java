@@ -12,8 +12,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import quickfix.ConfigError;
+import quickfix.FieldNotFound;
 import quickfix.FileLogFactory;
 import quickfix.FileStoreFactory;
+import quickfix.IncorrectTagValue;
 import quickfix.Initiator;
 import quickfix.LogFactory;
 import quickfix.MessageFactory;
@@ -21,6 +23,8 @@ import quickfix.MessageStoreFactory;
 import quickfix.SessionID;
 import quickfix.SessionSettings;
 import quickfix.SocketInitiator;
+import quickfix.UnsupportedMessageType;
+import quickfix.fix44.ExecutionReport;
 
 import com.xeiam.xchange.currency.CurrencyPair;
 import com.xeiam.xchange.dto.account.AccountInfo;
@@ -93,6 +97,13 @@ public class Client {
 				log.info("AccountInfo: {}", accountInfo);
 			}
 
+			@Override
+			public void onMessage(ExecutionReport message, SessionID sessionId)
+					throws FieldNotFound, UnsupportedMessageType,
+					IncorrectTagValue {
+				log.info(message.toXML(getDataDictionary()));
+			}
+
 		};
 
 		SessionSettings settings;
@@ -128,6 +139,11 @@ public class Client {
 
 		String accReqId = UUID.randomUUID().toString();
 		app.requestAccountInfo(accReqId, sessionId);
+
+		String massStatusReqId = UUID.randomUUID().toString();
+		long orderId = 1;
+		char ordStatus = '0';
+		app.requestOrdersInfoAfterSomeID(massStatusReqId, symbol, orderId, ordStatus, sessionId);
 	}
 
 	public static void main(String[] args) throws IOException, ConfigError,

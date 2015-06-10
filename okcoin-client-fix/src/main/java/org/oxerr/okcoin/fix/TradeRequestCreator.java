@@ -5,12 +5,15 @@ import java.util.Date;
 
 import org.oxerr.okcoin.fix.field.AccReqID;
 import org.oxerr.okcoin.fix.fix44.AccountInfoRequest;
+import org.oxerr.okcoin.fix.fix44.OrdersInfoAfterSomeIDRequest;
 
 import quickfix.field.Account;
 import quickfix.field.ClOrdID;
 import quickfix.field.MassStatusReqID;
 import quickfix.field.MassStatusReqType;
+import quickfix.field.OrdStatus;
 import quickfix.field.OrdType;
+import quickfix.field.OrderID;
 import quickfix.field.OrderQty;
 import quickfix.field.OrigClOrdID;
 import quickfix.field.Price;
@@ -91,6 +94,16 @@ public class TradeRequestCreator {
 				new TradeRequestType(
 						TradeRequestType.MATCHED_TRADES_MATCHING_CRITERIA_PROVIDED_ON_REQUEST));
 		message.set(new Symbol(symbol));
+		return message;
+	}
+
+	public OrdersInfoAfterSomeIDRequest createOrdersInfoAfterSomeIDRequest(
+			String massStatusReqId, String symbol, long orderId, char ordStatus) {
+		OrdersInfoAfterSomeIDRequest message = new OrdersInfoAfterSomeIDRequest(
+				new MassStatusReqID(massStatusReqId),
+				new Symbol(symbol),
+				new OrderID(String.valueOf(orderId)),
+				new OrdStatus(ordStatus));
 		return message;
 	}
 

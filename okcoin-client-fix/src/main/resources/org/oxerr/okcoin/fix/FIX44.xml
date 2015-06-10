@@ -110,6 +110,12 @@
       <field name="FrozenLtc" required="N"/>
       <field name="FrozenQtCcy" required="N"/>
     </message>
+    <message name="OrdersInfoAfterSomeIDRequest" msgtype="Z2000" msgcat="app">
+      <field name="OrderID" required="Y"/>
+      <field name="OrdStatus" required="Y"/>
+      <field name="Symbol" required="Y"/>
+      <field name="MassStatusReqID" required="Y"/>
+    </message>
     <message name="BusinessMessageReject" msgtype="j" msgcat="app">
       <field name="RefSeqNum" required="N"/>
       <field name="RefMsgType" required="Y"/>
