@@ -140,10 +140,10 @@ public class Client {
 		String accReqId = UUID.randomUUID().toString();
 		app.requestAccountInfo(accReqId, sessionId);
 
-		String massStatusReqId = UUID.randomUUID().toString();
+		String tradeRequestId = UUID.randomUUID().toString();
 		long orderId = 1;
 		char ordStatus = '0';
-		app.requestOrdersInfoAfterSomeID(massStatusReqId, symbol, orderId, ordStatus, sessionId);
+		app.requestOrdersInfoAfterSomeID(tradeRequestId, symbol, orderId, ordStatus, sessionId);
 	}
 
 	public static void main(String[] args) throws IOException, ConfigError,

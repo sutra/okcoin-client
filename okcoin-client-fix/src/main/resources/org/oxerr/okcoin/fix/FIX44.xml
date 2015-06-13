@@ -114,7 +114,7 @@
       <field name="OrderID" required="Y"/>
       <field name="OrdStatus" required="Y"/>
       <field name="Symbol" required="Y"/>
-      <field name="MassStatusReqID" required="Y"/>
+      <field name="TradeRequestID" required="Y"/>
     </message>
     <message name="BusinessMessageReject" msgtype="j" msgcat="app">
       <field name="RefSeqNum" required="N"/>

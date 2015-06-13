@@ -98,9 +98,9 @@ public class TradeRequestCreator {
 	}
 
 	public OrdersInfoAfterSomeIDRequest createOrdersInfoAfterSomeIDRequest(
-			String massStatusReqId, String symbol, long orderId, char ordStatus) {
+			String tradeRequestId, String symbol, long orderId, char ordStatus) {
 		OrdersInfoAfterSomeIDRequest message = new OrdersInfoAfterSomeIDRequest(
-				new MassStatusReqID(massStatusReqId),
+				new TradeRequestID(tradeRequestId),
 				new Symbol(symbol),
 				new OrderID(String.valueOf(orderId)),
 				new OrdStatus(ordStatus));

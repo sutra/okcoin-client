@@ -289,20 +289,20 @@ public class OKCoinApplication extends MessageCracker implements Application {
 	 * Request history order information which order ID is after the specified
 	 * {@code orderId}.
 	 *
-	 * @param massStatusReqId Client-assigned unique ID of this request.
+	 * @param tradeRequestId Client-assigned unique ID of this request.
 	 * @param symbol Symbol. BTC/CNY or LTC/CNY.
 	 * @param orderId Order ID. Return 10 records after this id.
 	 * @param ordStatus Order status. 0 = Not filled 1 = Fully filled.
 	 * @param sessionId the FIX session ID.
 	 */
 	public void requestOrdersInfoAfterSomeID(
-			String massStatusReqId,
+			String tradeRequestId,
 			String symbol,
 			long orderId,
 			char ordStatus,
 			SessionID sessionId) {
 		OrdersInfoAfterSomeIDRequest message = tradeRequestCreator.createOrdersInfoAfterSomeIDRequest(
-				massStatusReqId, symbol, orderId, ordStatus);
+				tradeRequestId, symbol, orderId, ordStatus);
 		sendMessage(message, sessionId);
 	}
 

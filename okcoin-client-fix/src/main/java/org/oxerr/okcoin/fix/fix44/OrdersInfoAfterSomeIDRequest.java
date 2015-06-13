@@ -1,11 +1,11 @@
 package org.oxerr.okcoin.fix.fix44;
 
 import quickfix.FieldNotFound;
-import quickfix.field.MassStatusReqID;
 import quickfix.field.MsgType;
 import quickfix.field.OrdStatus;
 import quickfix.field.OrderID;
 import quickfix.field.Symbol;
+import quickfix.field.TradeRequestID;
 import quickfix.fix44.Message;
 
 /**
@@ -22,14 +22,12 @@ public class OrdersInfoAfterSomeIDRequest extends Message {
 	}
 
 	public OrdersInfoAfterSomeIDRequest(
-			MassStatusReqID massStatusReqID,
+			TradeRequestID tradeRequestID,
 			Symbol symbol,
 			OrderID orderID,
 			OrdStatus ordStatus) {
 		this();
-		// Currently, if you set the MassStatusReqID, you will get rejected,
-		// say tag 584 not defined for this message type(Z2000).
-		// set(massStatusReqID);
+		set(tradeRequestID);
 		set(symbol);
 		set(orderID);
 		set(ordStatus);
@@ -104,27 +102,27 @@ public class OrdersInfoAfterSomeIDRequest extends Message {
 		return isSetField(Symbol.FIELD);
 	}
 
-	public void set(MassStatusReqID value) {
+	public void set(TradeRequestID value) {
 		setField(value);
 	}
 
-	public MassStatusReqID get(MassStatusReqID value) throws FieldNotFound {
+	public TradeRequestID get(TradeRequestID value) throws FieldNotFound {
 		getField(value);
 		return value;
 	}
 
-	public MassStatusReqID getMassStatusReqID() throws FieldNotFound {
-		MassStatusReqID value = new MassStatusReqID();
+	public TradeRequestID getTradeRequestID() throws FieldNotFound {
+		TradeRequestID value = new TradeRequestID();
 		getField(value);
 		return value;
 	}
 
-	public boolean isSet(MassStatusReqID field) {
+	public boolean isSet(TradeRequestID field) {
 		return isSetField(field);
 	}
 
-	public boolean isSetMassStatusReqID() {
-		return isSetField(MassStatusReqID.FIELD);
+	public boolean isSetTradeRequestID() {
+		return isSetField(TradeRequestID.FIELD);
 	}
 
 }
