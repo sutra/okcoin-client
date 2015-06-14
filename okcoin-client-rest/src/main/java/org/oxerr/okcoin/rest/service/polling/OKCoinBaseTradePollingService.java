@@ -1,10 +1,18 @@
 package org.oxerr.okcoin.rest.service.polling;
 
+import static org.oxerr.okcoin.rest.OKCoinExchange.CONNECTION_REQUEST_TIMEOUT_PARAMETER;
+import static org.oxerr.okcoin.rest.OKCoinExchange.CONNECT_TIMEOUT_PARAMETER;
+import static org.oxerr.okcoin.rest.OKCoinExchange.LOGIN_MAX_RETRY_TIMES_PARAMETER;
+import static org.oxerr.okcoin.rest.OKCoinExchange.SOCKET_TIMEOUT_PARAMETER;
+import static org.oxerr.okcoin.rest.OKCoinExchange.TRADE_PASSWORD_PARAMETER;
+
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
 import org.oxerr.okcoin.rest.OKCoin;
 import org.oxerr.okcoin.rest.service.OKCoinDigest;
+import org.oxerr.okcoin.rest.service.web.OKCoinClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -18,7 +26,7 @@ import com.xeiam.xchange.ExchangeSpecification;
  */
 public class OKCoinBaseTradePollingService extends OKCoinBasePollingService {
 
-	private static final long INTERVAL = 2_000;
+	private final long interval;
 
 	private final Logger log = LoggerFactory.getLogger(OKCoinBaseTradePollingService.class);
 
@@ -30,12 +38,57 @@ public class OKCoinBaseTradePollingService extends OKCoinBasePollingService {
 
 	private Map<String, Long> lasts = new HashMap<String, Long>();
 
+	protected final OKCoinClient okCoinClient;
+	protected final int loginMaxRetryTimes;
+
 	protected OKCoinBaseTradePollingService(Exchange exchange) {
 		super(exchange);
+
+		final Integer maxPrivatePollRatePerSecond = exchange.getMetaData().getMaxPrivatePollRatePerSecond();
+		if (maxPrivatePollRatePerSecond == null || maxPrivatePollRatePerSecond.intValue() == 0) {
+			interval = 0;
+		} else {
+			interval = (long) ((float) 1_000 / (float) maxPrivatePollRatePerSecond);
+		}
+		log.debug("interval: {}", interval);
+
 		ExchangeSpecification spec = exchange.getExchangeSpecification();
-		okCoin = RestProxyFactory.createProxy(OKCoin.class, spec.getSslUri());
-		this.apiKey = spec.getApiKey();
-		sign = new OKCoinDigest(spec.getSecretKey());
+
+		if (spec.getApiKey() != null && spec.getSecretKey() != null) {
+			okCoin = RestProxyFactory.createProxy(OKCoin.class, spec.getSslUri());
+			this.apiKey = spec.getApiKey();
+			sign = new OKCoinDigest(spec.getSecretKey());
+		} else {
+			okCoin = null;
+			this.apiKey = null;
+			sign = null;
+		}
+
+		Number loginMaxRetryTimes = (Number) spec.getExchangeSpecificParametersItem(LOGIN_MAX_RETRY_TIMES_PARAMETER);
+		this.loginMaxRetryTimes = loginMaxRetryTimes == null ? 1 : loginMaxRetryTimes.intValue();
+
+		if (spec.getUserName() != null && spec.getPassword() != null) {
+			String tradePassword = (String) spec.getExchangeSpecificParametersItem(TRADE_PASSWORD_PARAMETER);
+
+			Number socketTimeout = (Number) spec.getExchangeSpecificParametersItem(SOCKET_TIMEOUT_PARAMETER);
+			Number connectTimeout = (Number) spec.getExchangeSpecificParametersItem(CONNECT_TIMEOUT_PARAMETER);
+			Number connectionRequestTimeout = (Number) spec.getExchangeSpecificParametersItem(CONNECTION_REQUEST_TIMEOUT_PARAMETER);
+
+			okCoinClient = new OKCoinClient(
+				spec.getUserName(), spec.getPassword(), tradePassword,
+				socketTimeout == null ? 0 : socketTimeout.intValue(),
+				connectTimeout == null ? 0 : connectTimeout.intValue(),
+				connectionRequestTimeout == null ? 0 : connectionRequestTimeout.intValue());
+
+			try {
+				okCoinClient.login();
+			} catch (IOException e) {
+				log.warn(e.getMessage(), e);
+			}
+
+		} else {
+			okCoinClient = null;
+		}
 	}
 
 	private long getLast(String method) {
@@ -52,17 +105,17 @@ public class OKCoinBaseTradePollingService extends OKCoinBasePollingService {
 	}
 
 	protected void sleep(String method) {
-		if (System.currentTimeMillis() - getLast(method) < INTERVAL) {
+		if (System.currentTimeMillis() - getLast(method) < interval) {
 			sleep();
 		}
 	}
 
 	private void sleep() {
 		try {
-			log.trace("Sleeping for {} ms.", INTERVAL);
-			Thread.sleep(INTERVAL);
+			log.trace("Sleeping for {} ms.", interval);
+			Thread.sleep(interval);
 		} catch (InterruptedException e) {
-			throw new RuntimeException(e);
+			Thread.currentThread().interrupt();
 		}
 	}
 

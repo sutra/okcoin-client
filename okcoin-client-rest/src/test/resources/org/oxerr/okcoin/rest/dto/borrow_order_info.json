@@ -1,0 +1,13 @@
+{
+	"borrow_order": {
+		"amount": 111,
+		"borrow_date": 1423214717000,
+		"borrow_id": 65426,
+		"days": 15,
+		"deal_amount": 0,
+		"rate": 0.001,
+		"status": 0,
+		"symbol": "cny"
+	},
+	"result": true
+}

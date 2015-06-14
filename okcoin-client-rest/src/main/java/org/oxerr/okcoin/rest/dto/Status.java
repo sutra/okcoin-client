@@ -7,7 +7,8 @@ import java.util.Arrays;
  */
 public enum Status {
 
-	CANCELLED(-1), UNFILLED(0), PARTIALLY_FILLED(1), FULLY_FILLED(2);
+	CANCELLED(-1), UNFILLED(0), PARTIALLY_FILLED(1), FULLY_FILLED(2),
+	CANCEL_REQUEST_IN_PROCESS(4);
 
 	public static Status of(int code) {
 		return Arrays
@@ -17,10 +18,14 @@ public enum Status {
 			.get();
 	}
 
-	private int code;
+	private final int code;
 
 	Status(int code) {
 		this.code = code;
+	}
+
+	public int getCode() {
+		return code;
 	}
 
 }

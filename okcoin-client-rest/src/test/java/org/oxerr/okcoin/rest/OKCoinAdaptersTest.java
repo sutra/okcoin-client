@@ -1,6 +1,7 @@
 package org.oxerr.okcoin.rest;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -8,6 +9,7 @@ import java.util.Arrays;
 
 import org.junit.Test;
 import org.oxerr.okcoin.rest.dto.Depth;
+import org.oxerr.okcoin.rest.dto.OrderHistory;
 import org.oxerr.okcoin.rest.dto.OrderResult;
 import org.oxerr.okcoin.rest.dto.TickerResponse;
 import org.oxerr.okcoin.rest.dto.Trade;
@@ -25,6 +27,8 @@ import com.xeiam.xchange.dto.marketdata.Ticker;
 import com.xeiam.xchange.dto.marketdata.Trades;
 import com.xeiam.xchange.dto.marketdata.Trades.TradeSortType;
 import com.xeiam.xchange.dto.trade.OpenOrders;
+import com.xeiam.xchange.dto.trade.UserTrade;
+import com.xeiam.xchange.dto.trade.UserTrades;
 import com.xeiam.xchange.dto.trade.Wallet;
 
 public class OKCoinAdaptersTest {
@@ -208,6 +212,39 @@ public class OKCoinAdaptersTest {
 		assertEquals(OrderType.BID, openOrders.getOpenOrders().get(1).getType());
 		assertEquals(new BigDecimal("0.1"), openOrders.getOpenOrders().get(1).getLimitPrice());
 		assertEquals(new BigDecimal("0.2"), openOrders.getOpenOrders().get(1).getTradableAmount());
+	}
+
+	@Test
+	public void testAdaptUserTrades() throws IOException {
+		OrderHistory orderHistory = mapper.readValue(getClass().getResource("dto/order_history_with_market_orders.json"), OrderHistory.class);
+		UserTrades userTrades = OKCoinAdapters.adaptUserTrades(orderHistory);
+
+		UserTrade trade = userTrades.getUserTrades().get(0);
+		assertEquals(new BigDecimal("0.1"), trade.getTradableAmount());
+		assertEquals(new BigDecimal("1467.94"), trade.getPrice());
+		assertEquals(1424313017000L, trade.getTimestamp().getTime());
+		assertEquals("342062526", trade.getOrderId());
+		assertNull(trade.getId());
+		assertEquals(CurrencyPair.BTC_CNY, trade.getCurrencyPair());
+		assertEquals(OrderType.ASK, trade.getType());
+
+		trade = userTrades.getUserTrades().get(7);
+		assertEquals(new BigDecimal("0.01"), trade.getTradableAmount());
+		assertEquals(new BigDecimal("1467.98"), trade.getPrice());
+		assertEquals(1424315429000L, trade.getTimestamp().getTime());
+		assertEquals("342110762", trade.getOrderId());
+		assertNull(trade.getId());
+		assertEquals(CurrencyPair.BTC_CNY, trade.getCurrencyPair());
+		assertEquals(OrderType.ASK, trade.getType());
+
+		trade = userTrades.getUserTrades().get(8);
+		assertEquals(new BigDecimal("0.01"), trade.getTradableAmount());
+		assertEquals(new BigDecimal("1467.99"), trade.getPrice());
+		assertEquals(1424315585000L, trade.getTimestamp().getTime());
+		assertEquals("342113073", trade.getOrderId());
+		assertNull(trade.getId());
+		assertEquals(CurrencyPair.BTC_CNY, trade.getCurrencyPair());
+		assertEquals(OrderType.BID, trade.getType());
 	}
 
 }

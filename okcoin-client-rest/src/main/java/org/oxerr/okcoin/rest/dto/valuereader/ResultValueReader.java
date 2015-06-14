@@ -4,7 +4,9 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import org.oxerr.okcoin.rest.dto.Result;
+import org.oxerr.okcoin.rest.service.web.LoginRequiredException;
 
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class ResultValueReader implements ValueReader<Result> {
@@ -27,7 +29,11 @@ public class ResultValueReader implements ValueReader<Result> {
 	 */
 	@Override
 	public Result read(InputStream inputStream) throws IOException {
-		return jsonValueReader.read(inputStream);
+		try {
+			return jsonValueReader.read(inputStream);
+		} catch (JsonMappingException e) {
+			throw new LoginRequiredException(e.getMessage(), e);
+		}
 	}
 
 }

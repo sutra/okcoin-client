@@ -8,6 +8,7 @@ import java.util.List;
 import org.oxerr.okcoin.rest.OKCoinAdapters;
 import org.oxerr.okcoin.rest.OKCoinException;
 import org.oxerr.okcoin.rest.dto.CancelOrderResult;
+import org.oxerr.okcoin.rest.dto.OrderHistory;
 import org.oxerr.okcoin.rest.dto.OrderResult;
 import org.oxerr.okcoin.rest.dto.Type;
 import org.slf4j.Logger;
@@ -24,6 +25,9 @@ import com.xeiam.xchange.exceptions.ExchangeException;
 import com.xeiam.xchange.exceptions.NotAvailableFromExchangeException;
 import com.xeiam.xchange.exceptions.NotYetImplementedForExchangeException;
 import com.xeiam.xchange.service.polling.trade.PollingTradeService;
+import com.xeiam.xchange.service.polling.trade.params.DefaultTradeHistoryParamPaging;
+import com.xeiam.xchange.service.polling.trade.params.TradeHistoryParamCurrencyPair;
+import com.xeiam.xchange.service.polling.trade.params.TradeHistoryParamPaging;
 import com.xeiam.xchange.service.polling.trade.params.TradeHistoryParams;
 
 /**
@@ -113,19 +117,21 @@ public class OKCoinTradeService extends OKCoinTradeServiceRaw implements
 	 */
 	@Override
 	public UserTrades getTradeHistory(Object... arguments)
-			throws ExchangeException, NotAvailableFromExchangeException,
-			NotYetImplementedForExchangeException, IOException {
+			throws OKCoinException, IOException {
 		int argc = arguments.length;
-		CurrencyPair currencyPair = argc > 0 ? (CurrencyPair) arguments[0] : null;
-		Long orderId = argc > 0 ? (Long) arguments[1] : null;
 
-		if (currencyPair != null && orderId != null) {
-//			return OKCoinAdapters.adaptUserTrades(
-//					getOrder(OKCoinAdapters.adaptSymbol(currencyPair)), orderId);
-			return null; // TODO
-		} else {
+		CurrencyPair currencyPair = argc > 0 ? (CurrencyPair) arguments[0] : null;
+		if (currencyPair == null) {
 			throw new IllegalArgumentException();
 		}
+
+		int currentPage = argc > 1 ? ((Number) arguments[1]).intValue() : 0;
+		int pageLength = argc > 2 ? ((Number) arguments[2]).intValue() : 200;
+
+		String symbol = OKCoinAdapters.adaptSymbol(currencyPair);
+		int status = 1; // 1 for filled orders
+		OrderHistory history = getOrderHistory(symbol, status, currentPage, pageLength);
+		return OKCoinAdapters.adaptUserTrades(history);
 	}
 
 	/**
@@ -133,9 +139,16 @@ public class OKCoinTradeService extends OKCoinTradeServiceRaw implements
 	 */
 	@Override
 	public UserTrades getTradeHistory(TradeHistoryParams params)
-			throws ExchangeException, NotAvailableFromExchangeException,
-			NotYetImplementedForExchangeException, IOException {
-		throw new NotYetImplementedForExchangeException();
+			throws OKCoinException, IOException {
+		OKCoinTradeHistoryParams p = (OKCoinTradeHistoryParams) params;
+
+		String symbol = OKCoinAdapters.adaptSymbol(p.getCurrencyPair());
+		int status = 1; //  1 for filled orders
+		int currentPage = p.getPageNumber();
+		int pageLength = p.getPageLength();
+
+		OrderHistory history = getOrderHistory(symbol, status, currentPage, pageLength);
+		return OKCoinAdapters.adaptUserTrades(history);
 	}
 
 	/**
@@ -143,7 +156,31 @@ public class OKCoinTradeService extends OKCoinTradeServiceRaw implements
 	 */
 	@Override
 	public TradeHistoryParams createTradeHistoryParams() {
-		return null;
+		return new OKCoinTradeHistoryParams();
+	}
+
+	public static class OKCoinTradeHistoryParams extends
+			DefaultTradeHistoryParamPaging implements
+			TradeHistoryParamCurrencyPair, TradeHistoryParamPaging {
+
+		private CurrencyPair pair;
+
+		/**
+		 * {@inheritDoc}
+		 */
+		@Override
+		public void setCurrencyPair(CurrencyPair pair) {
+			this.pair = pair;
+		}
+
+		/**
+		 * {@inheritDoc}
+		 */
+		@Override
+		public CurrencyPair getCurrencyPair() {
+			return pair;
+		}
+
 	}
 
 }

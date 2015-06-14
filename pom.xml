@@ -6,7 +6,7 @@
 
 	<groupId>org.oxerr</groupId>
 	<artifactId>okcoin-client</artifactId>
-	<version>2.0.1</version>
+	<version>2.1.0</version>
 	<packaging>pom</packaging>
 
 	<name>OKCoin Client</name>
@@ -21,7 +21,6 @@
 		<license>
 			<name>The BSD 2-Clause License</name>
 			<url>http://opensource.org/licenses/bsd-license.php</url>
-			<distribution>manual</distribution>
 		</license>
 	</licenses>
 
@@ -49,13 +48,14 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-		<jackson.version>2.5.0</jackson.version>
+		<jackson.version>2.5.4</jackson.version>
 		<quickfixj.version>1.5.3-bd</quickfixj.version>
 		<mina.version>1.1.7</mina.version>
 	</properties>
 
 	<modules>
 		<module>okcoin-client-rest</module>
+		<module>okcoin-client-websocket</module>
 		<module>okcoin-client-fix</module>
 		<module>okcoin-client-xchange</module>
 		<module>okcoin-client-examples</module>
@@ -82,7 +82,7 @@
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-compiler-plugin</artifactId>
-					<version>3.2</version>
+					<version>3.3</version>
 				</plugin>
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
@@ -97,12 +97,12 @@
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-jar-plugin</artifactId>
-					<version>2.5</version>
+					<version>2.6</version>
 				</plugin>
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-javadoc-plugin</artifactId>
-					<version>2.10.1</version>
+					<version>2.10.3</version>
 				</plugin>
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
@@ -112,12 +112,12 @@
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-pmd-plugin</artifactId>
-					<version>3.3</version>
+					<version>3.4</version>
 				</plugin>
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-project-info-reports-plugin</artifactId>
-					<version>2.7</version>
+					<version>2.8</version>
 				</plugin>
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
@@ -149,12 +149,12 @@
 				<plugin>
 					<groupId>org.codehaus.mojo</groupId>
 					<artifactId>cobertura-maven-plugin</artifactId>
-					<version>2.6</version>
+					<version>2.7</version>
 				</plugin>
 				<plugin>
 					<groupId>org.codehaus.mojo</groupId>
 					<artifactId>findbugs-maven-plugin</artifactId>
-					<version>3.0.0</version>
+					<version>3.0.1</version>
 				</plugin>
 			</plugins>
 		</pluginManagement>
@@ -191,15 +191,30 @@
 
 	<dependencyManagement>
 		<dependencies>
+
+			<!-- JSR 353: Java API for JSON Processing -->
+			<dependency>
+				<groupId>javax.json</groupId>
+				<artifactId>javax.json-api</artifactId>
+				<version>1.0</version>
+			</dependency>
+
+			<!-- JSR 356: Java API for WebSocket -->
+			<dependency>
+				<groupId>javax.websocket</groupId>
+				<artifactId>javax.websocket-client-api</artifactId>
+				<version>1.1</version>
+			</dependency>
+
 			<dependency>
 				<groupId>org.apache.commons</groupId>
 				<artifactId>commons-lang3</artifactId>
-				<version>3.3.2</version>
+				<version>3.4</version>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.httpcomponents</groupId>
 				<artifactId>httpclient</artifactId>
-				<version>4.3.6</version>
+				<version>4.5</version>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.mina</groupId>
@@ -211,15 +226,30 @@
 				<artifactId>mina-filter-ssl</artifactId>
 				<version>${mina.version}</version>
 			</dependency>
+
+			<!-- JSR 353: Java API for JSON Processing - Reference Implementation -->
+			<dependency>
+				<groupId>org.glassfish</groupId>
+				<artifactId>javax.json</artifactId>
+				<version>1.0.4</version>
+			</dependency>
+
+			<!-- JSR 356: Java API for WebSocket - Reference Implementation -->
+			<dependency>
+				<groupId>org.glassfish.tyrus</groupId>
+				<artifactId>tyrus-container-grizzly-client</artifactId>
+				<version>1.10</version>
+			</dependency>
+
 			<dependency>
 				<groupId>org.slf4j</groupId>
 				<artifactId>slf4j-api</artifactId>
-				<version>1.7.10</version>
+				<version>1.7.12</version>
 			</dependency>
 			<dependency>
 				<groupId>net.sourceforge.nekohtml</groupId>
 				<artifactId>nekohtml</artifactId>
-				<version>1.9.21</version>
+				<version>1.9.22</version>
 			</dependency>
 			<dependency>
 				<groupId>com.fasterxml.jackson.core</groupId>
@@ -239,7 +269,7 @@
 			<dependency>
 				<groupId>ch.qos.logback</groupId>
 				<artifactId>logback-classic</artifactId>
-				<version>1.1.2</version>
+				<version>1.1.3</version>
 			</dependency>
 			<dependency>
 				<groupId>commons-io</groupId>

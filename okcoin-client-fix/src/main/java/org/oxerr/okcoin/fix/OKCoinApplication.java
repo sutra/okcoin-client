@@ -1,11 +1,10 @@
 package org.oxerr.okcoin.fix;
 
 import java.math.BigDecimal;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 import org.oxerr.okcoin.fix.fix44.AccountInfoRequest;
 import org.oxerr.okcoin.fix.fix44.AccountInfoResponse;
+import org.oxerr.okcoin.fix.fix44.OrdersInfoAfterSomeIDRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -24,6 +23,7 @@ import quickfix.UnsupportedMessageType;
 import quickfix.field.MsgType;
 import quickfix.field.Password;
 import quickfix.field.Username;
+import quickfix.fix44.ExecutionReport;
 import quickfix.fix44.MarketDataRequest;
 import quickfix.fix44.MessageCracker;
 import quickfix.fix44.NewOrderSingle;
@@ -38,25 +38,26 @@ public class OKCoinApplication extends MessageCracker implements Application {
 
 	private final Logger log = LoggerFactory.getLogger(OKCoinApplication.class);
 	private final DataDictionary dataDictionary;
-	private final ExecutorService executorService;
 	private final MarketDataRequestCreator marketDataRequestCreator;
 	private final TradeRequestCreator tradeRequestCreator;
-	private final String partner;
+	private final String apiKey;
 	private final String secretKey;
 
-	public OKCoinApplication(String partner, String secretKey) {
-		this.partner = partner;
+	public OKCoinApplication(String apiKey, String secretKey) {
+		this.apiKey = apiKey;
 		this.secretKey = secretKey;
 		this.marketDataRequestCreator = new MarketDataRequestCreator();
-		this.tradeRequestCreator = new TradeRequestCreator(partner, secretKey);
-		executorService = Executors.newFixedThreadPool(Runtime.getRuntime()
-				.availableProcessors() * 2 + 1);
+		this.tradeRequestCreator = new TradeRequestCreator(apiKey, secretKey);
 
 		try {
 			dataDictionary = new DataDictionary("org/oxerr/okcoin/fix/FIX44.xml");
 		} catch (ConfigError e) {
 			throw new RuntimeException(e);
 		}
+	}
+
+	public DataDictionary getDataDictionary() {
+		return dataDictionary;
 	}
 
 	/**
@@ -93,7 +94,7 @@ public class OKCoinApplication extends MessageCracker implements Application {
 		}
 
 		if (MsgType.LOGON.equals(msgType) || MsgType.HEARTBEAT.equals(msgType)) {
-			message.setField(new Username(partner));
+			message.setField(new Username(apiKey));
 			message.setField(new Password(secretKey));
 		}
 
@@ -151,21 +152,18 @@ public class OKCoinApplication extends MessageCracker implements Application {
 		}
 	}
 
+	@Override
+	public void onMessage(ExecutionReport message, SessionID sessionId)
+			throws FieldNotFound, UnsupportedMessageType, IncorrectTagValue {
+	}
+
 	public void onMessage(AccountInfoResponse message, SessionID sessionId)
 			throws FieldNotFound, UnsupportedMessageType, IncorrectTagValue {
 	}
 
 	public void sendMessage(final Message message, final SessionID sessionId) {
 		log.trace("sending message: {}", message);
-
-		executorService.execute(new Runnable() {
-
-			@Override
-			public void run() {
-				Session.lookupSession(sessionId).send(message);
-			}
-
-		});
+		Session.lookupSession(sessionId).send(message);
 	}
 
 	public void requestMarketData(
@@ -284,6 +282,27 @@ public class OKCoinApplication extends MessageCracker implements Application {
 	public void requestAccountInfo(String accReqId, SessionID sessionId) {
 		AccountInfoRequest message = tradeRequestCreator.createAccountInfoRequest(
 				accReqId);
+		sendMessage(message, sessionId);
+	}
+
+	/**
+	 * Request history order information which order ID is after the specified
+	 * {@code orderId}.
+	 *
+	 * @param tradeRequestId Client-assigned unique ID of this request.
+	 * @param symbol Symbol. BTC/CNY or LTC/CNY.
+	 * @param orderId Order ID. Return 10 records after this id.
+	 * @param ordStatus Order status. 0 = Not filled 1 = Fully filled.
+	 * @param sessionId the FIX session ID.
+	 */
+	public void requestOrdersInfoAfterSomeID(
+			String tradeRequestId,
+			String symbol,
+			long orderId,
+			char ordStatus,
+			SessionID sessionId) {
+		OrdersInfoAfterSomeIDRequest message = tradeRequestCreator.createOrdersInfoAfterSomeIDRequest(
+				tradeRequestId, symbol, orderId, ordStatus);
 		sendMessage(message, sessionId);
 	}
 

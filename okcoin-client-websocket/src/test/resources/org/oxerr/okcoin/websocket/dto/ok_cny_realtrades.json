@@ -1,0 +1,21 @@
+[
+	{
+		"channel":"ok_cny_realtrades",
+		"data":{
+			"averagePrice":"0",
+			"completedTradeAmount":"0",
+			"createdDate":1422258604000,
+			"id":268013884,
+			"orderId":268013884,
+			"sigTradeAmount":"0",
+			"sigTradePrice":"0",
+			"status":-1,
+			"symbol":"btc_cny",
+			"tradeAmount":"1.105",
+			"tradePrice":"0",
+			"tradeType":"buy",
+			"tradeUnitPrice":"1853.74",
+			"unTrade":"0"
+		}
+	}
+]

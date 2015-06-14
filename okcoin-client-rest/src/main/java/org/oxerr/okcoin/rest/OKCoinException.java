@@ -12,13 +12,13 @@ public class OKCoinException extends ExchangeException {
 
 	private final Integer errorCode;
 
+	public OKCoinException() {
+		this((Integer) null, (String) null);
+	}
+
 	public OKCoinException(@JsonProperty("error_code") Integer errorCode) {
 		this(errorCode,
 			errorCode != null ? Messages.getString(String.valueOf(errorCode)) : null);
-	}
-
-	public OKCoinException() {
-		this(null, null);
 	}
 
 	/**
@@ -30,6 +30,15 @@ public class OKCoinException extends ExchangeException {
 	public OKCoinException(Integer errorCode, String message) {
 		super(message);
 		this.errorCode = errorCode;
+	}
+
+	public OKCoinException(String message) {
+		this((Integer) null, message);
+	}
+
+	public OKCoinException(String message, Throwable cause) {
+		super(message, cause);
+		this.errorCode = null;
 	}
 
 	/**

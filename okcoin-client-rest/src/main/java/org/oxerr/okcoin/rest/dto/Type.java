@@ -18,10 +18,14 @@ public enum Type {
 			.get();
 	}
 
-	private String code;
+	private final String code;
 
 	Type(String code) {
 		this.code = code;
+	}
+
+	public String getCode() {
+		return code;
 	}
 
 	@Override

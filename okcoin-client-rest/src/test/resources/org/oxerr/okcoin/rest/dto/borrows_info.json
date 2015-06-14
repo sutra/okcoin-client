@@ -1,0 +1,13 @@
+{
+	"borrow_btc": 0,
+	"borrow_ltc": 11.06,
+	"borrow_cny": 0,
+	"can_borrow": 0.03,
+	"interest_btc": 0,
+	"interest_ltc": 0.0011,
+	"interest_cny": 0,
+	"result": true,
+	"today_interest_btc": 0,
+	"today_interest_ltc": 0.0011,
+	"today_interest_cny": 0
+}

@@ -5,6 +5,7 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Map;
 import java.util.TreeMap;
 
 import javax.ws.rs.FormParam;
@@ -42,9 +43,13 @@ public class OKCoinDigest implements ParamsDigest {
 	 */
 	@Override
 	public String digestParams(RestInvocation restInvocation) {
+		return digestParams(restInvocation.getParamsMap().get(FormParam.class).asHttpHeaders());
+	}
+
+	public String digestParams(Map<String, String> parameters) {
 		Params params = Params.of();
 
-		new TreeMap<>(restInvocation.getParamsMap().get(FormParam.class).asHttpHeaders())
+		new TreeMap<>(parameters)
 				.entrySet()
 				.stream()
 				.filter(e -> !e.getKey().equals("sign"))

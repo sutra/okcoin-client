@@ -11,16 +11,23 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
+import org.oxerr.okcoin.rest.dto.AccountRecords;
 import org.oxerr.okcoin.rest.dto.BatchTradeResult;
+import org.oxerr.okcoin.rest.dto.BorrowOrderInfo;
+import org.oxerr.okcoin.rest.dto.BorrowResult;
+import org.oxerr.okcoin.rest.dto.BorrowsInfo;
 import org.oxerr.okcoin.rest.dto.CancelOrderResult;
 import org.oxerr.okcoin.rest.dto.CandlestickChart;
 import org.oxerr.okcoin.rest.dto.Depth;
+import org.oxerr.okcoin.rest.dto.LendDepth;
+import org.oxerr.okcoin.rest.dto.OrderFee;
 import org.oxerr.okcoin.rest.dto.OrderHistory;
 import org.oxerr.okcoin.rest.dto.OrderResult;
 import org.oxerr.okcoin.rest.dto.TickerResponse;
 import org.oxerr.okcoin.rest.dto.Trade;
 import org.oxerr.okcoin.rest.dto.TradeResult;
 import org.oxerr.okcoin.rest.dto.Type;
+import org.oxerr.okcoin.rest.dto.UnrepaymentsInfo;
 import org.oxerr.okcoin.rest.dto.UserInfo;
 import org.oxerr.okcoin.rest.dto.Withdrawal;
 
@@ -36,7 +43,7 @@ public interface OKCoin {
 	/**
 	 * Get price ticker.
 	 *
-	 * @param symbol the symbol.
+	 * @param symbol the symbol: btc_cny, ltc_cny.
 	 * @return price ticker.
 	 * @throws IOException indicates I/O exception.
 	 */
@@ -48,8 +55,8 @@ public interface OKCoin {
 	/**
 	 * Get market depth.
 	 *
-	 * @param symbol the symbol.
-	 * @param size must be between 5 - 200
+	 * @param symbol the symbol: btc_cny, ltc_cny.
+	 * @param size must be between 1 - 200
 	 * @param merge 1 (merge depth)
 	 * @return market depth.
 	 * @throws IOException indicates I/O exception.
@@ -65,9 +72,8 @@ public interface OKCoin {
 	/**
 	 * Get trade history.
 	 *
-	 * @param symbol the symbol.
-	 * @param since if 'since' parameter is not supplied, the most recent 60
-	 * transactions are returned.
+	 * @param symbol the symbol: btc_cny, ltc_cny.
+	 * @param since get 600 pieces of data starting from the given tid(optional).
 	 * @return the trade history.
 	 * @throws IOException indicates I/O exception.
 	 */
@@ -81,7 +87,7 @@ public interface OKCoin {
 	/**
 	 * Get BTC/LTC candlestick data.
 	 *
-	 * @param symbol the symbol.
+	 * @param symbol the symbol: btc_cny, ltc_cny.
 	 * @param type
 	 * <ul>
 	 * <li>1min : 1 minute candlestick data</li>
@@ -98,7 +104,7 @@ public interface OKCoin {
 	 * <li>6hour : 6 hours candlestick data</li>
 	 * <li>12hour : 12 hours candlestick data</li>
 	 * </ul>
-	 * @param size specify data size to be acquired
+	 * @param size specify data size to be acquired.
 	 * @param since timestamp(eg:1417536000000).
 	 * data after the timestamp will be returned
 	 * @return candlestick.
@@ -112,6 +118,19 @@ public interface OKCoin {
 		@QueryParam("size") Integer size,
 		@QueryParam("since") Long since)
 			throws IOException;
+
+	/**
+	 * Get top 10 lending entries.
+	 *
+	 * @param symbol the symbol, such as btc_cny, ltc_cny, cny.
+	 * @return the top 10 lending entries.
+	 * @throws IOException indicates I/O exception.
+	 */
+	@GET
+	@Path("lend_depth.do")
+	LendDepth getLendDepth(
+		@QueryParam("symbol") String symbol)
+			throws OKCoinException, IOException;
 
 	/**
 	 * Get user account info.
@@ -133,7 +152,7 @@ public interface OKCoin {
 	 * Place order.
 	 *
 	 * @param apiKey the API key of the user.
-	 * @param symbol the symbol.
+	 * @param symbol the symbol: btc_cny, ltc_cny.
 	 * @param type order type: limit order(buy/sell) market order(buy_market/sell_market).
 	 * @param price order price. For limit orders, the price must be
 	 * between 0~1,000,000. IMPORTANT: for market buy orders, the price is to
@@ -159,9 +178,10 @@ public interface OKCoin {
 			throws OKCoinException, IOException;
 
 	/**
+	 * Batch trade.
 	 *
 	 * @param apiKey the API key of the user.
-	 * @param symbol the symbol.
+	 * @param symbol the symbol: btc_cny, ltc_cny.
 	 * @param type optional, order type for limit orders (buy/sell).
 	 * @param ordersData JSON string Example: [{price:3,amount:5,type:
 	 * 'sell'},{price:3,amount:3,type:'buy'},{price:3,amount:3}] max
@@ -193,7 +213,7 @@ public interface OKCoin {
 	 * Cancel orders.
 	 *
 	 * @param apiKey the API key of the user.
-	 * @param symbol the symbol.
+	 * @param symbol the symbol: btc_cny, ltc_cny.
 	 * @param orderId order ID (multiple orders are separated by a comma ',',
 	 * Max of 3 orders are allowed per request)
 	 * @param sign signature of request parameters.
@@ -218,7 +238,7 @@ public interface OKCoin {
 	 * Get order info.
 	 *
 	 * @param apiKey the API key of the user.
-	 * @param symbol the symbol.
+	 * @param symbol the symbol: btc_cny, ltc_cny.
 	 * @param orderId if order_id is -1, then return all unfilled orders,
 	 * otherwise return the order specified
 	 * @param sign signature of request parameters.
@@ -239,7 +259,7 @@ public interface OKCoin {
 	 * Get order information in batch.
 	 *
 	 * @param apiKey the API key of the user.
-	 * @param symbol the symbol.
+	 * @param symbol the symbol: btc_cny, ltc_cny.
 	 * @param type query type: 0 for unfilled (open) orders, 1 for filled orders
 	 * @param orderId order ID (multiple orders are separated by ',',
 	 * 50 orders at most are allowed per request).
@@ -262,7 +282,7 @@ public interface OKCoin {
 	 * Returns the most recent 7 days orders.
 	 *
 	 * @param apiKey the API key of the user.
-	 * @param symbol the symbol.
+	 * @param symbol the symbol: btc_cny, ltc_cny.
 	 * @param status query status: 0 for unfilled orders, 1 for filled orders.
 	 * @param currentPage current page number.
 	 * @param pageLength number of orders returned per page, maximum 200.
@@ -334,6 +354,170 @@ public interface OKCoin {
 		@FormParam("api_key") String apiKey,
 		@FormParam("symbol") String symbol,
 		@FormParam("withdraw_id") long withdrawId,
+		@FormParam("sign") ParamsDigest sign)
+			throws OKCoinException, IOException;
+
+	/**
+	 * Query fee.
+	 *
+	 * @param apiKey the API key of the user.
+	 * @param symbol the symbol: btc_cny, ltc_cny.
+	 * @param orderId the order ID.
+	 * @param sign the signature of request parameters.
+	 * @return the order fee.
+	 * @throws OKCoinException indicates request failed.
+	 * @throws IOException indicates I/O exception.
+	 */
+	@POST
+	@Path("order_fee.do")
+	OrderFee getOrderFee(
+		@FormParam("api_key") String apiKey,
+		@FormParam("symbol") String symbol,
+		@FormParam("order_id") long orderId,
+		@FormParam("sign") ParamsDigest sign)
+			throws OKCoinException, IOException;
+
+	/**
+	 * Get user borrow information.
+	 *
+	 * @param apiKey the API key of the user.
+	 * @param symbol the symbol, such as btc_cny, ltc_cny, cny.
+	 * @param sign signature of request parameters.
+	 * @return the borrow information of the user.
+	 * @throws OKCoinException indicates request failed.
+	 * @throws IOException indicates I/O exception.
+	 */
+	@POST
+	@Path("borrows_info.do")
+	BorrowsInfo getBorrowsInfo(
+		@FormParam("api_key") String apiKey,
+		@FormParam("symbol") String symbol,
+		@FormParam("sign") ParamsDigest sign)
+			throws OKCoinException, IOException;
+
+	/**
+	 * Request borrow.
+	 *
+	 * @param apiKey the API key of the user.
+	 * @param symbol the symbol, such as btc_cny, ltc_cny, cny.
+	 * @param days days of borrow: three, seven, fifteen, thirty, sixty, ninety.
+	 * @param amount borrow amount.
+	 * @param rate borrow rate [0.0001, 0.01].
+	 * @param sign signature of request parameters.
+	 * @return the borrow.
+	 * @throws OKCoinException indicates request failed.
+	 * @throws IOException indicates I/O exception.
+	 */
+	@POST
+	@Path("borrow_money.do")
+	BorrowResult borrowMoney(
+		@FormParam("api_key") String apiKey,
+		@FormParam("symbol") String symbol,
+		@FormParam("days") String days,
+		@FormParam("amount") BigDecimal amount,
+		@FormParam("rate") BigDecimal rate,
+		@FormParam("sign") ParamsDigest sign)
+			throws OKCoinException, IOException;
+
+	/**
+	 * Cancel borrow order.
+	 *
+	 * @param apiKey the API key of the user.
+	 * @param symbol the symbol, such as btc_cny, ltc_cny, cny.
+	 * @param borrowId the borrow order ID.
+	 * @param sign signature of request parameters.
+	 * @return the cancelled borrow order.
+	 * @throws OKCoinException indicates request failed.
+	 * @throws IOException indicates I/O exception.
+	 */
+	@POST
+	@Path("cancel_borrow.do")
+	BorrowResult cancelBorrow(
+		@FormParam("api_key") String apiKey,
+		@FormParam("symbol") String symbol,
+		@FormParam("borrow_id") long borrowId,
+		@FormParam("sign") ParamsDigest sign)
+			throws OKCoinException, IOException;
+
+	/**
+	 * Get borrowing order info.
+	 *
+	 * @param apiKey the API key of the user.
+	 * @param borrowId the borrow order ID.
+	 * @param sign signature of request parameters.
+	 * @return the borrowing order info.
+	 * @throws OKCoinException indicates request failed.
+	 * @throws IOException indicates I/O exception.
+	 */
+	@POST
+	@Path("borrow_order_info.do")
+	BorrowOrderInfo getBorrowOrderInfo(
+		@FormParam("api_key") String apiKey,
+		@FormParam("borrow_id") long borrowId,
+		@FormParam("sign") ParamsDigest sign)
+			throws OKCoinException, IOException;
+
+	/**
+	 * Pay off debt.
+	 *
+	 * @param apiKey the API key of the user.
+	 * @param borrowId the borrow order ID.
+	 * @param sign signature of request parameters.
+	 * @return the borrowing order info.
+	 * @throws OKCoinException indicates request failed.
+	 * @throws IOException indicates I/O exception.
+	 */
+	@POST
+	@Path("repayment.do")
+	BorrowResult repay(
+		@FormParam("api_key") String apiKey,
+		@FormParam("borrow_id") long borrowId,
+		@FormParam("sign") ParamsDigest sign)
+			throws OKCoinException, IOException;
+
+	/**
+	 * Get debt list.
+	 *
+	 * @param apiKey the API key of the user.
+	 * @param symbol the symbol, such as btc_cny, ltc_cny, cny.
+	 * @param currentPage the current page number.
+	 * @param pageLength data entries number per page, maximum 50.
+	 * @param sign signature of request parameters
+	 * @return the debt list.
+	 * @throws OKCoinException indicates request failed.
+	 * @throws IOException indicates I/O exception.
+	 */
+	@POST
+	@Path("unrepayments_info.do")
+	UnrepaymentsInfo getUnrepaymentsInfo(
+		@FormParam("api_key") String apiKey,
+		@FormParam("symbol") String symbol,
+		@FormParam("current_page") int currentPage,
+		@FormParam("page_length") int pageLength,
+		@FormParam("sign") ParamsDigest sign)
+			throws OKCoinException, IOException;
+
+	/**
+	 * Get user deposits or withdraw Records.
+	 *
+	 * @param apiKey the API key of the user.
+	 * @param symbol the symbol: btc_cny, ltc_cny, cny
+	 * @param type 0: deposits, 1: withdraw.
+	 * @param currentPage the current page number. 1 based.
+	 * @param pageLength the data entries number per page, maximum 50.
+	 * @param sign the signature of request parameters.
+	 * @return user deposits or withdraw records.
+	 * @throws OKCoinException indicates request failed.
+	 * @throws IOException indicates I/O exception.
+	 */
+	@POST
+	@Path("account_records.do")
+	AccountRecords getAccountRecords(
+		@FormParam("api_key") String apiKey,
+		@FormParam("symbol") String symbol,
+		@FormParam("type") int type,
+		@FormParam("current_page") int currentPage,
+		@FormParam("page_length") int pageLength,
 		@FormParam("sign") ParamsDigest sign)
 			throws OKCoinException, IOException;
 

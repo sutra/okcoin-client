@@ -1,2 +1,7 @@
 {
+	"currency_pairs": [
+		"BTC/CNY",
+		"LTC/CNY"
+	],
+	"max_private_poll_rate_per_second": 40
 }

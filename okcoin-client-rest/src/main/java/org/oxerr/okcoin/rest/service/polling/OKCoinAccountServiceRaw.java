@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.math.BigDecimal;
 
 import org.oxerr.okcoin.rest.OKCoinException;
+import org.oxerr.okcoin.rest.dto.AccountRecords;
 import org.oxerr.okcoin.rest.dto.UserInfo;
 import org.oxerr.okcoin.rest.dto.Withdrawal;
 
@@ -36,7 +37,25 @@ public class OKCoinAccountServiceRaw extends OKCoinBaseTradePollingService {
 
 	public Withdrawal cancelWithdraw(String symbol, long withdrawId)
 			throws OKCoinException, IOException {
-		return okCoin.cancelWithdraw(symbol, symbol, withdrawId, sign);
+		return okCoin.cancelWithdraw(apiKey, symbol, withdrawId, sign);
+	}
+
+	/**
+	 * Returns the user deposits or withdraw records.
+	 *
+	 * @param symbol the symbol: btc_cny, ltc_cny, cny.
+	 * @param type 0: deposits, 1: withdraw.
+	 * @param currentPage the current page number, 1 based.
+	 * @param pageLength the data entries number per page, maximum 50.
+	 * @return the user deposits or withdraw records.
+	 * @throws OKCoinException indicates request failed.
+	 * @throws IOException indicates I/O exception.
+	 */
+	public AccountRecords getAccountRecords(String symbol, int type,
+			int currentPage, int pageLength) throws OKCoinException,
+			IOException {
+		return okCoin.getAccountRecords(apiKey, symbol, type, currentPage,
+				pageLength, sign);
 	}
 
 }

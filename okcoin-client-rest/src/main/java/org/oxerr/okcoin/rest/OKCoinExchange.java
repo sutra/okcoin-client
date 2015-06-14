@@ -25,6 +25,15 @@ public class OKCoinExchange extends BaseExchange {
 	public static final String SYMBOLS_PARAMETER = "symbols";
 
 	/**
+	 * Max count of retry in logging into via web form.
+	 */
+	public static final String LOGIN_MAX_RETRY_TIMES_PARAMETER = "login.max.retry.times";
+
+	public static final String SOCKET_TIMEOUT_PARAMETER = "socketTimeout";
+	public static final String CONNECT_TIMEOUT_PARAMETER = "connectTimeout";
+	public static final String CONNECTION_REQUEST_TIMEOUT_PARAMETER = "connectionRequestTimeout";
+
+	/**
 	 * The parameter key of the trade password.
 	 */
 	public static final String TRADE_PASSWORD_PARAMETER = "trade_pwd";
@@ -37,8 +46,16 @@ public class OKCoinExchange extends BaseExchange {
 	public void applySpecification(ExchangeSpecification exchangeSpecification) {
 		super.applySpecification(exchangeSpecification);
 		this.pollingMarketDataService = new OKCoinMarketDataService(this);
-		if (exchangeSpecification.getApiKey() != null) {
+
+		if (exchangeSpecification.getApiKey() != null
+			&& exchangeSpecification.getSecretKey() != null) {
 			this.pollingAccountService = new OKCoinAccountService(this);
+		}
+
+		if ((exchangeSpecification.getApiKey() != null
+				&& exchangeSpecification.getSecretKey() != null)
+			|| (exchangeSpecification.getUserName() != null
+				&& exchangeSpecification.getPassword() != null)) {
 			this.pollingTradeService = new OKCoinTradeService(this);
 		}
 	}

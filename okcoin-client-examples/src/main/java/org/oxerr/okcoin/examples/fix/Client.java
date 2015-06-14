@@ -6,15 +6,16 @@ import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
-import org.oxerr.okcoin.fix.OKCoinApplication;
 import org.oxerr.okcoin.fix.fix44.OKCoinMessageFactory;
 import org.oxerr.okcoin.xchange.service.fix.OKCoinXChangeApplication;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import quickfix.ConfigError;
+import quickfix.FieldNotFound;
 import quickfix.FileLogFactory;
 import quickfix.FileStoreFactory;
+import quickfix.IncorrectTagValue;
 import quickfix.Initiator;
 import quickfix.LogFactory;
 import quickfix.MessageFactory;
@@ -22,9 +23,10 @@ import quickfix.MessageStoreFactory;
 import quickfix.SessionID;
 import quickfix.SessionSettings;
 import quickfix.SocketInitiator;
-import quickfix.field.MDUpdateType;
-import quickfix.field.SubscriptionRequestType;
+import quickfix.UnsupportedMessageType;
+import quickfix.fix44.ExecutionReport;
 
+import com.xeiam.xchange.currency.CurrencyPair;
 import com.xeiam.xchange.dto.account.AccountInfo;
 import com.xeiam.xchange.dto.marketdata.OrderBook;
 import com.xeiam.xchange.dto.marketdata.Trade;
@@ -37,7 +39,7 @@ public class Client {
 
 	private static final Logger log = LoggerFactory.getLogger(Client.class);
 
-	private final OKCoinApplication app;
+	private final OKCoinXChangeApplication app;
 	private final SessionID sessionId;
 	private final Initiator initiator;
 
@@ -95,6 +97,13 @@ public class Client {
 				log.info("AccountInfo: {}", accountInfo);
 			}
 
+			@Override
+			public void onMessage(ExecutionReport message, SessionID sessionId)
+					throws FieldNotFound, UnsupportedMessageType,
+					IncorrectTagValue {
+				log.info(message.toXML(getDataDictionary()));
+			}
+
 		};
 
 		SessionSettings settings;
@@ -120,11 +129,7 @@ public class Client {
 	public void demo() {
 		String mdReqId = UUID.randomUUID().toString();
 		String symbol = "BTC/CNY";
-		char subscriptionRequestType = SubscriptionRequestType.SNAPSHOT;
-		int marketDepth = 0;
-		int mdUpdateType = MDUpdateType.FULL_REFRESH;
-		app.requestOrderBook(mdReqId, symbol, subscriptionRequestType,
-				marketDepth, mdUpdateType, sessionId);
+		app.subscribeOrderBook(CurrencyPair.BTC_CNY, sessionId);
 
 		mdReqId = UUID.randomUUID().toString();
 		app.requestLiveTrades(mdReqId, symbol, sessionId);
@@ -134,12 +139,17 @@ public class Client {
 
 		String accReqId = UUID.randomUUID().toString();
 		app.requestAccountInfo(accReqId, sessionId);
+
+		String tradeRequestId = UUID.randomUUID().toString();
+		long orderId = 1;
+		char ordStatus = '0';
+		app.requestOrdersInfoAfterSomeID(tradeRequestId, symbol, orderId, ordStatus, sessionId);
 	}
 
 	public static void main(String[] args) throws IOException, ConfigError,
 			InterruptedException {
-		String partner = args[0], secretKey = args[1];
-		Client client = new Client(partner, secretKey);
+		String apiKey = args[0], secretKey = args[1];
+		Client client = new Client(apiKey, secretKey);
 		client.demo();
 
 		log.info("Waiting a moment and exiting.");

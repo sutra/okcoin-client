@@ -24,8 +24,20 @@ public class Order extends BaseObject {
 
 	private final Type type;
 
+	/**
+	 * The limit price or the amount of quoting currency amount
+	 * for buy_market order.
+	 *
+	 * Note, price of buy_market is the quoting currency amount,
+	 * price of sell_market is 0.
+	 */
 	private final BigDecimal price;
 
+	/**
+	 * The amount of the base symbol.
+	 *
+	 * Note, amount of buy_market is 0.
+	 */
 	private final BigDecimal amount;
 
 	private final BigDecimal dealAmount;
