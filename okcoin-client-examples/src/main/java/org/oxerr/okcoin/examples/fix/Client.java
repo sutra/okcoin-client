@@ -43,9 +43,9 @@ public class Client {
 	private final SessionID sessionId;
 	private final Initiator initiator;
 
-	public Client(String partner, String secretKey) throws IOException,
+	public Client(String apiKey, String secretKey) throws IOException,
 			ConfigError, InterruptedException {
-		app = new OKCoinXChangeApplication(partner, secretKey) {
+		app = new OKCoinXChangeApplication(apiKey, secretKey) {
 
 			@Override
 			public void onOrderBook(OrderBook orderBook, SessionID sessionId) {
