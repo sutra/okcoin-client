@@ -34,15 +34,11 @@
 		</dependency>
 		<dependency>
 			<groupId>quickfixj</groupId>
-			<artifactId>quickfixj-msg-fix44</artifactId>
+			<artifactId>quickfixj-messages-fix44</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.mina</groupId>
 			<artifactId>mina-core</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.mina</groupId>
-			<artifactId>mina-filter-ssl</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>commons-io</groupId>
