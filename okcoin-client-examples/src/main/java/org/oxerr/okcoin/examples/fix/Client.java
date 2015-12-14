@@ -24,6 +24,7 @@ import quickfix.SessionID;
 import quickfix.SessionSettings;
 import quickfix.SocketInitiator;
 import quickfix.UnsupportedMessageType;
+import quickfix.field.MassStatusReqType;
 import quickfix.fix44.ExecutionReport;
 
 import com.xeiam.xchange.currency.CurrencyPair;
@@ -46,6 +47,14 @@ public class Client {
 	public Client(String apiKey, String secretKey) throws IOException,
 			ConfigError, InterruptedException {
 		app = new OKCoinXChangeApplication(apiKey, secretKey) {
+
+			@Override
+			public void onLogon(SessionID sessionId) {
+				super.onLogon(sessionId);
+
+				String massStatusReqId = UUID.randomUUID().toString();
+				this.requestOrderMassStatus(massStatusReqId, MassStatusReqType.STATUS_FOR_ALL_ORDERS, sessionId);
+			}
 
 			@Override
 			public void onOrderBook(OrderBook orderBook, SessionID sessionId) {

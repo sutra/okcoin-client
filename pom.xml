@@ -49,8 +49,8 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<jackson.version>2.5.4</jackson.version>
-		<quickfixj.version>1.6.1-bd</quickfixj.version>
-		<mina.version>2.0.9</mina.version>
+		<quickfixj.version>1.5.3-bd</quickfixj.version>
+		<mina.version>1.1.7</mina.version>
 	</properties>
 
 	<modules>
@@ -229,6 +229,11 @@
 				<artifactId>mina-core</artifactId>
 				<version>${mina.version}</version>
 			</dependency>
+			<dependency>
+				<groupId>org.apache.mina</groupId>
+				<artifactId>mina-filter-ssl</artifactId>
+				<version>${mina.version}</version>
+			</dependency>
 
 			<!-- JSR 353: Java API for JSON Processing - Reference Implementation -->
 			<dependency>
@@ -291,7 +296,7 @@
 			</dependency>
 			<dependency>
 				<groupId>quickfixj</groupId>
-				<artifactId>quickfixj-messages-fix44</artifactId>
+				<artifactId>quickfixj-msg-fix44</artifactId>
 				<version>${quickfixj.version}</version>
 			</dependency>
 		</dependencies>
