@@ -8,6 +8,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -122,9 +123,9 @@ public final class OKCoinAdapters {
 			balances.put(currency, balance);
 		}
 
-		List<Wallet> wallets = new ArrayList<>(balances.size());
+		Map<String, Wallet> wallets = new HashMap<>(balances.size());
 		for (Map.Entry<String, BigDecimal> balance : balances.entrySet()) {
-			wallets.add(new Wallet(balance.getKey(), balance.getValue()));
+			wallets.put(balance.getKey(), new Wallet(balance.getKey(), balance.getValue()));
 		}
 
 		return new AccountInfo(null, wallets);
