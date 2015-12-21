@@ -219,7 +219,7 @@ public class OKCoinTradeServiceRaw extends OKCoinBaseTradePollingService {
 	}
 
 	private int toSymbol(CurrencyPair currencyPair) {
-		return currencyPair.baseSymbol.equals("BTC") ? 0 : 1;
+		return currencyPair.base.getCurrencyCode().equals("BTC") ? 0 : 1;
 	}
 
 	public OrderFee getOrderFee(String symbol, long orderId)

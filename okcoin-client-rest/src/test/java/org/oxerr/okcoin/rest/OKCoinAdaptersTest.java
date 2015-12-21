@@ -6,6 +6,7 @@ import static org.junit.Assert.assertNull;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.Arrays;
+import java.util.Map;
 
 import org.junit.Test;
 import org.oxerr.okcoin.rest.dto.Depth;
@@ -18,10 +19,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.xeiam.xchange.currency.Currency;
 import com.xeiam.xchange.currency.CurrencyPair;
 import com.xeiam.xchange.dto.Order;
 import com.xeiam.xchange.dto.Order.OrderType;
 import com.xeiam.xchange.dto.account.AccountInfo;
+import com.xeiam.xchange.dto.account.Balance;
 import com.xeiam.xchange.dto.marketdata.OrderBook;
 import com.xeiam.xchange.dto.marketdata.Ticker;
 import com.xeiam.xchange.dto.marketdata.Trades;
@@ -29,7 +32,6 @@ import com.xeiam.xchange.dto.marketdata.Trades.TradeSortType;
 import com.xeiam.xchange.dto.trade.OpenOrders;
 import com.xeiam.xchange.dto.trade.UserTrade;
 import com.xeiam.xchange.dto.trade.UserTrades;
-import com.xeiam.xchange.dto.trade.Wallet;
 
 public class OKCoinAdaptersTest {
 
@@ -185,12 +187,20 @@ public class OKCoinAdaptersTest {
 		UserInfo userInfo = mapper.readValue(
 				getClass().getResource("dto/userinfo.json"), UserInfo.class);
 		AccountInfo accountInfo = OKCoinAdapters.adaptAccountInfo(userInfo);
-		for (Wallet wallet : accountInfo.getWallets()) {
-			log.debug("{}: {}", wallet.getCurrency(), wallet.getBalance());
+		for (Map.Entry<Currency, Balance> entry : accountInfo.getWallet().getBalances().entrySet()) {
+			log.debug("{}: {}", entry.getKey(), entry.getValue());
 		}
-		assertEquals(new BigDecimal("2000"), accountInfo.getBalance("CNY"));
-		assertEquals(new BigDecimal("20"), accountInfo.getBalance("BTC"));
-		assertEquals(new BigDecimal("0"), accountInfo.getBalance("LTC"));
+		assertEquals(new BigDecimal("0"), accountInfo.getWallet().getBalance(Currency.CNY).getBorrowed());
+		assertEquals(new BigDecimal("1000"), accountInfo.getWallet().getBalance(Currency.CNY).getAvailable());
+		assertEquals(new BigDecimal("1000"), accountInfo.getWallet().getBalance(Currency.CNY).getFrozen());
+
+		assertEquals(new BigDecimal("0"), accountInfo.getWallet().getBalance(Currency.BTC).getBorrowed());
+		assertEquals(new BigDecimal("10"), accountInfo.getWallet().getBalance(Currency.BTC).getAvailable());
+		assertEquals(new BigDecimal("10"), accountInfo.getWallet().getBalance(Currency.BTC).getFrozen());
+
+		assertEquals(new BigDecimal("0"), accountInfo.getWallet().getBalance(Currency.LTC).getBorrowed());
+		assertEquals(new BigDecimal("0"), accountInfo.getWallet().getBalance(Currency.LTC).getAvailable());
+		assertEquals(new BigDecimal("0"), accountInfo.getWallet().getBalance(Currency.LTC).getFrozen());
 	}
 
 	@Test

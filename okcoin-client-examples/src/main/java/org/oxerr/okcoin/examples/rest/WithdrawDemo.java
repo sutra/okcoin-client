@@ -12,6 +12,7 @@ import org.oxerr.okcoin.rest.service.polling.OKCoinAccountServiceRaw;
 import com.xeiam.xchange.Exchange;
 import com.xeiam.xchange.ExchangeFactory;
 import com.xeiam.xchange.ExchangeSpecification;
+import com.xeiam.xchange.currency.Currency;
 import com.xeiam.xchange.service.polling.account.PollingAccountService;
 
 /**
@@ -33,7 +34,7 @@ public class WithdrawDemo {
 		String symbol = "BTC";
 
 		// request to withdraw
-		String withdrawId = accountService.withdrawFunds(symbol, new BigDecimal("1"), "yourAddress");
+		String withdrawId = accountService.withdrawFunds(Currency.getInstance(symbol), new BigDecimal("1"), "yourAddress");
 		// cancel the above withdrawal
 		rawAccountService.cancelWithdraw(symbol, Long.valueOf(withdrawId));
 

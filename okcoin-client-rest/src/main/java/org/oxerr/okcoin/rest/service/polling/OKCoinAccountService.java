@@ -10,6 +10,7 @@ import org.oxerr.okcoin.rest.OKCoinException;
 import org.oxerr.okcoin.rest.dto.Withdrawal;
 
 import com.xeiam.xchange.Exchange;
+import com.xeiam.xchange.currency.Currency;
 import com.xeiam.xchange.dto.account.AccountInfo;
 import com.xeiam.xchange.exceptions.ExchangeException;
 import com.xeiam.xchange.exceptions.NotAvailableFromExchangeException;
@@ -42,11 +43,11 @@ public class OKCoinAccountService extends OKCoinAccountServiceRaw implements
 	 * {@inheritDoc}
 	 */
 	@Override
-	public String withdrawFunds(String currency, BigDecimal amount,
+	public String withdrawFunds(Currency currency, BigDecimal amount,
 			String address) throws OKCoinException, IOException {
 		BigDecimal chargeFee = currency.equals("BTC") ? new BigDecimal("0.0001") : new BigDecimal("0.001");
 		String tradePassword = (String) exchange.getExchangeSpecification().getParameter(TRADE_PASSWORD_PARAMETER);
-		Withdrawal withdrawal = withdraw(currency, chargeFee, tradePassword, address, amount);
+		Withdrawal withdrawal = withdraw(currency.getCurrencyCode(), chargeFee, tradePassword, address, amount);
 		return String.valueOf(withdrawal.getWithdrawId());
 	}
 
@@ -54,7 +55,7 @@ public class OKCoinAccountService extends OKCoinAccountServiceRaw implements
 	 * {@inheritDoc}
 	 */
 	@Override
-	public String requestDepositAddress(String currency, String... args)
+	public String requestDepositAddress(Currency currency, String... args)
 			throws ExchangeException, NotAvailableFromExchangeException,
 			NotYetImplementedForExchangeException, IOException {
 		throw new NotAvailableFromExchangeException();

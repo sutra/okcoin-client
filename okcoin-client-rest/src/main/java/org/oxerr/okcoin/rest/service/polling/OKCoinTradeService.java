@@ -112,10 +112,7 @@ public class OKCoinTradeService extends OKCoinTradeServiceRaw implements
 		return ret;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
+	@Deprecated
 	public UserTrades getTradeHistory(Object... arguments)
 			throws OKCoinException, IOException {
 		int argc = arguments.length;
