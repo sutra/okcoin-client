@@ -7,7 +7,7 @@
 	<parent>
 		<groupId>org.oxerr</groupId>
 		<artifactId>okcoin-client</artifactId>
-		<version>2.2.0-SNAPSHOT</version>
+		<version>3.0.0-SNAPSHOT</version>
 	</parent>
 
 	<artifactId>okcoin-client-websocket</artifactId>
