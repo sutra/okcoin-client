@@ -1,6 +1,7 @@
 package org.oxerr.okcoin.rest.dto;
 
 import java.math.BigDecimal;
+import java.util.Collections;
 import java.util.Map;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -21,11 +22,15 @@ public class Funds extends BaseObject {
 			@JsonProperty("free") final Map<String, BigDecimal> free,
 			@JsonProperty("freezed") final Map<String, BigDecimal> frozen,
 			@JsonProperty("union_fund") final Map<String, BigDecimal> unionFund) {
-		this.asset = asset;
-		this.borrow = borrow;
-		this.free = free;
-		this.frozen = frozen;
-		this.unionFund = unionFund;
+		this.asset     = nonNull(asset);
+		this.borrow    = nonNull(borrow);
+		this.free      = nonNull(free);
+		this.frozen    = nonNull(frozen);
+		this.unionFund = nonNull(unionFund);
+	}
+
+	private static Map<String, BigDecimal> nonNull(final Map<String, BigDecimal> map) {
+		return map == null ? Collections.emptyMap() : map;
 	}
 
 	/**

@@ -38,7 +38,7 @@ public final class OKCoinFIXAdapters {
 		for (int i = 0; i < walletCount; i++) {
 			final String currency = currencies[i];
 			final BigDecimal available = new BigDecimal(balances[i]);
-			final Balance balance = new Balance(Currency.getInstance(currency), null, available);
+			final Balance balance = new Balance(Currency.getInstance(currency), available, available);
 			balanceList.add(balance);
 		}
 
