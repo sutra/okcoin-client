@@ -19,6 +19,7 @@ import org.oxerr.okcoin.rest.dto.OrderFee;
 import org.oxerr.okcoin.rest.dto.OrderHistory;
 import org.oxerr.okcoin.rest.dto.OrderResult;
 import org.oxerr.okcoin.rest.dto.Result;
+import org.oxerr.okcoin.rest.dto.Trade;
 import org.oxerr.okcoin.rest.dto.TradeResult;
 import org.oxerr.okcoin.rest.dto.Type;
 import org.oxerr.okcoin.rest.dto.UnrepaymentsInfo;
@@ -51,6 +52,10 @@ public class OKCoinTradeServiceRaw extends OKCoinBaseTradePollingService {
 
 		mapper = new ObjectMapper();
 		mapper.enable(SerializationFeature.WRITE_ENUMS_USING_TO_STRING);
+	}
+
+	public Trade[] getTradeHistory(String symbol, Long since) throws IOException {
+		return okCoin.getTradeHistory(apiKey, symbol, since, sign);
 	}
 
 	public TradeResult trade(String symbol, Type type, BigDecimal price,

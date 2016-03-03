@@ -178,6 +178,26 @@ public interface OKCoin {
 			throws OKCoinException, IOException;
 
 	/**
+	 * Get Trade History (Not for Personal).
+	 *
+	 * @param apiKey the API key of the user.
+	 * @param symbol the symbol: btc_cny, ltc_cny.
+	 * @param since get 600 pieces of data starting from the given tid (Required).
+	 * @param sign signature of request parameters.
+	 * @return the trade history.
+	 * @throws OKCoinException indicates request failed.
+	 * @throws IOException indicates I/O exception.
+	 */
+	@POST
+	@Path("trade_history.do")
+	Trade[] getTradeHistory(
+		@FormParam("api_key") String apiKey,
+		@FormParam("symbol") String symbol,
+		@FormParam("since") Long since,
+		@FormParam("sign") ParamsDigest sign
+	) throws OKCoinException, IOException;
+
+	/**
 	 * Batch trade.
 	 *
 	 * @param apiKey the API key of the user.

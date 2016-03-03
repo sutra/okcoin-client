@@ -42,9 +42,11 @@ public class OKCoinExchange extends BaseExchange {
 			CurrencyPair.BTC_CNY,
 			CurrencyPair.LTC_CNY);
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
-	public void applySpecification(ExchangeSpecification exchangeSpecification) {
-		super.applySpecification(exchangeSpecification);
+	protected void initServices() {
 		this.pollingMarketDataService = new OKCoinMarketDataService(this);
 
 		if (exchangeSpecification.getApiKey() != null

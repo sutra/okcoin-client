@@ -16,6 +16,7 @@ import org.slf4j.LoggerFactory;
 
 import com.xeiam.xchange.Exchange;
 import com.xeiam.xchange.currency.CurrencyPair;
+import com.xeiam.xchange.dto.Order;
 import com.xeiam.xchange.dto.Order.OrderType;
 import com.xeiam.xchange.dto.trade.LimitOrder;
 import com.xeiam.xchange.dto.trade.MarketOrder;
@@ -178,6 +179,16 @@ public class OKCoinTradeService extends OKCoinTradeServiceRaw implements
 			return pair;
 		}
 
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public Collection<Order> getOrder(String... orderIds)
+			throws ExchangeException, NotAvailableFromExchangeException,
+			NotYetImplementedForExchangeException, IOException {
+		throw new NotYetImplementedForExchangeException();
 	}
 
 }
