@@ -18,6 +18,10 @@ public class OKCoinMessageFactory extends MessageFactory {
 			return new AccountInfoResponse();
 		}
 
+		if (ExceptionResponseMessage.MSGTYPE.equals(msgType)) {
+			return new ExceptionResponseMessage();
+		}
+
 		return super.create(beginString, msgType);
 	}
 
