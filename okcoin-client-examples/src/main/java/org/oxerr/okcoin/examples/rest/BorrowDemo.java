@@ -2,17 +2,16 @@ package org.oxerr.okcoin.examples.rest;
 
 import java.io.IOException;
 
+import org.knowm.xchange.Exchange;
+import org.knowm.xchange.ExchangeFactory;
+import org.knowm.xchange.ExchangeSpecification;
+import org.knowm.xchange.service.polling.trade.PollingTradeService;
 import org.oxerr.okcoin.rest.OKCoinException;
 import org.oxerr.okcoin.rest.OKCoinExchange;
 import org.oxerr.okcoin.rest.dto.BorrowsInfo;
 import org.oxerr.okcoin.rest.service.polling.OKCoinTradeServiceRaw;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import com.xeiam.xchange.Exchange;
-import com.xeiam.xchange.ExchangeFactory;
-import com.xeiam.xchange.ExchangeSpecification;
-import com.xeiam.xchange.service.polling.trade.PollingTradeService;
 
 public class BorrowDemo {
 

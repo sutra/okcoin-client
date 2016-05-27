@@ -270,9 +270,9 @@
 				<version>${jackson.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>com.xeiam.xchange</groupId>
+				<groupId>org.knowm.xchange</groupId>
 				<artifactId>xchange-core</artifactId>
-				<version>4.0.0-SNAPSHOT</version>
+				<version>4.0.0</version>
 			</dependency>
 			<dependency>
 				<groupId>ch.qos.logback</groupId>

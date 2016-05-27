@@ -1,7 +1,8 @@
 package org.oxerr.okcoin.rest;
 
+import org.knowm.xchange.exceptions.ExchangeException;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.xeiam.xchange.exceptions.ExchangeException;
 
 /**
  * Exception to represent the exception from server side.

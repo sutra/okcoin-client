@@ -12,6 +12,20 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.knowm.xchange.currency.Currency;
+import org.knowm.xchange.currency.CurrencyPair;
+import org.knowm.xchange.dto.Order.OrderType;
+import org.knowm.xchange.dto.account.AccountInfo;
+import org.knowm.xchange.dto.account.Balance;
+import org.knowm.xchange.dto.account.Wallet;
+import org.knowm.xchange.dto.marketdata.OrderBook;
+import org.knowm.xchange.dto.marketdata.Ticker;
+import org.knowm.xchange.dto.marketdata.Trades;
+import org.knowm.xchange.dto.marketdata.Trades.TradeSortType;
+import org.knowm.xchange.dto.trade.LimitOrder;
+import org.knowm.xchange.dto.trade.OpenOrders;
+import org.knowm.xchange.dto.trade.UserTrade;
+import org.knowm.xchange.dto.trade.UserTrades;
 import org.oxerr.okcoin.rest.dto.Depth;
 import org.oxerr.okcoin.rest.dto.Funds;
 import org.oxerr.okcoin.rest.dto.Order;
@@ -21,21 +35,6 @@ import org.oxerr.okcoin.rest.dto.TickerResponse;
 import org.oxerr.okcoin.rest.dto.Trade;
 import org.oxerr.okcoin.rest.dto.Type;
 import org.oxerr.okcoin.rest.dto.UserInfo;
-
-import com.xeiam.xchange.currency.Currency;
-import com.xeiam.xchange.currency.CurrencyPair;
-import com.xeiam.xchange.dto.Order.OrderType;
-import com.xeiam.xchange.dto.account.AccountInfo;
-import com.xeiam.xchange.dto.account.Balance;
-import com.xeiam.xchange.dto.account.Wallet;
-import com.xeiam.xchange.dto.marketdata.OrderBook;
-import com.xeiam.xchange.dto.marketdata.Ticker;
-import com.xeiam.xchange.dto.marketdata.Trades;
-import com.xeiam.xchange.dto.marketdata.Trades.TradeSortType;
-import com.xeiam.xchange.dto.trade.LimitOrder;
-import com.xeiam.xchange.dto.trade.OpenOrders;
-import com.xeiam.xchange.dto.trade.UserTrade;
-import com.xeiam.xchange.dto.trade.UserTrades;
 
 /**
  * Various adapters for converting from OKCoin DTOs to XChange DTOs.
@@ -84,7 +83,7 @@ public final class OKCoinAdapters {
 	}
 
 	public static Trades adaptTrades(Trade[] trades, CurrencyPair currencyPair) {
-		List<com.xeiam.xchange.dto.marketdata.Trade> tradeList = new ArrayList<>(
+		List<org.knowm.xchange.dto.marketdata.Trade> tradeList = new ArrayList<>(
 				trades.length);
 		for (Trade trade : trades) {
 			tradeList.add(adaptTrade(trade, currencyPair));
@@ -154,9 +153,9 @@ public final class OKCoinAdapters {
 				timestamp, data[0]);
 	}
 
-	private static com.xeiam.xchange.dto.marketdata.Trade adaptTrade(
+	private static org.knowm.xchange.dto.marketdata.Trade adaptTrade(
 			Trade trade, CurrencyPair currencyPair) {
-		return new com.xeiam.xchange.dto.marketdata.Trade.Builder()
+		return new org.knowm.xchange.dto.marketdata.Trade.Builder()
 			.id(String.valueOf(trade.getTid()))
 			.timestamp(Date.from(trade.getDate()))
 			.currencyPair(currencyPair)
@@ -192,7 +191,7 @@ public final class OKCoinAdapters {
 				? OrderType.BID : OrderType.ASK;
 	}
 
-	private static com.xeiam.xchange.dto.trade.UserTrade adaptUserTrade(
+	private static org.knowm.xchange.dto.trade.UserTrade adaptUserTrade(
 			Order order) {
 		return new UserTrade.Builder()
 			.type(adaptOrderType(order.getType()))

@@ -4,13 +4,12 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.knowm.xchange.currency.Currency;
+import org.knowm.xchange.currency.CurrencyPair;
+import org.knowm.xchange.dto.account.AccountInfo;
+import org.knowm.xchange.dto.account.Balance;
+import org.knowm.xchange.dto.account.Wallet;
 import org.oxerr.okcoin.fix.fix44.AccountInfoResponse;
-
-import com.xeiam.xchange.currency.Currency;
-import com.xeiam.xchange.currency.CurrencyPair;
-import com.xeiam.xchange.dto.account.AccountInfo;
-import com.xeiam.xchange.dto.account.Balance;
-import com.xeiam.xchange.dto.account.Wallet;
 
 import quickfix.FieldNotFound;
 import quickfix.Message;

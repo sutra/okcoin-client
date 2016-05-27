@@ -9,6 +9,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import org.knowm.xchange.currency.CurrencyPair;
+import org.knowm.xchange.dto.Order.OrderType;
+import org.knowm.xchange.dto.account.AccountInfo;
+import org.knowm.xchange.dto.marketdata.OrderBook;
+import org.knowm.xchange.dto.marketdata.Ticker;
+import org.knowm.xchange.dto.marketdata.Trade;
+import org.knowm.xchange.dto.trade.LimitOrder;
 import org.oxerr.okcoin.fix.OKCoinApplication;
 import org.oxerr.okcoin.fix.fix44.AccountInfoResponse;
 import org.slf4j.Logger;
@@ -29,14 +36,6 @@ import quickfix.field.OrigTime;
 import quickfix.field.Side;
 import quickfix.field.SubscriptionRequestType;
 import quickfix.fix44.MarketDataSnapshotFullRefresh;
-
-import com.xeiam.xchange.currency.CurrencyPair;
-import com.xeiam.xchange.dto.Order.OrderType;
-import com.xeiam.xchange.dto.account.AccountInfo;
-import com.xeiam.xchange.dto.marketdata.OrderBook;
-import com.xeiam.xchange.dto.marketdata.Ticker;
-import com.xeiam.xchange.dto.marketdata.Trade;
-import com.xeiam.xchange.dto.trade.LimitOrder;
 
 /**
  * {@link Application} implementation using XChange DTOs as callback parameters.

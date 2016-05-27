@@ -15,12 +15,12 @@
 	<name>OKCoin Client - XChange</name>
 	<description>
 	<![CDATA[
-		Client for <a href="http://xeiam.com/xchange/">XChange</a> compatibility.
+		Client for <a href="http://knowm.org/open-source/xchange/">XChange</a> compatibility.
 	]]></description>
 
 	<dependencies>
 		<dependency>
-			<groupId>com.xeiam.xchange</groupId>
+			<groupId>org.knowm.xchange</groupId>
 			<artifactId>xchange-core</artifactId>
 		</dependency>
 		<dependency>

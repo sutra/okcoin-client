@@ -43,7 +43,7 @@
 			<artifactId>jackson-databind</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>com.xeiam.xchange</groupId>
+			<groupId>org.knowm.xchange</groupId>
 			<artifactId>xchange-core</artifactId>
 		</dependency>
 		<dependency>
