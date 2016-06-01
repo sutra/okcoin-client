@@ -6,7 +6,7 @@
 
 	<groupId>org.oxerr</groupId>
 	<artifactId>okcoin-client</artifactId>
-	<version>3.0.0-SNAPSHOT</version>
+	<version>3.0.0</version>
 	<packaging>pom</packaging>
 
 	<name>OKCoin Client</name>
