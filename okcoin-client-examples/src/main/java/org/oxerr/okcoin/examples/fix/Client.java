@@ -6,6 +6,12 @@ import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
+import org.knowm.xchange.currency.CurrencyPair;
+import org.knowm.xchange.dto.account.AccountInfo;
+import org.knowm.xchange.dto.marketdata.OrderBook;
+import org.knowm.xchange.dto.marketdata.Trade;
+import org.knowm.xchange.dto.trade.LimitOrder;
+import org.oxerr.okcoin.fix.fix44.ExceptionResponseMessage;
 import org.oxerr.okcoin.fix.fix44.OKCoinMessageFactory;
 import org.oxerr.okcoin.xchange.service.fix.OKCoinXChangeApplication;
 import org.slf4j.Logger;
@@ -26,12 +32,6 @@ import quickfix.SocketInitiator;
 import quickfix.UnsupportedMessageType;
 import quickfix.field.MassStatusReqType;
 import quickfix.fix44.ExecutionReport;
-
-import com.xeiam.xchange.currency.CurrencyPair;
-import com.xeiam.xchange.dto.account.AccountInfo;
-import com.xeiam.xchange.dto.marketdata.OrderBook;
-import com.xeiam.xchange.dto.marketdata.Trade;
-import com.xeiam.xchange.dto.trade.LimitOrder;
 
 /**
  * Demonstration of FIX API.
@@ -113,6 +113,13 @@ public class Client {
 				log.info(message.toXML(getDataDictionary()));
 			}
 
+			@Override
+			public void onMessage(ExceptionResponseMessage message,
+					SessionID sessionId) throws FieldNotFound,
+							UnsupportedMessageType, IncorrectTagValue {
+				log.error(message.toXML(getDataDictionary()));
+			}
+
 		};
 
 		SessionSettings settings;
@@ -153,6 +160,11 @@ public class Client {
 		long orderId = 1;
 		char ordStatus = '0';
 		app.requestOrdersInfoAfterSomeID(tradeRequestId, symbol, orderId, ordStatus, sessionId);
+
+		// to check order id > Integer.MAX_VALUE
+		app.requestOrderMassStatus("2147488076",
+				MassStatusReqType.STATUS_FOR_ORDERS_FOR_A_SECURITY, sessionId);
+
 	}
 
 	public static void main(String[] args) throws IOException, ConfigError,

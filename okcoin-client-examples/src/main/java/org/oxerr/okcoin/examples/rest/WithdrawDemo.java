@@ -5,14 +5,14 @@ import static org.oxerr.okcoin.rest.OKCoinExchange.TRADE_PASSWORD_PARAMETER;
 import java.io.IOException;
 import java.math.BigDecimal;
 
+import org.knowm.xchange.Exchange;
+import org.knowm.xchange.ExchangeFactory;
+import org.knowm.xchange.ExchangeSpecification;
+import org.knowm.xchange.currency.Currency;
+import org.knowm.xchange.service.polling.account.PollingAccountService;
 import org.oxerr.okcoin.rest.OKCoinException;
 import org.oxerr.okcoin.rest.dto.Withdrawal;
 import org.oxerr.okcoin.rest.service.polling.OKCoinAccountServiceRaw;
-
-import com.xeiam.xchange.Exchange;
-import com.xeiam.xchange.ExchangeFactory;
-import com.xeiam.xchange.ExchangeSpecification;
-import com.xeiam.xchange.service.polling.account.PollingAccountService;
 
 /**
  * Demonstration of withdrawing and canceling withdrawal.
@@ -33,7 +33,7 @@ public class WithdrawDemo {
 		String symbol = "BTC";
 
 		// request to withdraw
-		String withdrawId = accountService.withdrawFunds(symbol, new BigDecimal("1"), "yourAddress");
+		String withdrawId = accountService.withdrawFunds(Currency.getInstance(symbol), new BigDecimal("1"), "yourAddress");
 		// cancel the above withdrawal
 		rawAccountService.cancelWithdraw(symbol, Long.valueOf(withdrawId));
 

@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 
 import org.oxerr.okcoin.fix.fix44.AccountInfoRequest;
 import org.oxerr.okcoin.fix.fix44.AccountInfoResponse;
+import org.oxerr.okcoin.fix.fix44.ExceptionResponseMessage;
 import org.oxerr.okcoin.fix.fix44.OrdersInfoAfterSomeIDRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -147,6 +148,8 @@ public class OKCoinApplication extends MessageCracker implements Application {
 			throws UnsupportedMessageType, FieldNotFound, IncorrectTagValue {
 		if (message instanceof AccountInfoResponse) {
 			onMessage((AccountInfoResponse) message, sessionId);
+		} else if (message instanceof ExceptionResponseMessage) {
+			onMessage((ExceptionResponseMessage) message, sessionId);
 		} else {
 			super.crack(message, sessionId);
 		}
@@ -158,6 +161,10 @@ public class OKCoinApplication extends MessageCracker implements Application {
 	}
 
 	public void onMessage(AccountInfoResponse message, SessionID sessionId)
+			throws FieldNotFound, UnsupportedMessageType, IncorrectTagValue {
+	}
+
+	public void onMessage(ExceptionResponseMessage message, SessionID sessionId)
 			throws FieldNotFound, UnsupportedMessageType, IncorrectTagValue {
 	}
 

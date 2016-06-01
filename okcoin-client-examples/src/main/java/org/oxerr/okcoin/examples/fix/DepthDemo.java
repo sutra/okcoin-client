@@ -6,6 +6,7 @@ import java.text.DecimalFormat;
 import java.text.NumberFormat;
 
 import org.apache.commons.lang3.StringUtils;
+import org.knowm.xchange.dto.marketdata.OrderBook;
 import org.oxerr.okcoin.fix.fix44.OKCoinMessageFactory;
 import org.oxerr.okcoin.xchange.service.fix.OKCoinXChangeApplication;
 import org.slf4j.Logger;
@@ -22,8 +23,6 @@ import quickfix.RuntimeError;
 import quickfix.SessionID;
 import quickfix.SessionSettings;
 import quickfix.SocketInitiator;
-
-import com.xeiam.xchange.dto.marketdata.OrderBook;
 
 public class DepthDemo {
 

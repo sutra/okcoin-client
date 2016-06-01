@@ -34,8 +34,8 @@ public class TradeRequestCreator {
 
 	private final String account;
 
-	public TradeRequestCreator(String partner, String secretKey) {
-		this.account = String.format("%s,%s", partner, secretKey);
+	public TradeRequestCreator(String apiKey, String secretKey) {
+		this.account = String.format("%s,%s", apiKey, secretKey);
 	}
 
 	public AccountInfoRequest createAccountInfoRequest(String accReqId) {

@@ -2,17 +2,16 @@ package org.oxerr.okcoin.examples.rest;
 
 import java.io.IOException;
 
+import org.knowm.xchange.Exchange;
+import org.knowm.xchange.ExchangeFactory;
+import org.knowm.xchange.ExchangeSpecification;
+import org.knowm.xchange.currency.CurrencyPair;
+import org.knowm.xchange.dto.trade.UserTrades;
+import org.knowm.xchange.service.polling.trade.PollingTradeService;
 import org.oxerr.okcoin.rest.OKCoinExchange;
 import org.oxerr.okcoin.rest.service.polling.OKCoinTradeService.OKCoinTradeHistoryParams;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import com.xeiam.xchange.Exchange;
-import com.xeiam.xchange.ExchangeFactory;
-import com.xeiam.xchange.ExchangeSpecification;
-import com.xeiam.xchange.currency.CurrencyPair;
-import com.xeiam.xchange.dto.trade.UserTrades;
-import com.xeiam.xchange.service.polling.trade.PollingTradeService;
 
 /**
  * Demonstration of getting order history.

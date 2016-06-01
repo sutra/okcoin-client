@@ -12,6 +12,9 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
+import org.knowm.xchange.Exchange;
+import org.knowm.xchange.ExchangeSpecification;
+import org.knowm.xchange.dto.meta.RateLimit;
 import org.oxerr.okcoin.rest.OKCoin;
 import org.oxerr.okcoin.rest.service.OKCoinDigest;
 import org.oxerr.okcoin.rest.service.web.OKCoinClient;
@@ -19,10 +22,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import si.mazi.rescu.RestProxyFactory;
-
-import com.xeiam.xchange.Exchange;
-import com.xeiam.xchange.ExchangeSpecification;
-import com.xeiam.xchange.dto.meta.RateLimit;
 
 /**
  * Base trade service.

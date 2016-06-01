@@ -2,13 +2,12 @@ package org.oxerr.okcoin.rest.service.polling;
 
 import java.util.List;
 
+import org.knowm.xchange.Exchange;
+import org.knowm.xchange.ExchangeSpecification;
+import org.knowm.xchange.currency.CurrencyPair;
+import org.knowm.xchange.service.polling.BasePollingExchangeService;
+import org.knowm.xchange.service.polling.BasePollingService;
 import org.oxerr.okcoin.rest.OKCoinExchange;
-
-import com.xeiam.xchange.Exchange;
-import com.xeiam.xchange.ExchangeSpecification;
-import com.xeiam.xchange.currency.CurrencyPair;
-import com.xeiam.xchange.service.polling.BasePollingExchangeService;
-import com.xeiam.xchange.service.polling.BasePollingService;
 
 /**
  * {@link BasePollingService} implementation.
