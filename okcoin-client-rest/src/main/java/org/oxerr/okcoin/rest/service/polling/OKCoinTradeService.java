@@ -5,6 +5,22 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import org.knowm.xchange.Exchange;
+import org.knowm.xchange.currency.CurrencyPair;
+import org.knowm.xchange.dto.Order;
+import org.knowm.xchange.dto.Order.OrderType;
+import org.knowm.xchange.dto.trade.LimitOrder;
+import org.knowm.xchange.dto.trade.MarketOrder;
+import org.knowm.xchange.dto.trade.OpenOrders;
+import org.knowm.xchange.dto.trade.UserTrades;
+import org.knowm.xchange.exceptions.ExchangeException;
+import org.knowm.xchange.exceptions.NotAvailableFromExchangeException;
+import org.knowm.xchange.exceptions.NotYetImplementedForExchangeException;
+import org.knowm.xchange.service.polling.trade.PollingTradeService;
+import org.knowm.xchange.service.polling.trade.params.DefaultTradeHistoryParamPaging;
+import org.knowm.xchange.service.polling.trade.params.TradeHistoryParamCurrencyPair;
+import org.knowm.xchange.service.polling.trade.params.TradeHistoryParamPaging;
+import org.knowm.xchange.service.polling.trade.params.TradeHistoryParams;
 import org.oxerr.okcoin.rest.OKCoinAdapters;
 import org.oxerr.okcoin.rest.OKCoinException;
 import org.oxerr.okcoin.rest.dto.CancelOrderResult;
@@ -13,22 +29,6 @@ import org.oxerr.okcoin.rest.dto.OrderResult;
 import org.oxerr.okcoin.rest.dto.Type;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import com.xeiam.xchange.Exchange;
-import com.xeiam.xchange.currency.CurrencyPair;
-import com.xeiam.xchange.dto.Order.OrderType;
-import com.xeiam.xchange.dto.trade.LimitOrder;
-import com.xeiam.xchange.dto.trade.MarketOrder;
-import com.xeiam.xchange.dto.trade.OpenOrders;
-import com.xeiam.xchange.dto.trade.UserTrades;
-import com.xeiam.xchange.exceptions.ExchangeException;
-import com.xeiam.xchange.exceptions.NotAvailableFromExchangeException;
-import com.xeiam.xchange.exceptions.NotYetImplementedForExchangeException;
-import com.xeiam.xchange.service.polling.trade.PollingTradeService;
-import com.xeiam.xchange.service.polling.trade.params.DefaultTradeHistoryParamPaging;
-import com.xeiam.xchange.service.polling.trade.params.TradeHistoryParamCurrencyPair;
-import com.xeiam.xchange.service.polling.trade.params.TradeHistoryParamPaging;
-import com.xeiam.xchange.service.polling.trade.params.TradeHistoryParams;
 
 /**
  * {@link PollingTradeService} implementation.
@@ -112,10 +112,7 @@ public class OKCoinTradeService extends OKCoinTradeServiceRaw implements
 		return ret;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
+	@Deprecated
 	public UserTrades getTradeHistory(Object... arguments)
 			throws OKCoinException, IOException {
 		int argc = arguments.length;
@@ -181,6 +178,16 @@ public class OKCoinTradeService extends OKCoinTradeServiceRaw implements
 			return pair;
 		}
 
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public Collection<Order> getOrder(String... orderIds)
+			throws ExchangeException, NotAvailableFromExchangeException,
+			NotYetImplementedForExchangeException, IOException {
+		throw new NotYetImplementedForExchangeException();
 	}
 
 }

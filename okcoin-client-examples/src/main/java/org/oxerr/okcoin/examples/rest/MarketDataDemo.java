@@ -1,15 +1,24 @@
 package org.oxerr.okcoin.examples.rest;
 
-import static com.xeiam.xchange.currency.CurrencyPair.BTC_CNY;
-import static com.xeiam.xchange.currency.CurrencyPair.BTC_USD;
-import static com.xeiam.xchange.currency.CurrencyPair.LTC_CNY;
-import static com.xeiam.xchange.currency.CurrencyPair.LTC_USD;
 import static org.apache.commons.lang3.builder.ToStringBuilder.reflectionToString;
 import static org.apache.commons.lang3.builder.ToStringStyle.MULTI_LINE_STYLE;
+import static org.knowm.xchange.currency.CurrencyPair.BTC_CNY;
+import static org.knowm.xchange.currency.CurrencyPair.BTC_USD;
+import static org.knowm.xchange.currency.CurrencyPair.LTC_CNY;
+import static org.knowm.xchange.currency.CurrencyPair.LTC_USD;
 
 import java.io.IOException;
 import java.util.Arrays;
 
+import org.knowm.xchange.Exchange;
+import org.knowm.xchange.ExchangeFactory;
+import org.knowm.xchange.ExchangeSpecification;
+import org.knowm.xchange.currency.CurrencyPair;
+import org.knowm.xchange.dto.marketdata.OrderBook;
+import org.knowm.xchange.dto.marketdata.Ticker;
+import org.knowm.xchange.dto.marketdata.Trades;
+import org.knowm.xchange.exceptions.ExchangeException;
+import org.knowm.xchange.service.polling.marketdata.PollingMarketDataService;
 import org.oxerr.okcoin.rest.OKCoinExchange;
 import org.oxerr.okcoin.rest.dto.CandlestickChart;
 import org.oxerr.okcoin.rest.dto.Depth;
@@ -18,16 +27,6 @@ import org.oxerr.okcoin.rest.dto.Trade;
 import org.oxerr.okcoin.rest.service.polling.OKCoinMarketDataServiceRaw;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import com.xeiam.xchange.Exchange;
-import com.xeiam.xchange.ExchangeFactory;
-import com.xeiam.xchange.ExchangeSpecification;
-import com.xeiam.xchange.currency.CurrencyPair;
-import com.xeiam.xchange.dto.marketdata.OrderBook;
-import com.xeiam.xchange.dto.marketdata.Ticker;
-import com.xeiam.xchange.dto.marketdata.Trades;
-import com.xeiam.xchange.exceptions.ExchangeException;
-import com.xeiam.xchange.service.polling.marketdata.PollingMarketDataService;
 
 /**
  * Demonstration of getting market data.

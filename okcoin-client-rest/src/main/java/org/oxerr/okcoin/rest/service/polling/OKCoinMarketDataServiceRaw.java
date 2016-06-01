@@ -2,6 +2,8 @@ package org.oxerr.okcoin.rest.service.polling;
 
 import java.io.IOException;
 
+import org.knowm.xchange.Exchange;
+import org.knowm.xchange.ExchangeSpecification;
 import org.oxerr.okcoin.rest.OKCoin;
 import org.oxerr.okcoin.rest.dto.CandlestickChart;
 import org.oxerr.okcoin.rest.dto.Depth;
@@ -10,9 +12,6 @@ import org.oxerr.okcoin.rest.dto.TickerResponse;
 import org.oxerr.okcoin.rest.dto.Trade;
 
 import si.mazi.rescu.RestProxyFactory;
-
-import com.xeiam.xchange.Exchange;
-import com.xeiam.xchange.ExchangeSpecification;
 
 /**
  * Raw market data service.

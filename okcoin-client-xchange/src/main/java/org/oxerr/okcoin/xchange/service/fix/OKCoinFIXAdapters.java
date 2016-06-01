@@ -4,14 +4,15 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.knowm.xchange.currency.Currency;
+import org.knowm.xchange.currency.CurrencyPair;
+import org.knowm.xchange.dto.account.AccountInfo;
+import org.knowm.xchange.dto.account.Balance;
+import org.knowm.xchange.dto.account.Wallet;
 import org.oxerr.okcoin.fix.fix44.AccountInfoResponse;
 
 import quickfix.FieldNotFound;
 import quickfix.Message;
-
-import com.xeiam.xchange.currency.CurrencyPair;
-import com.xeiam.xchange.dto.account.AccountInfo;
-import com.xeiam.xchange.dto.trade.Wallet;
 
 /**
  * Various adapters for converting from {@link Message} to XChange DTOs.
@@ -22,24 +23,26 @@ public final class OKCoinFIXAdapters {
 	}
 
 	public static String adaptSymbol(CurrencyPair currencyPair) {
-		return String.format("%s/%s", currencyPair.baseSymbol, currencyPair.counterSymbol);
+		return String.format("%s/%s", currencyPair.base.getCurrencyCode(), currencyPair.counter.getCurrencyCode());
 	}
 
 	public static AccountInfo adaptAccountInfo(AccountInfoResponse message)
 			throws FieldNotFound {
-		String[] currencies = message.getCurrency().getValue().split("/");
-		String[] balances = message.getBalance().getValue().split("/");
+		final String[] currencies = message.getCurrency().getValue().split("/");
+		final String[] balances = message.getBalance().getValue().split("/");
 
-		int walletCount = currencies.length;
-		List<Wallet> wallets = new ArrayList<Wallet>(walletCount);
+		final int walletCount = currencies.length;
+		final List<Balance> balanceList = new ArrayList<>(walletCount);
 
 		for (int i = 0; i < walletCount; i++) {
-			Wallet wallet = new Wallet(currencies[i],
-					new BigDecimal(balances[i]));
-			wallets.add(wallet);
+			final String currency = currencies[i];
+			final BigDecimal available = new BigDecimal(balances[i]);
+			final Balance balance = new Balance(Currency.getInstance(currency), available, available);
+			balanceList.add(balance);
 		}
 
-		return new AccountInfo(null, wallets);
+		final Wallet wallet = new Wallet(balanceList);
+		return new AccountInfo(wallet);
 	}
 
 }

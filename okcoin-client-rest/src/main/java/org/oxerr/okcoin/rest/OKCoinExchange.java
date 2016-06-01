@@ -3,16 +3,15 @@ package org.oxerr.okcoin.rest;
 import java.util.Arrays;
 import java.util.List;
 
+import org.knowm.xchange.BaseExchange;
+import org.knowm.xchange.Exchange;
+import org.knowm.xchange.ExchangeSpecification;
+import org.knowm.xchange.currency.CurrencyPair;
 import org.oxerr.okcoin.rest.service.polling.OKCoinAccountService;
 import org.oxerr.okcoin.rest.service.polling.OKCoinMarketDataService;
 import org.oxerr.okcoin.rest.service.polling.OKCoinTradeService;
 
 import si.mazi.rescu.SynchronizedValueFactory;
-
-import com.xeiam.xchange.BaseExchange;
-import com.xeiam.xchange.Exchange;
-import com.xeiam.xchange.ExchangeSpecification;
-import com.xeiam.xchange.currency.CurrencyPair;
 
 /**
  * {@link Exchange} implementation for OKCoin.
@@ -42,9 +41,11 @@ public class OKCoinExchange extends BaseExchange {
 			CurrencyPair.BTC_CNY,
 			CurrencyPair.LTC_CNY);
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
-	public void applySpecification(ExchangeSpecification exchangeSpecification) {
-		super.applySpecification(exchangeSpecification);
+	protected void initServices() {
 		this.pollingMarketDataService = new OKCoinMarketDataService(this);
 
 		if (exchangeSpecification.getApiKey() != null

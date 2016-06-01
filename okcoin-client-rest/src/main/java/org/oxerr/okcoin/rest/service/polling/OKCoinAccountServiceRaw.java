@@ -3,12 +3,11 @@ package org.oxerr.okcoin.rest.service.polling;
 import java.io.IOException;
 import java.math.BigDecimal;
 
+import org.knowm.xchange.Exchange;
 import org.oxerr.okcoin.rest.OKCoinException;
 import org.oxerr.okcoin.rest.dto.AccountRecords;
 import org.oxerr.okcoin.rest.dto.UserInfo;
 import org.oxerr.okcoin.rest.dto.Withdrawal;
-
-import com.xeiam.xchange.Exchange;
 
 /**
  * Raw account service.

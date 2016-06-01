@@ -10,14 +10,13 @@ import java.util.TreeMap;
 
 import javax.ws.rs.FormParam;
 
+import org.knowm.xchange.utils.DigestUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import si.mazi.rescu.Params;
 import si.mazi.rescu.ParamsDigest;
 import si.mazi.rescu.RestInvocation;
-
-import com.xeiam.xchange.utils.DigestUtils;
 
 /**
  * {@link ParamsDigest} implementation.

@@ -6,6 +6,9 @@ import java.util.Arrays;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
+import org.knowm.xchange.Exchange;
+import org.knowm.xchange.currency.CurrencyPair;
+import org.knowm.xchange.dto.Order.OrderType;
 import org.oxerr.okcoin.rest.OKCoinException;
 import org.oxerr.okcoin.rest.dto.BatchTradeResult;
 import org.oxerr.okcoin.rest.dto.BorrowOrderInfo;
@@ -19,6 +22,7 @@ import org.oxerr.okcoin.rest.dto.OrderFee;
 import org.oxerr.okcoin.rest.dto.OrderHistory;
 import org.oxerr.okcoin.rest.dto.OrderResult;
 import org.oxerr.okcoin.rest.dto.Result;
+import org.oxerr.okcoin.rest.dto.Trade;
 import org.oxerr.okcoin.rest.dto.TradeResult;
 import org.oxerr.okcoin.rest.dto.Type;
 import org.oxerr.okcoin.rest.dto.UnrepaymentsInfo;
@@ -29,9 +33,6 @@ import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
-import com.xeiam.xchange.Exchange;
-import com.xeiam.xchange.currency.CurrencyPair;
-import com.xeiam.xchange.dto.Order.OrderType;
 
 /**
  * Raw trade service.
@@ -51,6 +52,10 @@ public class OKCoinTradeServiceRaw extends OKCoinBaseTradePollingService {
 
 		mapper = new ObjectMapper();
 		mapper.enable(SerializationFeature.WRITE_ENUMS_USING_TO_STRING);
+	}
+
+	public Trade[] getTradeHistory(String symbol, Long since) throws IOException {
+		return okCoin.getTradeHistory(apiKey, symbol, since, sign);
 	}
 
 	public TradeResult trade(String symbol, Type type, BigDecimal price,
@@ -219,7 +224,7 @@ public class OKCoinTradeServiceRaw extends OKCoinBaseTradePollingService {
 	}
 
 	private int toSymbol(CurrencyPair currencyPair) {
-		return currencyPair.baseSymbol.equals("BTC") ? 0 : 1;
+		return currencyPair.base.getCurrencyCode().equals("BTC") ? 0 : 1;
 	}
 
 	public OrderFee getOrderFee(String symbol, long orderId)

@@ -6,15 +6,14 @@ import static org.oxerr.okcoin.rest.OKCoinAdapters.adaptTicker;
 
 import java.io.IOException;
 
+import org.knowm.xchange.Exchange;
+import org.knowm.xchange.currency.CurrencyPair;
+import org.knowm.xchange.dto.marketdata.OrderBook;
+import org.knowm.xchange.dto.marketdata.Ticker;
+import org.knowm.xchange.dto.marketdata.Trades;
+import org.knowm.xchange.service.polling.marketdata.PollingMarketDataService;
 import org.oxerr.okcoin.rest.OKCoinAdapters;
 import org.oxerr.okcoin.rest.dto.Trade;
-
-import com.xeiam.xchange.Exchange;
-import com.xeiam.xchange.currency.CurrencyPair;
-import com.xeiam.xchange.dto.marketdata.OrderBook;
-import com.xeiam.xchange.dto.marketdata.Ticker;
-import com.xeiam.xchange.dto.marketdata.Trades;
-import com.xeiam.xchange.service.polling.marketdata.PollingMarketDataService;
 
 /**
  * {@link PollingMarketDataService} implementation.

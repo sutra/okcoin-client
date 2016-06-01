@@ -8,8 +8,13 @@ import static org.oxerr.okcoin.rest.OKCoinExchange.TRADE_PASSWORD_PARAMETER;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
+import java.util.Set;
 
+import org.knowm.xchange.Exchange;
+import org.knowm.xchange.ExchangeSpecification;
+import org.knowm.xchange.dto.meta.RateLimit;
 import org.oxerr.okcoin.rest.OKCoin;
 import org.oxerr.okcoin.rest.service.OKCoinDigest;
 import org.oxerr.okcoin.rest.service.web.OKCoinClient;
@@ -17,9 +22,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import si.mazi.rescu.RestProxyFactory;
-
-import com.xeiam.xchange.Exchange;
-import com.xeiam.xchange.ExchangeSpecification;
 
 /**
  * Base trade service.
@@ -44,7 +46,11 @@ public class OKCoinBaseTradePollingService extends OKCoinBasePollingService {
 	protected OKCoinBaseTradePollingService(Exchange exchange) {
 		super(exchange);
 
-		final Integer maxPrivatePollRatePerSecond = exchange.getMetaData().getMaxPrivatePollRatePerSecond();
+		final Set<RateLimit>  rateLimits = exchange.getMetaData().getPrivateRateLimits();
+		Integer maxPrivatePollRatePerSecond = 40;
+		for (Iterator<RateLimit> iterator = rateLimits.iterator(); iterator.hasNext();) {
+			maxPrivatePollRatePerSecond = iterator.next().calls;
+		}
 		if (maxPrivatePollRatePerSecond == null || maxPrivatePollRatePerSecond.intValue() == 0) {
 			interval = 0;
 		} else {

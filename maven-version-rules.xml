@@ -1,0 +1,63 @@
+<ruleset comparisonMethod="maven"
+	xmlns="http://mojo.codehaus.org/versions-maven-plugin/rule/2.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="
+		http://mojo.codehaus.org/versions-maven-plugin/rule/2.0.0
+		http://mojo.codehaus.org/versions-maven-plugin/xsd/rule-2.0.0.xsd">
+	<ignoreVersions>
+		<ignoreVersion type="regex">.*-alpha\d*</ignoreVersion>
+		<ignoreVersion type="regex">.*-beta\d*</ignoreVersion>
+		<ignoreVersion type="regex">.*-rc\d*</ignoreVersion>
+	</ignoreVersions>
+	<rules>
+		<rule groupId="javax.cache" comparisonMethod="maven">
+			<ignoreVersions>
+				<ignoreVersion>1.0.0-PFD</ignoreVersion>
+			</ignoreVersions>
+		</rule>
+		<rule groupId="javax.servlet" comparisonMethod="maven">
+			<ignoreVersions>
+				<ignoreVersion type="regex">.*-b.*</ignoreVersion>
+			</ignoreVersions>
+		</rule>
+		<rule groupId="org.apache.mina" comparisonMethod="maven">
+			<ignoreVersions>
+				<ignoreVersion type="regex">.*-M\d*</ignoreVersion>
+			</ignoreVersions>
+		</rule>
+		<rule groupId="org.hibernate" comparisonMethod="maven">
+			<ignoreVersions>
+				<ignoreVersion type="regex">.*\.Draft.*</ignoreVersion>
+			</ignoreVersions>
+		</rule>
+		<rule groupId="org.thymeleaf" comparisonMethod="maven">
+			<ignoreVersions>
+				<ignoreVersion type="regex">.*\.ALPHA.*</ignoreVersion>
+				<ignoreVersion type="regex">.*\.BETA.*</ignoreVersion>
+			</ignoreVersions>
+		</rule>
+		<rule groupId="com.atomikos" comparisonMethod="maven">
+			<ignoreVersions>
+				<ignoreVersion type="regex">.*M\d*</ignoreVersion>
+			</ignoreVersions>
+		</rule>
+		<rule groupId="antlr" comparisonMethod="maven">
+			<ignoreVersions>
+				<ignoreVersion>20030911</ignoreVersion>
+			</ignoreVersions>
+		</rule>
+		<rule groupId="commons-collections" comparisonMethod="maven">
+			<ignoreVersions>
+				<ignoreVersion>20030418.083655</ignoreVersion>
+				<ignoreVersion>20031027.000000</ignoreVersion>
+				<ignoreVersion>20040102.233541</ignoreVersion>
+				<ignoreVersion>20040616</ignoreVersion>
+			</ignoreVersions>
+		</rule>
+		<rule groupId="dom4j" comparisonMethod="maven">
+			<ignoreVersions>
+				<ignoreVersion>20040902.021138</ignoreVersion>
+			</ignoreVersions>
+		</rule>
+	</rules>
+</ruleset>

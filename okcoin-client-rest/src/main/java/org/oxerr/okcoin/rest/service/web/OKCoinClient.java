@@ -254,6 +254,7 @@ public class OKCoinClient implements AutoCloseable {
 	 * @param singleAvg average order amount.
 	 * @param depthRange price variance.
 	 * @param protePrice highest buy price for buying, lowest sell price for selling.
+	 * @return result of continuous entrust.
 	 * @throws LoginRequiredException indicates the client is not logged in.
 	 * @throws IOException indicates I/O exception.
 	 */
@@ -319,6 +320,7 @@ public class OKCoinClient implements AutoCloseable {
 	 * @param type 5: ?
 	 * @param sign 1: Open Orders, 2: Order History
 	 * @param strategyType 2: ?
+	 * @param page 1 based.
 	 * @return iceberg orders.
 	 * @throws LoginRequiredException indicates the client is not logged in.
 	 * @throws IOException indicates I/O exception.
