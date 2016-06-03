@@ -113,7 +113,7 @@ public class TradeParam extends BaseObject {
 	}
 
 	public List<NameValuePair> toNameValurPairs() {
-		List<NameValuePair> params = new ArrayList<NameValuePair>(5);
+		List<NameValuePair> params = new ArrayList<>(5);
 		params.add(new BasicNameValuePair("tradeAmount", getTradeAmount().toPlainString()));
 		params.add(new BasicNameValuePair("tradeCnyPrice", getTradeCnyPrice().toPlainString()));
 		params.add(new BasicNameValuePair("tradePwd", getTradePwd()));
