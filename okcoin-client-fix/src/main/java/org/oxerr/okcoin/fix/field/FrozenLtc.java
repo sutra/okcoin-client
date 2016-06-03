@@ -19,7 +19,7 @@ public class FrozenLtc extends DecimalField {
 	}
 
 	public FrozenLtc(double data) {
-		super(FIELD, new BigDecimal(data));
+		super(FIELD, BigDecimal.valueOf(data));
 	}
 
 }
