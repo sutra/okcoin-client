@@ -19,7 +19,7 @@ public class FrozenBtc extends DecimalField {
 	}
 
 	public FrozenBtc(double data) {
-		super(FIELD, new BigDecimal(data));
+		super(FIELD, BigDecimal.valueOf(data));
 	}
 
 }
