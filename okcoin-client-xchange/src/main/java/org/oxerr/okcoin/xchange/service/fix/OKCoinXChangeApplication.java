@@ -173,11 +173,11 @@ public class OKCoinXChangeApplication extends OKCoinApplication {
 			}
 		}
 
-		if (asks.size() > 0 && bids.size() > 0) {
+		if (!asks.isEmpty() && !bids.isEmpty()) {
 			onOrderBook(origTime, asks, bids, sessionId);
 		}
 
-		if (trades.size() > 0) {
+		if (!trades.isEmpty()) {
 			onTrades(trades, sessionId);
 		}
 
