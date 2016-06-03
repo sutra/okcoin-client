@@ -38,7 +38,7 @@ public class OKCoinDecoder implements Decoder.TextStream<OKCoinData[]> {
 	private final Map<String, Class<?>> types;
 
 	public OKCoinDecoder() {
-		types = new HashMap<String, Class<?>>();
+		types = new HashMap<>();
 		for (String symbol : new String[] {"btccny", "ltccny"}) {
 			types.put(String.format("ok_%s_ticker", symbol), Ticker.class);
 			types.put(String.format("ok_%s_depth", symbol), Depth.class);

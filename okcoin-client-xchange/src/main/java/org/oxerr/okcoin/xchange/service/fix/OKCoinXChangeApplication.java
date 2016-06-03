@@ -122,9 +122,9 @@ public class OKCoinXChangeApplication extends OKCoinApplication {
 		log.debug("Symbol: {}, currency pair: {}", symbol, currencyPair);
 		log.debug("MDReqID: {}", mdReqId);
 
-		List<LimitOrder> asks = new ArrayList<LimitOrder>();
-		List<LimitOrder> bids = new ArrayList<LimitOrder>();
-		List<Trade> trades = new ArrayList<Trade>();
+		List<LimitOrder> asks = new ArrayList<>();
+		List<LimitOrder> bids = new ArrayList<>();
+		List<Trade> trades = new ArrayList<>();
 		BigDecimal openingPrice = null, closingPrice = null,
 			highPrice = null, lowPrice = null,
 			vwapPrice = null, lastPrice = null,

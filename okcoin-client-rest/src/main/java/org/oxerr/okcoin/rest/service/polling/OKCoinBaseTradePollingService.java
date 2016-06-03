@@ -38,7 +38,7 @@ public class OKCoinBaseTradePollingService extends OKCoinBasePollingService {
 
 	protected final String apiKey;
 
-	private Map<String, Long> lasts = new HashMap<String, Long>();
+	private Map<String, Long> lasts = new HashMap<>();
 
 	protected final OKCoinClient okCoinClient;
 	protected final int loginMaxRetryTimes;
