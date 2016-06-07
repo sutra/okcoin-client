@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="ISO-8859-1" standalone="no"?>
+<message>
+	<header>
+		<field name="BeginString" tag="8"><![CDATA[FIX.4.4]]></field>
+		<field name="BodyLength" tag="9"><![CDATA[282]]></field>
+		<field name="MsgSeqNum" tag="34"><![CDATA[118964]]></field>
+		<field enum="ExecutionReport" name="MsgType" tag="35"><![CDATA[8]]></field>
+		<field name="SenderCompID" tag="49"><![CDATA[OKSERVER]]></field>
+		<field name="SendingTime" tag="52"><![CDATA[20160607-11:25:40.071]]></field>
+		<field name="TargetCompID" tag="56"><![CDATA[00000000-0000-0000-0000-000000000000]]></field>
+	</header>
+	<body>
+		<field name="AvgPx" tag="6"><![CDATA[0]]></field>
+		<field name="ClOrdID" tag="11"><![CDATA[b80091ca-52f7-43b3-ae8b-ab6ac0ba438a]]></field>
+		<field name="CumQty" tag="14"><![CDATA[0]]></field>
+		<field name="ExecID" tag="17"><![CDATA[ae15b5dfcc3b4caaaff058959e17e681]]></field>
+		<field name="OrderID" tag="37"><![CDATA[refused]]></field>
+		<field name="OrderQty" tag="38"><![CDATA[0.1]]></field>
+		<field enum="REJECTED" name="OrdStatus" tag="39"><![CDATA[8]]></field>
+		<field enum="BUY" name="Side" tag="54"><![CDATA[1]]></field>
+		<field name="Symbol" tag="55"><![CDATA[BTC/CNY]]></field>
+		<field name="Text" tag="58"><![CDATA[request failed please retry errorcode:10049]]></field>
+		<field enum="OTHER" name="OrdRejReason" tag="103"><![CDATA[99]]></field>
+		<field enum="REJECTED" name="ExecType" tag="150"><![CDATA[8]]></field>
+		<field name="LeavesQty" tag="151"><![CDATA[0]]></field>
+	</body>
+	<trailer>
+		<field name="CheckSum" tag="10"><![CDATA[096]]></field>
+	</trailer>
+</message>
