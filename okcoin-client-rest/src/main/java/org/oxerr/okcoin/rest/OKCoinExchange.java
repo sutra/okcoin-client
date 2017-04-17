@@ -19,11 +19,6 @@ import si.mazi.rescu.SynchronizedValueFactory;
 public class OKCoinExchange extends BaseExchange {
 
 	/**
-	 * The parameter name of the symbols that will focus on.
-	 */
-	public static final String SYMBOLS_PARAMETER = "symbols";
-
-	/**
 	 * Max count of retry in logging into via web form.
 	 */
 	public static final String LOGIN_MAX_RETRY_TIMES_PARAMETER = "login.max.retry.times";
@@ -36,10 +31,6 @@ public class OKCoinExchange extends BaseExchange {
 	 * The parameter key of the trade password.
 	 */
 	public static final String TRADE_PASSWORD_PARAMETER = "trade_pwd";
-
-	private static final List<CurrencyPair> SYMBOLS = Arrays.asList(
-			CurrencyPair.BTC_CNY,
-			CurrencyPair.LTC_CNY);
 
 	/**
 	 * {@inheritDoc}
@@ -73,8 +64,6 @@ public class OKCoinExchange extends BaseExchange {
 		exchangeSpecification.setExchangeName("OKCoin");
 		exchangeSpecification
 				.setExchangeDescription("OKCoin is a globally oriented crypto-currency trading platform.");
-		exchangeSpecification.setExchangeSpecificParametersItem(
-				SYMBOLS_PARAMETER, SYMBOLS);
 		return exchangeSpecification;
 	}
 
