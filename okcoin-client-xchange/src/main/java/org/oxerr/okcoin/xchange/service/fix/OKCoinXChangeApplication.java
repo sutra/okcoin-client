@@ -35,6 +35,7 @@ import quickfix.field.NoMDEntries;
 import quickfix.field.OrigTime;
 import quickfix.field.Side;
 import quickfix.field.SubscriptionRequestType;
+import quickfix.fix44.MarketDataIncrementalRefresh;
 import quickfix.fix44.MarketDataSnapshotFullRefresh;
 
 /**
@@ -108,6 +109,9 @@ public class OKCoinXChangeApplication extends OKCoinApplication {
 		unsubscribeOrderBook(OKCoinFIXAdapters.adaptSymbol(currencyPair), sessionId);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void onMessage(MarketDataSnapshotFullRefresh message,
 			SessionID sessionId) throws FieldNotFound, UnsupportedMessageType,
@@ -197,6 +201,19 @@ public class OKCoinXChangeApplication extends OKCoinApplication {
 		}
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void onMessage(MarketDataIncrementalRefresh message,
+			SessionID sessionId)
+			throws FieldNotFound, UnsupportedMessageType, IncorrectTagValue {
+		// TODO
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void onMessage(AccountInfoResponse message, SessionID sessionId)
 			throws FieldNotFound, UnsupportedMessageType, IncorrectTagValue {
