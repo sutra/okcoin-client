@@ -1,12 +1,8 @@
 package org.oxerr.okcoin.rest;
 
-import java.util.Arrays;
-import java.util.List;
-
 import org.knowm.xchange.BaseExchange;
 import org.knowm.xchange.Exchange;
 import org.knowm.xchange.ExchangeSpecification;
-import org.knowm.xchange.currency.CurrencyPair;
 import org.oxerr.okcoin.rest.service.polling.OKCoinAccountService;
 import org.oxerr.okcoin.rest.service.polling.OKCoinMarketDataService;
 import org.oxerr.okcoin.rest.service.polling.OKCoinTradeService;
@@ -17,11 +13,6 @@ import si.mazi.rescu.SynchronizedValueFactory;
  * {@link Exchange} implementation for OKCoin.
  */
 public class OKCoinExchange extends BaseExchange {
-
-	/**
-	 * The parameter name of the symbols that will focus on.
-	 */
-	public static final String SYMBOLS_PARAMETER = "symbols";
 
 	/**
 	 * Max count of retry in logging into via web form.
@@ -36,10 +27,6 @@ public class OKCoinExchange extends BaseExchange {
 	 * The parameter key of the trade password.
 	 */
 	public static final String TRADE_PASSWORD_PARAMETER = "trade_pwd";
-
-	private static final List<CurrencyPair> SYMBOLS = Arrays.asList(
-			CurrencyPair.BTC_CNY,
-			CurrencyPair.LTC_CNY);
 
 	/**
 	 * {@inheritDoc}
@@ -73,8 +60,6 @@ public class OKCoinExchange extends BaseExchange {
 		exchangeSpecification.setExchangeName("OKCoin");
 		exchangeSpecification
 				.setExchangeDescription("OKCoin is a globally oriented crypto-currency trading platform.");
-		exchangeSpecification.setExchangeSpecificParametersItem(
-				SYMBOLS_PARAMETER, SYMBOLS);
 		return exchangeSpecification;
 	}
 
