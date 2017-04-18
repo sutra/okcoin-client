@@ -1,12 +1,8 @@
 package org.oxerr.okcoin.rest;
 
-import java.util.Arrays;
-import java.util.List;
-
 import org.knowm.xchange.BaseExchange;
 import org.knowm.xchange.Exchange;
 import org.knowm.xchange.ExchangeSpecification;
-import org.knowm.xchange.currency.CurrencyPair;
 import org.oxerr.okcoin.rest.service.polling.OKCoinAccountService;
 import org.oxerr.okcoin.rest.service.polling.OKCoinMarketDataService;
 import org.oxerr.okcoin.rest.service.polling.OKCoinTradeService;
