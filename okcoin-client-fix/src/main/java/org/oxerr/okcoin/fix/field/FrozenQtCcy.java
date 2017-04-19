@@ -22,7 +22,7 @@ public class FrozenQtCcy extends DecimalField {
 	}
 
 	public FrozenQtCcy(double data) {
-		super(FIELD, new BigDecimal(data));
+		super(FIELD, BigDecimal.valueOf(data));
 	}
 
 }

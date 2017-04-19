@@ -15,6 +15,7 @@ import org.oxerr.okcoin.rest.dto.IcebergOrderHistory;
 import org.oxerr.okcoin.rest.dto.Status;
 import org.oxerr.okcoin.rest.dto.Type;
 import org.oxerr.okcoin.rest.service.web.LoginRequiredException;
+import org.oxerr.okcoin.rest.service.web.OKCoinClient;
 
 public class IcebergOrdersReaderTest {
 
@@ -22,7 +23,7 @@ public class IcebergOrdersReaderTest {
 
 	@Test
 	public void testNotLoggedIn() throws IOException {
-		try (InputStream inputStream = IOUtils.toInputStream("")) {
+		try (InputStream inputStream = IOUtils.toInputStream("", OKCoinClient.ENCODING)) {
 			reader.read(inputStream);
 			fail("A LoginRequiredException should be thrown.");
 		} catch (LoginRequiredException e) {

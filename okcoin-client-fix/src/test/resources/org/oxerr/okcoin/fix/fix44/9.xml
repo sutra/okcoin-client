@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="ISO-8859-1" standalone="no"?>
+<message>
+	<header>
+		<field name="BeginString" tag="8"><![CDATA[FIX.4.4]]></field>
+		<field name="BodyLength" tag="9"><![CDATA[175]]></field>
+		<field name="MsgSeqNum" tag="34"><![CDATA[14907]]></field>
+		<field enum="OrderCancelReject" name="MsgType" tag="35"><![CDATA[9]]></field>
+		<field name="SenderCompID" tag="49"><![CDATA[OKSERVER]]></field>
+		<field name="SendingTime" tag="52"><![CDATA[20160613-06:56:50.594]]></field>
+		<field name="TargetCompID" tag="56"><![CDATA[00000000-0000-0000-0000-000000000000]]></field>
+	</header>
+	<body>
+		<field name="ClOrdID" tag="11"><![CDATA[b39f8f02-4715-4138-90ff-de158519c5ee]]></field>
+		<field name="OrderID" tag="37"><![CDATA[3777572314]]></field>
+		<field enum="REJECTED" name="OrdStatus" tag="39"><![CDATA[8]]></field>
+		<field name="OrigClOrdID" tag="41"><![CDATA[3777572314]]></field>
+		<field enum="SELL" name="Side" tag="54"><![CDATA[2]]></field>
+		<field enum="ORDER_CANCEL_REQUEST" name="CxlRejResponseTo" tag="434"><![CDATA[1]]></field>
+	</body>
+	<trailer>
+		<field name="CheckSum" tag="10"><![CDATA[067]]></field>
+	</trailer>
+</message>

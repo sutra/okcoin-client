@@ -47,7 +47,7 @@ public class OKCoinTradeService extends OKCoinTradeServiceRaw implements
 	 */
 	@Override
 	public OpenOrders getOpenOrders() throws OKCoinException, IOException {
-		Collection<CurrencyPair> symbols = getExchangeSymbols();
+		Collection<CurrencyPair> symbols = this.exchange.getExchangeSymbols();
 		List<OrderResult> orderResults = new ArrayList<>(symbols.size());
 
 		for (CurrencyPair symbol : symbols) {
@@ -93,7 +93,7 @@ public class OKCoinTradeService extends OKCoinTradeServiceRaw implements
 		boolean ret = false;
 		long id = Long.parseLong(orderId);
 
-		for (CurrencyPair symbol : getExchangeSymbols()) {
+		for (CurrencyPair symbol : this.exchange.getExchangeSymbols()) {
 			try {
 				CancelOrderResult cancelResult = cancelOrder(
 						OKCoinAdapters.adaptSymbol(symbol), id);

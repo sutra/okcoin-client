@@ -19,7 +19,7 @@ public class FreeLtc extends DecimalField {
 	}
 
 	public FreeLtc(double data) {
-		super(FIELD, new BigDecimal(data));
+		super(FIELD, BigDecimal.valueOf(data));
 	}
 
 }

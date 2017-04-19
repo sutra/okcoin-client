@@ -75,11 +75,11 @@ public class HttpClient implements AutoCloseable {
 	}
 
 	public <T> T get(URI uri, Class<T> valueType) throws IOException {
-		return get(uri, new JsonValueReader<T>(objectMapper, valueType));
+		return get(uri, new JsonValueReader<>(objectMapper, valueType));
 	}
 
 	public <T> T get(URI uri, TypeReference<T> valueTypeRef) throws IOException {
-		return get(uri, new JsonValueTypeRefReader<T>(objectMapper, valueTypeRef));
+		return get(uri, new JsonValueTypeRefReader<>(objectMapper, valueTypeRef));
 	}
 
 	public <T> T get(URI uri, ValueReader<T> valueReader) throws IOException {
