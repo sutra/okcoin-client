@@ -7,12 +7,12 @@ import org.knowm.xchange.Exchange;
 import org.knowm.xchange.ExchangeFactory;
 import org.knowm.xchange.ExchangeSpecification;
 import org.knowm.xchange.dto.trade.OpenOrders;
-import org.knowm.xchange.service.polling.trade.PollingTradeService;
+import org.knowm.xchange.service.trade.TradeService;
 import org.oxerr.okcoin.rest.OKCoinException;
 import org.oxerr.okcoin.rest.OKCoinExchange;
 import org.oxerr.okcoin.rest.dto.OrderHistory;
 import org.oxerr.okcoin.rest.dto.OrderResult;
-import org.oxerr.okcoin.rest.service.polling.OKCoinTradeServiceRaw;
+import org.oxerr.okcoin.rest.service.OKCoinTradeServiceRaw;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -23,11 +23,11 @@ public class OrderInfoDemo {
 
 	private final Logger log = LoggerFactory.getLogger(TradeDemo.class);
 
-	private final PollingTradeService tradeService;
+	private final TradeService tradeService;
 	private final OKCoinTradeServiceRaw rawTradeService;
 
 	public OrderInfoDemo(Exchange exchange) {
-		tradeService = exchange.getPollingTradeService();
+		tradeService = exchange.getTradeService();
 		rawTradeService = (OKCoinTradeServiceRaw) tradeService;
 	}
 

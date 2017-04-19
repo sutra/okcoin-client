@@ -28,9 +28,9 @@ import org.oxerr.okcoin.rest.dto.valuereader.IndexHtmlPageReader;
 import org.oxerr.okcoin.rest.dto.valuereader.PlainTextReader;
 import org.oxerr.okcoin.rest.dto.valuereader.ResultValueReader;
 import org.oxerr.okcoin.rest.dto.valuereader.VoidValueReader;
-import org.oxerr.okcoin.rest.service.polling.OKCoinAccountService;
-import org.oxerr.okcoin.rest.service.polling.OKCoinMarketDataService;
-import org.oxerr.okcoin.rest.service.polling.OKCoinTradeService;
+import org.oxerr.okcoin.rest.service.OKCoinAccountService;
+import org.oxerr.okcoin.rest.service.OKCoinMarketDataService;
+import org.oxerr.okcoin.rest.service.OKCoinTradeService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

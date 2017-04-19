@@ -1,4 +1,4 @@
-package org.oxerr.okcoin.rest.service;
+package org.oxerr.okcoin.rest;
 
 import static java.lang.String.format;
 import static java.nio.charset.StandardCharsets.UTF_8;

@@ -1,4 +1,4 @@
-package org.oxerr.okcoin.rest.service.polling;
+package org.oxerr.okcoin.rest.service;
 
 import static org.oxerr.okcoin.rest.OKCoinAdapters.adaptOrderBook;
 import static org.oxerr.okcoin.rest.OKCoinAdapters.adaptSymbol;
@@ -11,15 +11,15 @@ import org.knowm.xchange.currency.CurrencyPair;
 import org.knowm.xchange.dto.marketdata.OrderBook;
 import org.knowm.xchange.dto.marketdata.Ticker;
 import org.knowm.xchange.dto.marketdata.Trades;
-import org.knowm.xchange.service.polling.marketdata.PollingMarketDataService;
+import org.knowm.xchange.service.marketdata.MarketDataService;
 import org.oxerr.okcoin.rest.OKCoinAdapters;
 import org.oxerr.okcoin.rest.dto.Trade;
 
 /**
- * {@link PollingMarketDataService} implementation.
+ * {@link MarketDataService} implementation.
  */
 public class OKCoinMarketDataService extends OKCoinMarketDataServiceRaw
-		implements PollingMarketDataService {
+		implements MarketDataService {
 
 	public OKCoinMarketDataService(Exchange exchange) {
 		super(exchange);

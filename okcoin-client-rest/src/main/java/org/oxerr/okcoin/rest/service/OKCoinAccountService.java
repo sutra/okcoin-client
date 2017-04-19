@@ -1,4 +1,4 @@
-package org.oxerr.okcoin.rest.service.polling;
+package org.oxerr.okcoin.rest.service;
 
 import static org.oxerr.okcoin.rest.OKCoinExchange.TRADE_PASSWORD_PARAMETER;
 
@@ -11,16 +11,16 @@ import org.knowm.xchange.dto.account.AccountInfo;
 import org.knowm.xchange.exceptions.ExchangeException;
 import org.knowm.xchange.exceptions.NotAvailableFromExchangeException;
 import org.knowm.xchange.exceptions.NotYetImplementedForExchangeException;
-import org.knowm.xchange.service.polling.account.PollingAccountService;
+import org.knowm.xchange.service.account.AccountService;
 import org.oxerr.okcoin.rest.OKCoinAdapters;
 import org.oxerr.okcoin.rest.OKCoinException;
 import org.oxerr.okcoin.rest.dto.Withdrawal;
 
 /**
- * {@link PollingAccountService} implementation.
+ * {@link AccountService} implementation.
  */
 public class OKCoinAccountService extends OKCoinAccountServiceRaw implements
-		PollingAccountService {
+		AccountService {
 
 	private final Exchange exchange;
 

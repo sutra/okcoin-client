@@ -9,23 +9,23 @@ import org.knowm.xchange.Exchange;
 import org.knowm.xchange.ExchangeFactory;
 import org.knowm.xchange.ExchangeSpecification;
 import org.knowm.xchange.currency.Currency;
-import org.knowm.xchange.service.polling.account.PollingAccountService;
+import org.knowm.xchange.service.account.AccountService;
 import org.oxerr.okcoin.rest.OKCoinException;
 import org.oxerr.okcoin.rest.dto.Withdrawal;
-import org.oxerr.okcoin.rest.service.polling.OKCoinAccountServiceRaw;
+import org.oxerr.okcoin.rest.service.OKCoinAccountServiceRaw;
 
 /**
  * Demonstration of withdrawing and canceling withdrawal.
  */
 public class WithdrawDemo {
 
-	private final PollingAccountService accountService;
+	private final AccountService accountService;
 	private final OKCoinAccountServiceRaw rawAccountService;
 	private final String tradePwd;
 
 	public WithdrawDemo(Exchange exchange, String tradePwd) {
 		this.tradePwd = tradePwd;
-		accountService = exchange.getPollingAccountService();
+		accountService = exchange.getAccountService();
 		rawAccountService = (OKCoinAccountServiceRaw) accountService;
 	}
 

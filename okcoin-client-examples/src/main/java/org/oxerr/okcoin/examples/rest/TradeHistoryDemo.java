@@ -7,9 +7,9 @@ import org.knowm.xchange.ExchangeFactory;
 import org.knowm.xchange.ExchangeSpecification;
 import org.knowm.xchange.currency.CurrencyPair;
 import org.knowm.xchange.dto.trade.UserTrades;
-import org.knowm.xchange.service.polling.trade.PollingTradeService;
+import org.knowm.xchange.service.trade.TradeService;
 import org.oxerr.okcoin.rest.OKCoinExchange;
-import org.oxerr.okcoin.rest.service.polling.OKCoinTradeService.OKCoinTradeHistoryParams;
+import org.oxerr.okcoin.rest.service.OKCoinTradeService.OKCoinTradeHistoryParams;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -20,10 +20,10 @@ public class TradeHistoryDemo {
 
 	private final Logger log = LoggerFactory.getLogger(TradeHistoryDemo.class);
 
-	private final PollingTradeService tradeService;
+	private final TradeService tradeService;
 
 	public TradeHistoryDemo(Exchange exchange) {
-		tradeService = exchange.getPollingTradeService();
+		tradeService = exchange.getTradeService();
 	}
 
 	public void demoGetTradeHistory() throws IOException {

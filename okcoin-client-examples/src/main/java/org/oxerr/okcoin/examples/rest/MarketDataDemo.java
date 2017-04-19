@@ -18,13 +18,13 @@ import org.knowm.xchange.dto.marketdata.OrderBook;
 import org.knowm.xchange.dto.marketdata.Ticker;
 import org.knowm.xchange.dto.marketdata.Trades;
 import org.knowm.xchange.exceptions.ExchangeException;
-import org.knowm.xchange.service.polling.marketdata.PollingMarketDataService;
+import org.knowm.xchange.service.marketdata.MarketDataService;
 import org.oxerr.okcoin.rest.OKCoinExchange;
 import org.oxerr.okcoin.rest.dto.CandlestickChart;
 import org.oxerr.okcoin.rest.dto.Depth;
 import org.oxerr.okcoin.rest.dto.TickerResponse;
 import org.oxerr.okcoin.rest.dto.Trade;
-import org.oxerr.okcoin.rest.service.polling.OKCoinMarketDataServiceRaw;
+import org.oxerr.okcoin.rest.service.OKCoinMarketDataServiceRaw;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -35,11 +35,11 @@ public class MarketDataDemo {
 
 	private final Logger log = LoggerFactory.getLogger(MarketDataDemo.class);
 
-	private final PollingMarketDataService mdService;
+	private final MarketDataService mdService;
 	private final OKCoinMarketDataServiceRaw rawMdService;
 
 	public MarketDataDemo(Exchange exchange) {
-		mdService = exchange.getPollingMarketDataService();
+		mdService = exchange.getMarketDataService();
 		rawMdService = (OKCoinMarketDataServiceRaw) mdService;
 	}
 

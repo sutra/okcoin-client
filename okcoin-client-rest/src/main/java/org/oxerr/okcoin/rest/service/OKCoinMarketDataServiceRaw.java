@@ -1,4 +1,4 @@
-package org.oxerr.okcoin.rest.service.polling;
+package org.oxerr.okcoin.rest.service;
 
 import java.io.IOException;
 
@@ -16,7 +16,7 @@ import si.mazi.rescu.RestProxyFactory;
 /**
  * Raw market data service.
  */
-public class OKCoinMarketDataServiceRaw extends OKCoinBasePollingService {
+public class OKCoinMarketDataServiceRaw extends OKCoinBaseService {
 
 	private final OKCoin okCoin;
 

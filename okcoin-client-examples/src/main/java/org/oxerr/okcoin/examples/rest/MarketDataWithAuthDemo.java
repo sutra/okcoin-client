@@ -7,7 +7,7 @@ import org.knowm.xchange.ExchangeFactory;
 import org.knowm.xchange.ExchangeSpecification;
 import org.oxerr.okcoin.rest.OKCoinExchange;
 import org.oxerr.okcoin.rest.dto.Trade;
-import org.oxerr.okcoin.rest.service.polling.OKCoinTradeServiceRaw;
+import org.oxerr.okcoin.rest.service.OKCoinTradeServiceRaw;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -18,7 +18,7 @@ public class MarketDataWithAuthDemo {
 	private final OKCoinTradeServiceRaw rawTradeService;
 
 	public MarketDataWithAuthDemo(Exchange exchange) {
-		rawTradeService = (OKCoinTradeServiceRaw) exchange.getPollingTradeService();
+		rawTradeService = (OKCoinTradeServiceRaw) exchange.getTradeService();
 	}
 
 	public void demoTradeHistory() throws IOException {

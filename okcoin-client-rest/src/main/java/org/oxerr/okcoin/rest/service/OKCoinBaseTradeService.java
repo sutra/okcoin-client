@@ -1,4 +1,4 @@
-package org.oxerr.okcoin.rest.service.polling;
+package org.oxerr.okcoin.rest.service;
 
 import static org.oxerr.okcoin.rest.OKCoinExchange.CONNECTION_REQUEST_TIMEOUT_PARAMETER;
 import static org.oxerr.okcoin.rest.OKCoinExchange.CONNECT_TIMEOUT_PARAMETER;
@@ -14,7 +14,7 @@ import org.knowm.xchange.Exchange;
 import org.knowm.xchange.ExchangeSpecification;
 import org.knowm.xchange.dto.meta.RateLimit;
 import org.oxerr.okcoin.rest.OKCoin;
-import org.oxerr.okcoin.rest.service.OKCoinDigest;
+import org.oxerr.okcoin.rest.OKCoinDigest;
 import org.oxerr.okcoin.rest.service.web.OKCoinClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,11 +24,11 @@ import si.mazi.rescu.RestProxyFactory;
 /**
  * Base trade service.
  */
-public class OKCoinBaseTradePollingService extends OKCoinBasePollingService {
+public class OKCoinBaseTradeService extends OKCoinBaseService {
 
 	private final long interval;
 
-	private final Logger log = LoggerFactory.getLogger(OKCoinBaseTradePollingService.class);
+	private final Logger log = LoggerFactory.getLogger(OKCoinBaseTradeService.class);
 
 	protected final OKCoin okCoin;
 
@@ -41,7 +41,7 @@ public class OKCoinBaseTradePollingService extends OKCoinBasePollingService {
 	protected final OKCoinClient okCoinClient;
 	protected final int loginMaxRetryTimes;
 
-	protected OKCoinBaseTradePollingService(Exchange exchange) {
+	protected OKCoinBaseTradeService(Exchange exchange) {
 		super(exchange);
 
 		final RateLimit[]  rateLimits = exchange.getExchangeMetaData().getPrivateRateLimits();

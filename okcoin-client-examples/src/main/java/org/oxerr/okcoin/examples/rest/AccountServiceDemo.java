@@ -7,12 +7,12 @@ import org.knowm.xchange.Exchange;
 import org.knowm.xchange.ExchangeFactory;
 import org.knowm.xchange.ExchangeSpecification;
 import org.knowm.xchange.dto.account.AccountInfo;
-import org.knowm.xchange.service.polling.account.PollingAccountService;
+import org.knowm.xchange.service.account.AccountService;
 import org.oxerr.okcoin.rest.OKCoinException;
 import org.oxerr.okcoin.rest.OKCoinExchange;
 import org.oxerr.okcoin.rest.dto.AccountRecords;
 import org.oxerr.okcoin.rest.dto.UserInfo;
-import org.oxerr.okcoin.rest.service.polling.OKCoinAccountServiceRaw;
+import org.oxerr.okcoin.rest.service.OKCoinAccountServiceRaw;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -23,11 +23,11 @@ public class AccountServiceDemo {
 
 	private final Logger log = LoggerFactory.getLogger(AccountServiceDemo.class);
 
-	private final PollingAccountService accountService;
+	private final AccountService accountService;
 	private final OKCoinAccountServiceRaw rawAccountService;
 
 	public AccountServiceDemo(Exchange exchange) {
-		accountService = exchange.getPollingAccountService();
+		accountService = exchange.getAccountService();
 		rawAccountService = (OKCoinAccountServiceRaw) accountService;
 	}
 

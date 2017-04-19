@@ -12,7 +12,7 @@ import javax.websocket.DeploymentException;
 import javax.websocket.Session;
 import javax.websocket.WebSocketContainer;
 
-import org.oxerr.okcoin.rest.service.OKCoinDigest;
+import org.oxerr.okcoin.rest.OKCoinDigest;
 import org.oxerr.okcoin.websocket.OKCoinClientEndpoint;
 import org.oxerr.okcoin.websocket.event.OKCoinDataListener;
 import org.slf4j.Logger;

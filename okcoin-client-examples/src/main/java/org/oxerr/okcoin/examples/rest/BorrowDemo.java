@@ -5,11 +5,11 @@ import java.io.IOException;
 import org.knowm.xchange.Exchange;
 import org.knowm.xchange.ExchangeFactory;
 import org.knowm.xchange.ExchangeSpecification;
-import org.knowm.xchange.service.polling.trade.PollingTradeService;
+import org.knowm.xchange.service.trade.TradeService;
 import org.oxerr.okcoin.rest.OKCoinException;
 import org.oxerr.okcoin.rest.OKCoinExchange;
 import org.oxerr.okcoin.rest.dto.BorrowsInfo;
-import org.oxerr.okcoin.rest.service.polling.OKCoinTradeServiceRaw;
+import org.oxerr.okcoin.rest.service.OKCoinTradeServiceRaw;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -17,11 +17,11 @@ public class BorrowDemo {
 
 	private final Logger log = LoggerFactory.getLogger(BorrowDemo.class);
 
-	private final PollingTradeService tradeService;
+	private final TradeService tradeService;
 	private final OKCoinTradeServiceRaw rawTradeService;
 
 	public BorrowDemo(Exchange exchange) {
-		tradeService = exchange.getPollingTradeService();
+		tradeService = exchange.getTradeService();
 		rawTradeService = (OKCoinTradeServiceRaw) tradeService;
 	}
 

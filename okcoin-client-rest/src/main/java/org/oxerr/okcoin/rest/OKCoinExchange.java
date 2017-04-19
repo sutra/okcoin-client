@@ -3,9 +3,9 @@ package org.oxerr.okcoin.rest;
 import org.knowm.xchange.BaseExchange;
 import org.knowm.xchange.Exchange;
 import org.knowm.xchange.ExchangeSpecification;
-import org.oxerr.okcoin.rest.service.polling.OKCoinAccountService;
-import org.oxerr.okcoin.rest.service.polling.OKCoinMarketDataService;
-import org.oxerr.okcoin.rest.service.polling.OKCoinTradeService;
+import org.oxerr.okcoin.rest.service.OKCoinAccountService;
+import org.oxerr.okcoin.rest.service.OKCoinMarketDataService;
+import org.oxerr.okcoin.rest.service.OKCoinTradeService;
 
 import si.mazi.rescu.SynchronizedValueFactory;
 
@@ -33,18 +33,18 @@ public class OKCoinExchange extends BaseExchange {
 	 */
 	@Override
 	protected void initServices() {
-		this.pollingMarketDataService = new OKCoinMarketDataService(this);
+		this.marketDataService = new OKCoinMarketDataService(this);
 
 		if (exchangeSpecification.getApiKey() != null
 			&& exchangeSpecification.getSecretKey() != null) {
-			this.pollingAccountService = new OKCoinAccountService(this);
+			this.accountService = new OKCoinAccountService(this);
 		}
 
 		if ((exchangeSpecification.getApiKey() != null
 				&& exchangeSpecification.getSecretKey() != null)
 			|| (exchangeSpecification.getUserName() != null
 				&& exchangeSpecification.getPassword() != null)) {
-			this.pollingTradeService = new OKCoinTradeService(this);
+			this.tradeService = new OKCoinTradeService(this);
 		}
 	}
 
