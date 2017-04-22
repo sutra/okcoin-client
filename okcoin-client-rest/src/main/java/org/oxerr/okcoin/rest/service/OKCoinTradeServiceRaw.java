@@ -1,4 +1,4 @@
-package org.oxerr.okcoin.rest.service.polling;
+package org.oxerr.okcoin.rest.service;
 
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -37,7 +37,7 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 /**
  * Raw trade service.
  */
-public class OKCoinTradeServiceRaw extends OKCoinBaseTradePollingService {
+public class OKCoinTradeServiceRaw extends OKCoinBaseTradeService {
 
 	private static final String METHOD_TRADE = "trade";
 	private static final String METHOD_CANCEL_ORDER = "cancel_order";

@@ -9,11 +9,11 @@ import org.knowm.xchange.ExchangeFactory;
 import org.knowm.xchange.ExchangeSpecification;
 import org.knowm.xchange.currency.CurrencyPair;
 import org.knowm.xchange.dto.Order.OrderType;
-import org.knowm.xchange.service.polling.trade.PollingTradeService;
+import org.knowm.xchange.service.trade.TradeService;
 import org.oxerr.okcoin.rest.OKCoinExchange;
 import org.oxerr.okcoin.rest.dto.IcebergOrder;
 import org.oxerr.okcoin.rest.dto.IcebergOrderHistory;
-import org.oxerr.okcoin.rest.service.polling.OKCoinTradeServiceRaw;
+import org.oxerr.okcoin.rest.service.OKCoinTradeServiceRaw;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -24,12 +24,12 @@ public class IcebergOrderDemo {
 
 	private final Logger log = LoggerFactory.getLogger(IcebergOrderDemo.class);
 
-	private final PollingTradeService tradeService;
+	private final TradeService tradeService;
 	private final OKCoinTradeServiceRaw rawTradeService;
 	private final CurrencyPair currencyPair;
 
 	public IcebergOrderDemo(Exchange exchange, CurrencyPair currencyPair) {
-		tradeService = exchange.getPollingTradeService();
+		tradeService = exchange.getTradeService();
 		rawTradeService = (OKCoinTradeServiceRaw) tradeService;
 		this.currencyPair = currencyPair;
 	}

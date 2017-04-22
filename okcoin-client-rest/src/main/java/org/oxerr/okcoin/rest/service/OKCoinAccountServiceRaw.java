@@ -1,4 +1,4 @@
-package org.oxerr.okcoin.rest.service.polling;
+package org.oxerr.okcoin.rest.service;
 
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -12,7 +12,7 @@ import org.oxerr.okcoin.rest.dto.Withdrawal;
 /**
  * Raw account service.
  */
-public class OKCoinAccountServiceRaw extends OKCoinBaseTradePollingService {
+public class OKCoinAccountServiceRaw extends OKCoinBaseTradeService {
 
 	private static final String METHOD_GET_USER_INFO = "userinfo";
 

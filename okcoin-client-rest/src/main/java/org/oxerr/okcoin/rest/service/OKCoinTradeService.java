@@ -1,7 +1,8 @@
-package org.oxerr.okcoin.rest.service.polling;
+package org.oxerr.okcoin.rest.service;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
@@ -16,11 +17,13 @@ import org.knowm.xchange.dto.trade.UserTrades;
 import org.knowm.xchange.exceptions.ExchangeException;
 import org.knowm.xchange.exceptions.NotAvailableFromExchangeException;
 import org.knowm.xchange.exceptions.NotYetImplementedForExchangeException;
-import org.knowm.xchange.service.polling.trade.PollingTradeService;
-import org.knowm.xchange.service.polling.trade.params.DefaultTradeHistoryParamPaging;
-import org.knowm.xchange.service.polling.trade.params.TradeHistoryParamCurrencyPair;
-import org.knowm.xchange.service.polling.trade.params.TradeHistoryParamPaging;
-import org.knowm.xchange.service.polling.trade.params.TradeHistoryParams;
+import org.knowm.xchange.service.trade.TradeService;
+import org.knowm.xchange.service.trade.params.DefaultTradeHistoryParamPaging;
+import org.knowm.xchange.service.trade.params.TradeHistoryParamCurrencyPair;
+import org.knowm.xchange.service.trade.params.TradeHistoryParamPaging;
+import org.knowm.xchange.service.trade.params.TradeHistoryParams;
+import org.knowm.xchange.service.trade.params.orders.DefaultOpenOrdersParamCurrencyPair;
+import org.knowm.xchange.service.trade.params.orders.OpenOrdersParams;
 import org.oxerr.okcoin.rest.OKCoinAdapters;
 import org.oxerr.okcoin.rest.OKCoinException;
 import org.oxerr.okcoin.rest.dto.CancelOrderResult;
@@ -31,10 +34,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * {@link PollingTradeService} implementation.
+ * {@link TradeService} implementation.
  */
 public class OKCoinTradeService extends OKCoinTradeServiceRaw implements
-		PollingTradeService {
+		TradeService {
 
 	private final Logger log = LoggerFactory.getLogger(OKCoinTradeService.class);
 
@@ -58,6 +61,26 @@ public class OKCoinTradeService extends OKCoinTradeServiceRaw implements
 		}
 
 		return OKCoinAdapters.adaptOpenOrders(orderResults);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public OpenOrders getOpenOrders(OpenOrdersParams params)
+			throws ExchangeException, NotAvailableFromExchangeException,
+			NotYetImplementedForExchangeException, IOException {
+		DefaultOpenOrdersParamCurrencyPair p = (DefaultOpenOrdersParamCurrencyPair) params;
+		OrderResult orderResult = getOrder(OKCoinAdapters.adaptSymbol(p.getCurrencyPair()), -1);
+		return OKCoinAdapters.adaptOpenOrders(Arrays.asList(orderResult));
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public DefaultOpenOrdersParamCurrencyPair createOpenOrdersParams() {
+		return new DefaultOpenOrdersParamCurrencyPair();
 	}
 
 	/**
