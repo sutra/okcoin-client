@@ -1,17 +1,18 @@
 {
-	"currencyPair": {
+	"currency_pairs": {
 		"BTC/CNY": {
-			"priceScale": 2
+			"price_scale": 2
 		},
 
 		"LTC/CNY": {
-			"priceScale": 2
+			"price_scale": 2
 		}
 	},
-	"privateRateLimits": [
+	"private_rate_limits": [
 		{
 			"calls": 20,
-			"timeUnit": "seconds"
+			"time_unit": "seconds"
 		}
-	]
+	],
+	"share_rate_limits": true
 }
