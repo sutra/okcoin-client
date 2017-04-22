@@ -851,6 +851,7 @@
   </message>
   <message name="MarketDataIncrementalRefresh" msgtype="X" msgcat="app">
     <field name="MDReqID" required="N"/>
+    <field name="Symbol" required="Y"/>
     <group name="NoMDEntries" required="Y">
       <field name="MDUpdateAction" required="Y"/>
       <field name="DeleteReason" required="N"/>
