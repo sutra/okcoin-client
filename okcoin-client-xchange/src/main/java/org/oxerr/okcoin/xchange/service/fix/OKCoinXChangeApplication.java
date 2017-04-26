@@ -125,7 +125,7 @@ public class OKCoinXChangeApplication extends OKCoinApplication {
 		Date origTime = message.getField(new OrigTime()).getValue();
 		String symbol = message.getSymbol().getValue();
 		String mdReqId = message.isSetMDReqID() ? message.getMDReqID().getValue() : null;
-		CurrencyPair currencyPair = toCurrencyPair(symbol);
+		CurrencyPair currencyPair = OKCoinFIXAdapters.adaptCurrencyPair(symbol);
 
 		log.debug("OrigTime: {}", origTime);
 		log.debug("Symbol: {}, currency pair: {}", symbol, currencyPair);
@@ -215,7 +215,7 @@ public class OKCoinXChangeApplication extends OKCoinApplication {
 			throws FieldNotFound, UnsupportedMessageType, IncorrectTagValue {
 		final Date date = message.getHeader().getUtcTimeStamp(SendingTime.FIELD);
 		final String symbol = message.getField(new Symbol()).getValue();
-		final CurrencyPair currencyPair = toCurrencyPair(symbol);
+		final CurrencyPair currencyPair = OKCoinFIXAdapters.adaptCurrencyPair(symbol);
 
 		for (int i = 1, l = message.getNoMDEntries().getValue(); i <= l; i++) {
 			final Group group = message.getGroup(i, NoMDEntries.FIELD);
@@ -339,12 +339,6 @@ public class OKCoinXChangeApplication extends OKCoinApplication {
 	}
 
 	public void onAccountInfo(AccountInfo accountInfo, SessionID sessionId) {
-	}
-
-	private CurrencyPair toCurrencyPair(String symbol) {
-		String[] symbols = symbol.split("/");
-		CurrencyPair currencyPair = new CurrencyPair(symbols[0], symbols[1]);
-		return currencyPair;
 	}
 
 }
