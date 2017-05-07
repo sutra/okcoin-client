@@ -7,7 +7,7 @@
 	<parent>
 		<groupId>org.oxerr</groupId>
 		<artifactId>okcoin-client</artifactId>
-		<version>5.0.1</version>
+		<version>5.1.0</version>
 	</parent>
 
 	<artifactId>okcoin-client-rest</artifactId>

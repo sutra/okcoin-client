@@ -125,7 +125,7 @@ public class OKCoinXChangeApplication extends OKCoinApplication {
 		Date origTime = message.getField(new OrigTime()).getValue();
 		String symbol = message.getSymbol().getValue();
 		String mdReqId = message.isSetMDReqID() ? message.getMDReqID().getValue() : null;
-		CurrencyPair currencyPair = toCurrencyPair(symbol);
+		CurrencyPair currencyPair = OKCoinFIXAdapters.adaptCurrencyPair(symbol);
 
 		log.debug("OrigTime: {}", origTime);
 		log.debug("Symbol: {}, currency pair: {}", symbol, currencyPair);
@@ -215,7 +215,7 @@ public class OKCoinXChangeApplication extends OKCoinApplication {
 			throws FieldNotFound, UnsupportedMessageType, IncorrectTagValue {
 		final Date date = message.getHeader().getUtcTimeStamp(SendingTime.FIELD);
 		final String symbol = message.getField(new Symbol()).getValue();
-		final CurrencyPair currencyPair = toCurrencyPair(symbol);
+		final CurrencyPair currencyPair = OKCoinFIXAdapters.adaptCurrencyPair(symbol);
 
 		for (int i = 1, l = message.getNoMDEntries().getValue(); i <= l; i++) {
 			final Group group = message.getGroup(i, NoMDEntries.FIELD);
@@ -251,27 +251,22 @@ public class OKCoinXChangeApplication extends OKCoinApplication {
 					this.orderBook.update(limitOrder);
 					break;
 				case MDUpdateAction.DELETE:
-					final List<LimitOrder> orders = this.orderBook.getOrders(limitOrder.getType());
-					final int idx = Collections.binarySearch(orders, limitOrder);
-					if (idx >= 0) {
-						final LimitOrder oldLimitOrder = orders.get(idx);
-						if (!oldLimitOrder.getLimitPrice().equals(limitOrder.getLimitPrice())) {
-							log.error("FIXME: The order book has been changed.");
-						} else {
-							final BigDecimal newSize = oldLimitOrder.getTradableAmount().subtract(limitOrder.getTradableAmount());
-							final OrderBookUpdate orderBookUpdate = new OrderBookUpdate(oldLimitOrder.getType(), oldLimitOrder.getTradableAmount(), oldLimitOrder.getCurrencyPair(), oldLimitOrder.getLimitPrice(), oldLimitOrder.getTimestamp(), newSize);
-							this.orderBook.update(orderBookUpdate);
-						}
-					} else {
-						log.trace("{} {}@{} was not found.", limitOrder.getType(), limitOrder.getTradableAmount(), limitOrder.getLimitPrice());
-					}
+					OrderBookUpdate orderBookUpdate = new OrderBookUpdate(
+						limitOrder.getType(),
+						limitOrder.getTradableAmount(),
+						limitOrder.getCurrencyPair(),
+						limitOrder.getLimitPrice(),
+						limitOrder.getTimestamp(), BigDecimal.ZERO);
+					this.orderBook.update(orderBookUpdate);
 					break;
 				default:
-					log.warn("Unsupported MDUpdateAction {}.", action);
+					log.warn("Unsupported MDUpdateAction: {}.", action);
 					break;
 				}
 			}
 		}
+
+		match(this.orderBook);
 
 		onOrderBook(this.orderBook, sessionId);
 	}
@@ -341,10 +336,42 @@ public class OKCoinXChangeApplication extends OKCoinApplication {
 	public void onAccountInfo(AccountInfo accountInfo, SessionID sessionId) {
 	}
 
-	private CurrencyPair toCurrencyPair(String symbol) {
-		String[] symbols = symbol.split("/");
-		CurrencyPair currencyPair = new CurrencyPair(symbols[0], symbols[1]);
-		return currencyPair;
+	private void match(final OrderBook orderBook) {
+		if (orderBook.getBids().size() > 0 && orderBook.getAsks().size() > 0) {
+			final LimitOrder bid = orderBook.getBids().get(0);
+			final LimitOrder ask = orderBook.getAsks().get(0);
+
+			if (bid.getLimitPrice().compareTo(ask.getLimitPrice()) >= 0) {
+				final BigDecimal tradeAmount = bid.getTradableAmount().min(ask.getTradableAmount());
+				log.trace("Trade {} bid@{} ask@{}",
+					tradeAmount,
+					bid.getLimitPrice(),
+					ask.getLimitPrice()
+				);
+
+				final OrderBookUpdate bidUpdate = new OrderBookUpdate(
+					bid.getType(),
+					bid.getTradableAmount(),
+					bid.getCurrencyPair(),
+					bid.getLimitPrice(),
+					bid.getTimestamp(),
+					bid.getTradableAmount().subtract(tradeAmount)
+				);
+				final OrderBookUpdate askUpdate = new OrderBookUpdate(
+					ask.getType(),
+					ask.getTradableAmount(),
+					ask.getCurrencyPair(),
+					ask.getLimitPrice(),
+					ask.getTimestamp(),
+					ask.getTradableAmount().subtract(tradeAmount)
+				);
+
+				orderBook.update(bidUpdate);
+				orderBook.update(askUpdate);
+
+				match(orderBook);
+			}
+		}
 	}
 
 }

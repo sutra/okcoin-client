@@ -26,6 +26,12 @@ public final class OKCoinFIXAdapters {
 		return String.format("%s/%s", currencyPair.base.getCurrencyCode(), currencyPair.counter.getCurrencyCode());
 	}
 
+	public static CurrencyPair adaptCurrencyPair(String symbol) {
+		String[] symbols = symbol.split("/");
+		CurrencyPair currencyPair = new CurrencyPair(symbols[0], symbols[1]);
+		return currencyPair;
+	}
+
 	public static AccountInfo adaptAccountInfo(AccountInfoResponse message)
 			throws FieldNotFound {
 		final String[] currencies = message.getCurrency().getValue().split("/");

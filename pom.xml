@@ -6,7 +6,7 @@
 
 	<groupId>org.oxerr</groupId>
 	<artifactId>okcoin-client</artifactId>
-	<version>5.0.1</version>
+	<version>5.1.0</version>
 	<packaging>pom</packaging>
 
 	<name>OKCoin Client</name>
@@ -48,7 +48,7 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-		<jackson.version>2.7.4</jackson.version>
+		<jackson.version>2.8.8</jackson.version>
 		<quickfixj.version>1.5.3-bd</quickfixj.version>
 		<mina.version>1.1.7</mina.version>
 	</properties>
@@ -219,12 +219,12 @@
 			<dependency>
 				<groupId>org.apache.commons</groupId>
 				<artifactId>commons-lang3</artifactId>
-				<version>3.4</version>
+				<version>3.5</version>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.httpcomponents</groupId>
 				<artifactId>httpclient</artifactId>
-				<version>4.5.2</version>
+				<version>4.5.3</version>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.mina</groupId>
@@ -248,13 +248,13 @@
 			<dependency>
 				<groupId>org.glassfish.tyrus</groupId>
 				<artifactId>tyrus-container-grizzly-client</artifactId>
-				<version>1.12</version>
+				<version>1.13.1</version>
 			</dependency>
 
 			<dependency>
 				<groupId>org.slf4j</groupId>
 				<artifactId>slf4j-api</artifactId>
-				<version>1.7.21</version>
+				<version>1.7.25</version>
 			</dependency>
 			<dependency>
 				<groupId>net.sourceforge.nekohtml</groupId>
@@ -279,7 +279,7 @@
 			<dependency>
 				<groupId>ch.qos.logback</groupId>
 				<artifactId>logback-classic</artifactId>
-				<version>1.1.7</version>
+				<version>1.2.3</version>
 			</dependency>
 			<dependency>
 				<groupId>commons-io</groupId>
