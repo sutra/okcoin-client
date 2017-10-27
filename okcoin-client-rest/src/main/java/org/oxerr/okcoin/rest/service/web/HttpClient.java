@@ -1,7 +1,6 @@
 package org.oxerr.okcoin.rest.service.web;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -10,7 +9,6 @@ import java.util.List;
 
 import org.apache.http.Header;
 import org.apache.http.NameValuePair;
-import org.apache.http.StatusLine;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -35,16 +33,16 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class HttpClient implements AutoCloseable {
 
-	/**
-	 * Status code (200) indicating the request succeeded normally.
-	 */
-	private static final int SC_OK = 200;
-
 	private final Logger log = LoggerFactory.getLogger(HttpClient.class);
 
 	private final CloseableHttpClient httpClient;
 
 	private final ObjectMapper objectMapper;
+
+	public HttpClient(CloseableHttpClient httpClient, ObjectMapper objectMapper) {
+		this.httpClient = httpClient;
+		this.objectMapper = objectMapper;
+	}
 
 	public HttpClient(
 			int socketTimeout,
@@ -64,7 +62,6 @@ public class HttpClient implements AutoCloseable {
 				.setSocketTimeout(socketTimeout)
 				.setConnectTimeout(connectTimeout)
 				.setConnectionRequestTimeout(connectionRequestTimeout)
-				.setStaleConnectionCheckEnabled(true)
 				.build();
 		httpClientBuilder.setDefaultRequestConfig(defaultRequestConfig);
 
@@ -83,7 +80,7 @@ public class HttpClient implements AutoCloseable {
 	}
 
 	public <T> T get(URI uri, ValueReader<T> valueReader) throws IOException {
-		return execute(valueReader, new HttpGet(uri));
+		return execute(new HttpGet(uri), valueReader);
 	}
 
 	public <T> T post(URI uri, ValueReader<T> valueReader,
@@ -95,36 +92,34 @@ public class HttpClient implements AutoCloseable {
 			List<NameValuePair> params) throws IOException {
 		HttpPost post = new HttpPost(uri);
 		post.setEntity(new UrlEncodedFormEntity(params));
-		return execute(valueReader, post);
+		return execute(post, valueReader);
 	}
 
 	public <T> T post(URI uri, ValueReader<T> valueReader, String content,
 			String charset) throws IOException {
 		HttpPost post = new HttpPost(uri);
 		post.setEntity(new StringEntity(content, charset));
-		return execute(valueReader, post);
+		return execute(post, valueReader);
 	}
 
 	public <T> T post(URI uri, ValueReader<T> valueReader, String content,
 			ContentType contentType) throws IOException {
 		HttpPost post = new HttpPost(uri);
 		post.setEntity(new StringEntity(content, contentType));
-		return execute(valueReader, post);
+		return execute(post, valueReader);
 	}
 
+	@Deprecated
 	public <T> T execute(
 			final ValueReader<T> valueReader,
 			final HttpUriRequest request) throws IOException {
+		return execute(request, valueReader);
+	}
+
+	public <T> T execute(HttpUriRequest request, ValueReader<T> valueReader) throws IOException {
 		log.debug("Executing: {}", request.getURI());
 		try (CloseableHttpResponse response = httpClient.execute(request)) {
-			final StatusLine statusLine = response.getStatusLine();
-			if (statusLine.getStatusCode() == SC_OK) {
-				try (InputStream content = response.getEntity().getContent()) {
-					return valueReader.read(content);
-				}
-			} else {
-				throw new IOException(statusLine.getReasonPhrase());
-			}
+			return valueReader.read(response);
 		}
 	}
 
