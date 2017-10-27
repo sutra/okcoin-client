@@ -9,6 +9,7 @@ import java.util.logging.Logger;
 import org.apache.commons.io.IOUtils;
 
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class JsonValueTypeRefReader<T> implements ValueReader<T> {
@@ -37,7 +38,15 @@ public class JsonValueTypeRefReader<T> implements ValueReader<T> {
 			log.log(Level.FINEST, "JSON: {0}", s);
 			inputStream.reset();
 		}
-		return objectMapper.readValue(inputStream, valueTypeRef);
+		try {
+			return objectMapper.readValue(inputStream, valueTypeRef);
+		} catch (JsonMappingException jme) {
+			if (jme.getCause() instanceof RuntimeException) {
+				throw (RuntimeException) jme.getCause();
+			} else {
+				throw jme;
+			}
+		}
 	}
 
 }
