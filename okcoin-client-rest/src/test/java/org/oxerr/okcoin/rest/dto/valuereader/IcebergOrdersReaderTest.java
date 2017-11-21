@@ -7,6 +7,7 @@ import static org.junit.Assert.fail;
 import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigDecimal;
+import java.nio.charset.StandardCharsets;
 
 import org.apache.commons.io.IOUtils;
 import org.junit.Test;
@@ -24,7 +25,7 @@ public class IcebergOrdersReaderTest {
 	@Test
 	public void testNotLoggedIn() throws IOException {
 		try (InputStream inputStream = IOUtils.toInputStream("", OKCoinClient.ENCODING)) {
-			reader.read(inputStream);
+			reader.read(inputStream, null, StandardCharsets.UTF_8);
 			fail("A LoginRequiredException should be thrown.");
 		} catch (LoginRequiredException e) {
 			assertEquals("No HTML table found.", e.getMessage());
@@ -35,7 +36,7 @@ public class IcebergOrdersReaderTest {
 	public void testIcebergOrders0() throws IOException {
 		try (InputStream inputStream = getClass().getResourceAsStream(
 				"open-iceberg-orders-0.html")) {
-			IcebergOrder[] orders = reader.read(inputStream).getOrders();
+			IcebergOrder[] orders = reader.read(inputStream, null, StandardCharsets.UTF_8).getOrders();
 			assertEquals(0, orders.length);
 		}
 	}
@@ -44,7 +45,7 @@ public class IcebergOrdersReaderTest {
 	public void testIcebergOrders1() throws IOException {
 		try (InputStream inputStream = getClass().getResourceAsStream(
 				"open-iceberg-orders-1.html")) {
-			IcebergOrder[] orders = reader.read(inputStream).getOrders();
+			IcebergOrder[] orders = reader.read(inputStream, null, StandardCharsets.UTF_8).getOrders();
 			assertEquals(1, orders.length);
 			IcebergOrder order = orders[0];
 			assertEquals("2015-02-15T09:53:28Z", order.getDate().toString());
@@ -61,7 +62,7 @@ public class IcebergOrdersReaderTest {
 	@Test
 	public void testIcebergOrderHistory() throws IOException {
 		try (InputStream inputStream = getClass().getResourceAsStream("order-history-iceberg-orders.html")) {
-			IcebergOrderHistory history = reader.read(inputStream);
+			IcebergOrderHistory history = reader.read(inputStream, null, StandardCharsets.UTF_8);
 			IcebergOrder[] orders = history.getOrders();
 			assertEquals(10, orders.length);
 			assertEquals("2015-02-17T14:23:25Z", orders[0].getDate().toString());

@@ -2,9 +2,12 @@ package org.oxerr.okcoin.rest.dto.valuereader;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import javax.annotation.Nullable;
 
 import org.apache.commons.io.IOUtils;
 
@@ -30,11 +33,12 @@ public class JsonValueTypeRefReader<T> implements ValueReader<T> {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public T read(InputStream inputStream) throws IOException {
+	public T read(InputStream inputStream,
+		@Nullable String mimeType, @Nullable Charset charset) throws IOException {
 		if (log.isLoggable(Level.FINEST)) {
 			inputStream = IOUtils.buffer(inputStream);
 			inputStream.mark(Integer.MAX_VALUE);
-			String s = IOUtils.toString(inputStream, StandardCharsets.UTF_8);
+			String s = IOUtils.toString(inputStream, charset != null ? charset : StandardCharsets.UTF_8);
 			log.log(Level.FINEST, "JSON: {0}", s);
 			inputStream.reset();
 		}

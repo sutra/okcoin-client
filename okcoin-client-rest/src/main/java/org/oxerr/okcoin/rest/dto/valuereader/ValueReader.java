@@ -56,6 +56,7 @@ public interface ValueReader<T> {
 		return read(inputStream);
 	}
 
+	@Deprecated
 	default T read(@Nonnull InputStream inputStream) throws IOException {
 		return null;
 	}
