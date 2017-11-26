@@ -3,6 +3,9 @@ package org.oxerr.okcoin.rest.dto.valuereader;
 import java.io.IOException;
 import java.io.InputStream;
 
+import javax.annotation.Nullable;
+
+import org.apache.http.entity.ContentType;
 import org.oxerr.okcoin.rest.dto.Result;
 import org.oxerr.okcoin.rest.service.web.LoginRequiredException;
 
@@ -28,9 +31,10 @@ public class ResultValueReader implements ValueReader<Result> {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public Result read(InputStream inputStream) throws IOException {
+	public Result read(InputStream inputStream,
+		@Nullable ContentType contentType) throws IOException {
 		try {
-			return jsonValueReader.read(inputStream);
+			return jsonValueReader.read(inputStream, contentType);
 		} catch (JsonMappingException e) {
 			throw new LoginRequiredException(e.getMessage(), e);
 		}
