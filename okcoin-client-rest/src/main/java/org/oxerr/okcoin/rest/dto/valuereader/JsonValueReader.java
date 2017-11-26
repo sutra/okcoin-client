@@ -2,6 +2,7 @@ package org.oxerr.okcoin.rest.dto.valuereader;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.charset.Charset;
 
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -21,7 +22,7 @@ public class JsonValueReader<T> implements ValueReader<T> {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public T read(InputStream inputStream) throws IOException {
+	public T read(InputStream inputStream, String mimeType, Charset charset) throws IOException {
 		try {
 			return objectMapper.readValue(inputStream, valueType);
 		} catch (JsonMappingException jme) {

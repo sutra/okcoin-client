@@ -3,6 +3,10 @@ package org.oxerr.okcoin.rest.dto.valuereader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.nio.charset.Charset;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import org.apache.commons.io.IOUtils;
 import org.cyberneko.html.parsers.DOMParser;
@@ -16,7 +20,7 @@ import org.xml.sax.SAXException;
 
 public abstract class HtmlPageReader<T> implements ValueReader<T> {
 
-	private static final String ENCODING = OKCoinClient.ENCODING;
+	private static final Charset CHARSET = Charset.forName(OKCoinClient.ENCODING);
 
 	private final Logger log = LoggerFactory.getLogger(IndexHtmlPageReader.class);
 
@@ -24,10 +28,11 @@ public abstract class HtmlPageReader<T> implements ValueReader<T> {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public T read(InputStream inputStream) throws IOException {
+	public T read(InputStream inputStream,
+		@Nullable String mimeType, @Nullable Charset charset) throws IOException {
 		HTMLDocument document;
 		try {
-			document = toDocument(inputStream);
+			document = toDocument(inputStream, charset != null ? charset: CHARSET);
 		} catch (SAXException e) {
 			throw new IOException(e);
 		}
@@ -36,17 +41,17 @@ public abstract class HtmlPageReader<T> implements ValueReader<T> {
 
 	protected abstract T read(HTMLDocument document) throws OKCoinClientException;
 
-	private HTMLDocument toDocument(InputStream inputStream)
+	private HTMLDocument toDocument(InputStream inputStream, @Nonnull Charset charset)
 			throws IOException, SAXException {
 		final InputSource inputSource;
 		if (log.isTraceEnabled()) {
-			String html = IOUtils.toString(inputStream, ENCODING);
+			String html = IOUtils.toString(inputStream, charset);
 			log.trace("Parsing HTML:\n{}", html);
 			inputSource = new InputSource(new InputStreamReader(
-					IOUtils.toInputStream(html, ENCODING), ENCODING));
+					IOUtils.toInputStream(html, charset), charset));
 		} else {
 			inputSource = new InputSource(new InputStreamReader(inputStream,
-					ENCODING));
+					charset));
 		}
 		DOMParser parser = new DOMParser();
 		parser.parse(inputSource);

@@ -2,6 +2,9 @@ package org.oxerr.okcoin.rest.dto.valuereader;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.charset.Charset;
+
+import javax.annotation.Nullable;
 
 import org.apache.commons.io.IOUtils;
 import org.oxerr.okcoin.rest.service.web.OKCoinClient;
@@ -18,8 +21,9 @@ public class PlainTextReader implements ValueReader<String> {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public String read(InputStream inputStream) throws IOException {
-		return IOUtils.toString(inputStream, OKCoinClient.ENCODING);
+	public String read(InputStream inputStream,
+		@Nullable String mimeType, @Nullable Charset charset) throws IOException {
+		return IOUtils.toString(inputStream, charset != null ? charset : Charset.forName(OKCoinClient.ENCODING));
 	}
 
 }
